@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import Link from '~/components/base/Link';
 import PageContainer from '~/components/common/PageContainer';
 import CategoryListItem from './CategoryListItem';
 
@@ -6,7 +7,9 @@ const Header = () => {
   return (
     <StyledHeader>
       <HeaderContent>
-        <h1>developerwiki</h1>
+        <h1>
+          <Link href="/">developerwiki</Link>
+        </h1>
         <CategoryList>
           <CategoryListItem href="/" name="프론트엔드" />
           <CategoryListItem href="/" name="백엔드" />
