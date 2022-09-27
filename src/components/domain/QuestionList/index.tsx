@@ -20,5 +20,5 @@ export default QuestionList;
 
 const Container = styled.div`
   margin-top: 32px;
-  border-top: 1px solid ${({ theme }) => theme.colors.LightGray};
+  border-top: 1px solid ${({ theme }) => theme.colors.lightGray};
 `;

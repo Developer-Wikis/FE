@@ -19,3 +19,9 @@ a {
 li {
   list-style: none;
 }
+
+button {
+  background: white;
+  border: none;
+  cursor: pointer;
+}
