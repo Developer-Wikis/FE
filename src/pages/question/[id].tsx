@@ -3,6 +3,29 @@ import PageContainer from '~/components/common/PageContainer';
 import styled from '@emotion/styled';
 import AdditionalQuestions from '~/components/domain/question/AdditionalQuestions';
 import PostHeader from '~/components/domain/question/PostHeader';
+import Comment from '~/components/common/Comment';
+import { ICommentItem } from '~/types/comment';
+
+const commentData: ICommentItem[] = [
+  {
+    id: 1,
+    nickname: '하이루',
+    content: '반가워요~',
+    createdAt: '2022.09.28 00:00:00',
+  },
+  {
+    id: 2,
+    nickname: '하이루2',
+    content: '반가워요~2',
+    createdAt: '2022.09.28 00:00:00',
+  },
+  {
+    id: 3,
+    nickname: '하이루3',
+    content: '반가워요~3',
+    createdAt: '2022.09.28 00:00:00',
+  },
+];
 
 const question = () => {
   const [isRecording, setIsRecording] = useState(false);
@@ -81,6 +104,7 @@ const question = () => {
           <button>다음 질문</button>
         </MoveButtons>
       </PostContent>
+      <Comment total={2} comments={commentData} />
     </Container>
   );
 };
