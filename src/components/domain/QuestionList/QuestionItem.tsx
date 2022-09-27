@@ -31,7 +31,7 @@ const StyledItem = styled.li`
   a {
     display: flex;
     padding: 20px 0;
-    border-bottom: 1px solid ${({ theme }) => theme.colors.LightGray};
+    border-bottom: 1px solid ${({ theme }) => theme.colors.lightGray};
   }
 `;
 

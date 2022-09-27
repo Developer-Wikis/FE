@@ -22,7 +22,7 @@ const Header = () => {
 export default Header;
 
 const StyledHeader = styled.div`
-  border-bottom: 1px solid ${({ theme }) => theme.colors.LightGray};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.lightGray};
 `;
 
 const HeaderContent = styled(PageContainer)`
