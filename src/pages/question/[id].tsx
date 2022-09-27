@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import PageContainer from '~/components/common/PageContainer';
 import styled from '@emotion/styled';
+import AdditionalQuestions from '~/components/domain/question/AdditionalQuestions';
+import PostHeader from '~/components/domain/question/PostHeader';
 
 const question = () => {
   const [isRecording, setIsRecording] = useState(false);
@@ -63,12 +65,22 @@ const question = () => {
 
   return (
     <Container>
-      <h2>ㅇㅇㅇ에 대해 설명해 주세요.</h2>
-      <button onClick={isRecording ? onClickStop : onRecordAudio}>
-        {isRecording ? '녹음중지' : '녹음'}
-      </button>
-      <audio controls ref={audioRef} src={audioSrc}></audio>
-      <p>예상되는 꼬리 질문</p>
+      <PostHeader category="FE기본" title="ㅇㅇㅇ에 대해 설명해주세요" writer="ㅇㅇㅇ" />
+      <PostContent>
+        <RecordContainer>
+          <button onClick={isRecording ? onClickStop : onRecordAudio}>
+            {isRecording ? '녹음중지' : '녹음'}
+          </button>
+          <audio controls ref={audioRef} src={audioSrc}></audio>
+        </RecordContainer>
+        <AdditionalQuestions
+          questions={['MVC의 문제점은 무엇인가요?', 'MVC의 문제점은 무엇인가요?']}
+        />
+        <MoveButtons>
+          <button>이전 질문</button>
+          <button>다음 질문</button>
+        </MoveButtons>
+      </PostContent>
     </Container>
   );
 };
@@ -77,4 +89,29 @@ export default question;
 
 const Container = styled(PageContainer)`
   margin-top: 32px;
+`;
+const PostContent = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+
+  margin-top: 36px;
+`;
+
+const RecordContainer = styled.div``;
+
+const MoveButtons = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 56px;
+
+  button {
+    font-size: 14px;
+    padding: 12px 26px;
+    border: 1px solid ${({ theme }) => theme.colors.lightGray};
+    background-color: white;
+    border-radius: 4px;
+  }
 `;
