@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { ChangeEvent, FormEvent, useRef, useState } from 'react';
+import Button from '~/components/base/Button';
 
 const AddCommentForm = () => {
   const [formData, setFormData] = useState({
@@ -105,11 +106,6 @@ const Textarea = styled.textarea`
   flex-grow: 1;
 `;
 
-const AddButton = styled.button`
-  width: 100px;
-  background-color: ${({ theme }) => theme.colors.blackGray};
-  padding: 12px 0;
-  color: white;
+const AddButton = styled(Button)`
   align-self: flex-end;
-  border-radius: 4px;
 `;
