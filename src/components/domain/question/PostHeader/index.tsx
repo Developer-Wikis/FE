@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import Title from '~/components/base/Title';
 
 interface PostHeaderProps {
   category: string;
@@ -30,9 +31,7 @@ const CategoryName = styled.div`
   color: ${({ theme }) => theme.colors.mediumGray};
 `;
 
-const PostTitle = styled.h2`
-  font-size: 24px;
-  font-weight: 700;
+const PostTitle = styled(Title)`
   margin-top: 18px;
 `;
 

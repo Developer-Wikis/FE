@@ -1,0 +1,16 @@
+export const middleCategories = [
+  'FE 기본',
+  'BE 기본',
+  'CSS',
+  'HTML',
+  'JS',
+  'REACT',
+  'java',
+  'spring',
+  '네트워크',
+  '데이터베이스',
+  '디자인패턴',
+  '보안',
+  '운영체제',
+  '자료구조/알고리즘',
+];

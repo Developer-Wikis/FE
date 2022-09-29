@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import Button from '~/components/base/Button';
 import Link from '~/components/base/Link';
 import PageContainer from '~/components/common/PageContainer';
 import CategoryListItem from './CategoryListItem';
@@ -7,13 +8,16 @@ const Header = () => {
   return (
     <StyledHeader>
       <HeaderContent>
-        <h1>
-          <Link href="/">developerwiki</Link>
-        </h1>
-        <CategoryList>
-          <CategoryListItem href="/" name="프론트엔드" />
-          <CategoryListItem href="/" name="백엔드" />
-        </CategoryList>
+        <LeftArea>
+          <h1>
+            <Link href="/">developerwiki</Link>
+          </h1>
+          <CategoryList>
+            <CategoryListItem href="/" name="프론트엔드" />
+            <CategoryListItem href="/" name="백엔드" />
+          </CategoryList>
+        </LeftArea>
+        <Link href="/question/create">질문 등록</Link>
       </HeaderContent>
     </StyledHeader>
   );
@@ -27,8 +31,13 @@ const StyledHeader = styled.div`
 
 const HeaderContent = styled(PageContainer)`
   display: flex;
+  justify-content: space-between;
   height: 70px;
   align-items: center;
+`;
+
+const LeftArea = styled.div`
+  display: flex;
 `;
 
 const CategoryList = styled.div`

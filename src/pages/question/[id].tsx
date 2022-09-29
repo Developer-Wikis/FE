@@ -27,6 +27,21 @@ const commentData: ICommentItem[] = [
   },
 ];
 
+/*
+
+1. [녹음 시작버튼] 클릭 시 시간을 카운트 한다.
+2. 60초가되면 녹음을 자동으로 멈추고 카운트도 멈춘다
+   [녹음 중지] 버튼을 눌렀을 경우 카운트를 멈춘다.
+
+3. 녹음이 중지되었을 경우 [재생 버튼]이 활성화 된다.
+4. 재생 버튼을 클릭 할 경우 0에서 지정한 카운트 만큼 시간이 표시 되고
+   녹음된 내용이 재생된다.
+5. 다시 재생 버튼을 누를 경우 다시 0에서 지정한 카운트 만큼 표시되면서 진행상황을 알려준다.
+6. 만약 다시 녹음 버튼을 누른다면 지정한 카운트가 초기화 되고 재생 버튼이 비활성화 되고,
+   녹음이 다시 시작된다.
+
+*/
+
 const question = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [audioSrc, setAudioSrc] = useState('');
@@ -85,6 +100,12 @@ const question = () => {
       onRecordStop(mediaRecorder);
     }
   };
+  useEffect(() => {
+    console.log('하이');
+    return () => {
+      console.log('cleanup');
+    };
+  }, [isRecording]);
 
   return (
     <Container>
