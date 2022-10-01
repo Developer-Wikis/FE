@@ -21,3 +21,13 @@ export interface ISort {
   sorted: boolean;
   unsorted: boolean;
 }
+export interface IQuestionDetail {
+  id: number;
+  title: string;
+  nickname: string;
+  category: string;
+  additionQuestions: string[];
+  viewCount: number;
+  commentCount: number;
+  createdAt: string;
+}
