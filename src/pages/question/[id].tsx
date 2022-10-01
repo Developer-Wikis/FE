@@ -103,6 +103,7 @@ const questionDetail = () => {
       mediaRecorder.current.stream.getTracks().forEach((track) => {
         track.stop();
       });
+
       setIsRecording(false);
       setIsCompleted(true);
     }
