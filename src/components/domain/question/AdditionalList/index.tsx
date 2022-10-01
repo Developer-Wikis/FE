@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import Icon from '~/components/base/Icon';
 
 interface AdditionalListProps {
   list: string[];
@@ -11,7 +12,9 @@ const AdditionalList = ({ list, onRemove }: AdditionalListProps) => {
       {list.map((question, index) => (
         <li key={index}>
           <span>{question}</span>
-          <button onClick={() => onRemove(index)}>삭제</button>
+          <button onClick={() => onRemove(index)}>
+            <Icon name="Close" size="10" color="darkGray" />
+          </button>
         </li>
       ))}
     </StyledUl>
@@ -30,5 +33,12 @@ const StyledUl = styled.ul`
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    span {
+      line-height: 1.5;
+    }
+    svg {
+      display: block;
+    }
   }
 `;
