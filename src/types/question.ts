@@ -7,3 +7,17 @@ export interface IQuestionItem {
   commentCount: number;
   createAt: string;
 }
+
+export interface IQuestion {
+  nickname: string;
+  password: string;
+  title: string;
+  category: string;
+  additionalQuestions: string[];
+}
+
+export interface ISort {
+  empty: boolean;
+  sorted: boolean;
+  unsorted: boolean;
+}
