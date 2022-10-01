@@ -1,10 +1,13 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import PageContainer from '~/components/common/PageContainer';
 import styled from '@emotion/styled';
 import AdditionalQuestions from '~/components/domain/question/AdditionalQuestions';
 import PostHeader from '~/components/domain/question/PostHeader';
 import Comment from '~/components/common/Comment';
 import { ICommentItem } from '~/types/comment';
+import useTimer from '~/hooks/useTimer';
+import Button from '~/components/base/Button';
+import Icon from '~/components/base/Icon';
 
 const commentData: ICommentItem[] = [
   {
@@ -42,87 +45,164 @@ const commentData: ICommentItem[] = [
 
 */
 
-const question = () => {
+const questionDetail = () => {
   const [isRecording, setIsRecording] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [audioSrc, setAudioSrc] = useState('');
   const audioRef = useRef<null | HTMLAudioElement>(null);
-  const [mediaRecorder, setMediaRecorder] = useState<null | MediaRecorder>(null);
+
+  let timeoutId = useRef<null | NodeJS.Timeout>(null);
+  // 그냥 일반 변수or state 로 저장 시에 timeout을 삭제하려는 시점에 값이 null이기 때문에 초기화가 안됨.
+
+  let mediaRecorder = useRef<null | MediaRecorder>(null);
+
+  const { onStart, onFinish, onStop, minutes, seconds } = useTimer();
 
   const onRecordAudio = async () => {
+    onStart();
+    setIsCompleted(false);
     const mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    const mediaRecorder = new MediaRecorder(mediaStream);
-    setMediaRecorder(mediaRecorder);
+    mediaRecorder.current = new MediaRecorder(mediaStream);
 
     let blobChunk: Blob[] = [];
 
-    mediaRecorder.ondataavailable = (e) => {
+    mediaRecorder.current.ondataavailable = (e) => {
       // MediaRecorder가 미디어 데이터를 사용하도록 애플리케이션에 전달할 때 이벤트가 시작
       // ondatavailable 이후 onstop 실행
-      blobChunk.push(e.data);
-      // setAudioBlob(() => e.data);
-      // setAudioBlob로 담아서 이 값으로 컨트롤 하고 싶었으나 비동기로 값이 담기기 때문에 임의로 위에 변수 실행
+      if (e.data && e.data.size > 0) {
+        blobChunk.push(e.data);
+      }
     };
 
-    mediaRecorder.onstop = (event) => {
-      const blob = new Blob(blobChunk, { type: 'audio/ogg codecs=opus' });
-
-      console.log(blob, 'blob');
+    mediaRecorder.current.onstop = () => {
+      const blob = new Blob(blobChunk, { type: 'audio/ogg; codecs=vorbis' });
       blobChunk.splice(0);
 
-      // Blob 데이터에 접근할 수 있는 주소 생성
       const blobURL = window.URL.createObjectURL(blob);
 
       if (audioRef.current) {
         setAudioSrc(blobURL);
       }
     };
-    mediaRecorder.start(1000);
+
+    mediaRecorder.current.start();
     setIsRecording(true);
-    setTimeout(() => {
-      if (mediaRecorder.state === 'recording') {
-        onRecordStop(mediaRecorder);
+
+    timeoutId.current = setTimeout(() => {
+      if (mediaRecorder.current?.state === 'recording') {
+        onRecordStop();
       }
-    }, 5000);
+    }, 61000);
   };
 
-  const onRecordStop = (recorder: MediaRecorder) => {
-    if (recorder) {
-      recorder.stop();
-      recorder.stream.getTracks().forEach((track) => {
+  const onRecordStop = () => {
+    if (mediaRecorder.current) {
+      onFinish();
+      mediaRecorder.current.stop();
+      mediaRecorder.current.stream.getTracks().forEach((track) => {
         track.stop();
       });
+
       setIsRecording(false);
+      setIsCompleted(true);
+    }
+  };
+
+  const onRecordReset = () => {
+    onPlayStop();
+    onFinish();
+    setIsRecording(false);
+    setIsPlaying(false);
+    setIsCompleted(false);
+
+    if (timeoutId.current) {
+      clearTimeout(timeoutId.current);
     }
   };
 
   const onClickStop = () => {
-    if (mediaRecorder) {
-      onRecordStop(mediaRecorder);
+    if (mediaRecorder.current) {
+      onRecordStop();
     }
   };
-  useEffect(() => {
-    console.log('하이');
-    return () => {
-      console.log('cleanup');
-    };
-  }, [isRecording]);
+
+  const onPlay = () => {
+    if (audioRef.current) {
+      audioRef.current.play();
+      onStart();
+      setIsPlaying(true);
+    }
+  };
+
+  const onPlayStop = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      onStop();
+      setIsPlaying(false);
+    }
+  };
+
+  const onPlayEnded = () => {
+    setIsPlaying(false);
+    onFinish();
+  };
 
   return (
     <Container>
       <PostHeader category="FE기본" title="ㅇㅇㅇ에 대해 설명해주세요" writer="ㅇㅇㅇ" />
       <PostContent>
         <RecordContainer>
-          <button onClick={isRecording ? onClickStop : onRecordAudio}>
-            {isRecording ? '녹음중지' : '녹음'}
-          </button>
-          <audio controls ref={audioRef} src={audioSrc}></audio>
+          {!isRecording && !isPlaying && !isCompleted ? (
+            <RecordStart>
+              <MikeButton onClick={onRecordAudio}>
+                <Icon name="Microphone" color="white" size="30" />
+              </MikeButton>
+            </RecordStart>
+          ) : (
+            <Player>
+              <ButtonArea>
+                {isRecording && (
+                  <StopButton onClick={onClickStop}>
+                    <Icon name="Stop" size="21" color="white" />
+                  </StopButton>
+                )}
+                {isCompleted &&
+                  (isPlaying ? (
+                    <PlayButton onClick={onPlayStop}>
+                      <Icon name="Pause" size="36" color="white" />
+                    </PlayButton>
+                  ) : (
+                    <PlayButton onClick={onPlay}>
+                      <Icon name="Play" size="21" color="white" />
+                    </PlayButton>
+                  ))}
+              </ButtonArea>
+              <TimeArea>
+                <span>
+                  {minutes}:{seconds < 10 ? 0 : ''}
+                  {seconds}
+                </span>
+              </TimeArea>
+            </Player>
+          )}
         </RecordContainer>
+        <Button buttonType="borderGray" onClick={onRecordReset}>
+          다시 녹음하기
+        </Button>
+        <audio
+          controls
+          ref={audioRef}
+          src={audioSrc}
+          onEnded={onPlayEnded}
+          style={{ display: 'none' }}
+        ></audio>
         <AdditionalQuestions
           questions={['MVC의 문제점은 무엇인가요?', 'MVC의 문제점은 무엇인가요?']}
         />
         <MoveButtons>
-          <button>이전 질문</button>
-          <button>다음 질문</button>
+          <Button buttonType="borderGray">이전 질문</Button>
+          <Button buttonType="borderGray">다음 질문</Button>
         </MoveButtons>
       </PostContent>
       <Comment total={2} comments={commentData} />
@@ -130,11 +210,12 @@ const question = () => {
   );
 };
 
-export default question;
+export default questionDetail;
 
 const Container = styled(PageContainer)`
   margin-top: 32px;
 `;
+
 const PostContent = styled.div`
   display: flex;
   justify-content: center;
@@ -144,19 +225,78 @@ const PostContent = styled.div`
   margin-top: 36px;
 `;
 
-const RecordContainer = styled.div``;
+const RecordContainer = styled.div`
+  width: 352px;
+  height: 95px;
+  display: flex;
+  background: ${({ theme }) => theme.colors.bgGray};
+  border-radius: 100px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 16px;
+`;
 
+const Player = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const RecordStart = styled.div``;
+
+const ButtonArea = styled.div`
+  margin-left: 20px;
+`;
+
+const StopButton = styled.button`
+  position: relative;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: ${({ theme }) => theme.colors.red};
+  svg {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    top: 50%;
+  }
+`;
+
+const PlayButton = styled.button`
+  position: relative;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+
+  background: ${({ theme }) => theme.colors.blackGray};
+  svg {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    top: 50%;
+  }
+`;
+
+const TimeArea = styled.div`
+  padding-right: 30px;
+  flex-grow: 1;
+  text-align: center;
+`;
 const MoveButtons = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
   margin-top: 56px;
+`;
 
-  button {
-    font-size: 14px;
-    padding: 12px 26px;
-    border: 1px solid ${({ theme }) => theme.colors.lightGray};
-    background-color: white;
-    border-radius: 4px;
-  }
+const MikeButton = styled.button`
+  background-color: ${({ theme }) => theme.colors.red};
+  border-radius: 50%;
+
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;

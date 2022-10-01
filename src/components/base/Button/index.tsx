@@ -1,16 +1,16 @@
 import styled from '@emotion/styled';
-import { CSSProperties, MouseEvent, ReactNode } from 'react';
-interface ButtonProps {
-  type?: 'button' | 'submit';
+import { ButtonHTMLAttributes, CSSProperties, MouseEvent, ReactNode } from 'react';
+import { buttonStyle } from './types';
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  buttonType?: keyof typeof buttonStyle;
   disabled?: boolean;
-  onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
   children?: ReactNode;
   style?: CSSProperties;
 }
 
-const Button = ({ type = 'button', onClick, disabled, children, ...props }: ButtonProps) => {
+const Button = ({ buttonType, disabled, children, ...props }: ButtonProps) => {
   return (
-    <StyledButton type={type} onClick={onClick} disabled={disabled} {...props}>
+    <StyledButton buttonType={buttonType} disabled={disabled} {...props}>
       {children}
     </StyledButton>
   );
@@ -25,6 +25,8 @@ const StyledButton = styled.button<ButtonProps>`
   color: white;
   border-radius: 4px;
   white-space: nowrap;
+
+  ${({ buttonType }) => buttonType && buttonStyle[buttonType]};
 
   &:disabled {
     opacity: 0.7;
