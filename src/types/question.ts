@@ -13,7 +13,7 @@ export interface IQuestion {
   password: string;
   title: string;
   category: string;
-  additionalQuestions: string[];
+  additionQuestions: string[];
 }
 
 export interface ISort {
