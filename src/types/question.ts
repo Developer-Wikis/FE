@@ -30,4 +30,6 @@ export interface IQuestionDetail {
   viewCount: number;
   commentCount: number;
   createdAt: string;
+  prevId: number;
+  nextId: number;
 }

@@ -11,6 +11,8 @@ import Icon from '~/components/base/Icon';
 import { getQuestionDetail } from '~/service/question';
 import { NextPageContext } from 'next';
 import { IQuestionDetail } from '~/types/question';
+import { useRouter } from 'next/router';
+import MoveButtons from '~/components/domain/question/MoveButtons';
 
 const commentData: ICommentItem[] = [
   {
@@ -80,6 +82,7 @@ const QuestionDetail = ({ detailData }: QuestionDetailProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [audioSrc, setAudioSrc] = useState('');
   const audioRef = useRef<null | HTMLAudioElement>(null);
+  const router = useRouter();
 
   let timeoutId = useRef<null | NodeJS.Timeout>(null);
   // 그냥 일반 변수or state 로 저장 시에 timeout을 삭제하려는 시점에 값이 null이기 때문에 초기화가 안됨.
@@ -177,15 +180,6 @@ const QuestionDetail = ({ detailData }: QuestionDetailProps) => {
     onFinish();
   };
 
-  useEffect(() => {
-    console.log(detailData);
-
-    // (async () => {
-    //   const result = await getQuestionDetail(10);
-    //   console.log(result.data);
-    // })();
-  }, []);
-
   return (
     <Container>
       <PostHeader
@@ -240,10 +234,7 @@ const QuestionDetail = ({ detailData }: QuestionDetailProps) => {
           style={{ display: 'none' }}
         ></audio>
         <AdditionalQuestions questions={detailData.additionQuestions} />
-        <MoveButtons>
-          <Button buttonType="borderGray">이전 질문</Button>
-          <Button buttonType="borderGray">다음 질문</Button>
-        </MoveButtons>
+        <MoveButtons prevId={detailData.prevId} nextId={detailData.nextId} />
       </PostContent>
       <Comment total={2} comments={commentData} />
     </Container>
@@ -322,12 +313,6 @@ const TimeArea = styled.div`
   padding-right: 30px;
   flex-grow: 1;
   text-align: center;
-`;
-const MoveButtons = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  margin-top: 56px;
 `;
 
 const MikeButton = styled.button`
