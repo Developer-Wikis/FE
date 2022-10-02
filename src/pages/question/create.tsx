@@ -13,15 +13,8 @@ import useForm from '~/hooks/useForm';
 import { createQuestion } from '~/service/question';
 import { IQuestion } from '~/types/question';
 import { middleCategories } from '~/utils/constant/category';
+import { checkLength, checkSpace, checkSpecial } from '~/utils/helper/validation';
 
-/*
- * input별 validation처리 후 메세지 추가하기
- *  닉네임: 6자
- *  비밀번호: 2자 이상
- *  질문 제목: 30자 이하?
- *
- * ++ 특수문자 입력 방지
- */
 const initialValues = {
   nickname: '',
   password: '',
@@ -31,6 +24,27 @@ const initialValues = {
 
 type valuesType = {
   [key in keyof typeof initialValues]: string;
+};
+
+const validate = (values: valuesType) => {
+  const errors = {} as valuesType;
+
+  if (checkLength(values.nickname, 2, 10) || checkSpecial(values.nickname)) {
+    errors.nickname = '닉네임은 특수문자 제외, 2~10자로 입력해 주세요.';
+  }
+  if (checkLength(values.password, 4, 10) || checkSpace(values.password)) {
+    errors.password = '비밀번호는 공백 제외, 4~10자 이상 입력해 주세요.';
+  }
+
+  if (checkLength(values.title, 2, 30)) {
+    errors.title = '질문 제목은 2~30자로 입력해 주세요.';
+  }
+
+  if (values.category === 'none') {
+    errors.category = '분류를 선택해 주세요.';
+  }
+
+  return errors;
 };
 
 const CreateQuestion = () => {
@@ -52,27 +66,6 @@ const CreateQuestion = () => {
     } catch {
       alert('질문 등록에 실패했습니다.');
     }
-  }
-
-  function validate(values: valuesType) {
-    const errors = {} as valuesType;
-
-    if (values.nickname.trim().length < 2 || values.nickname.trim().length > 10) {
-      errors.nickname = '닉네임은 2~10자로 입력해 주세요.';
-    }
-    if (values.password.length < 4) {
-      errors.password = '비밀번호는 4~10자 이상 입력해 주세요.';
-    }
-
-    if (values.title.trim().length < 2 || values.title.trim().length > 30) {
-      errors.title = '질문 제목은 2~30자로 입력해 주세요.';
-    }
-
-    if (values.category === 'none') {
-      errors.category = '분류를 선택해 주세요.';
-    }
-
-    return errors;
   }
 
   const onAddQuestion = (value: string) => {
@@ -101,6 +94,7 @@ const CreateQuestion = () => {
               name="nickname"
               id="nickname"
               placeholder="닉네임"
+              value={values.nickname}
               onChange={handleChange}
             />
           </InputField>
@@ -111,6 +105,7 @@ const CreateQuestion = () => {
               name="password"
               id="password"
               placeholder="비밀번호"
+              value={values.password}
               onChange={handleChange}
             />
           </InputField>
@@ -125,6 +120,7 @@ const CreateQuestion = () => {
             name="title"
             id="title"
             placeholder="질문 제목을 입력해 주세요."
+            value={values.title}
             onChange={handleChange}
           />
           <ErrorMessage message={errors.title} />
