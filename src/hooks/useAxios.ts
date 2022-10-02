@@ -1,21 +1,27 @@
 import { AxiosError, AxiosResponse } from 'axios';
 import { DependencyList, useCallback, useRef, useState } from 'react';
 
-type AxiosFn<Request, Response> = (args: Request) => Promise<AxiosResponse<Response>>;
+type AxiosFnVoid<T> = () => Promise<AxiosResponse<T>>;
+type AxiosFnParams<T, R> = (...args: [T]) => Promise<AxiosResponse<R>>;
 
-type UseAxiosReturn<Request, Response> = {
+type CallbackVoid = () => Promise<void>;
+type CallbackParams<T> = (args: T) => Promise<void>;
+
+type UseAxiosReturn<T, R> = {
   isLoading: boolean;
   error: AxiosError | null;
-  response: AxiosResponse<Response> | null;
-  callback: (args: Request) => Promise<void>;
+  response: AxiosResponse<R> | null;
+  callback: CallbackVoid & CallbackParams<T>;
 };
 
-const useAxios = <Request, Response>(
-  axiosFn: AxiosFn<Request, Response>,
+const useAxios = <T, R>(
+  axiosFn: AxiosFnVoid<R> & AxiosFnParams<T, R>,
   dependency: DependencyList,
-): UseAxiosReturn<Request, Response> => {
+  errorHandler?: (status: number, message: string) => void,
+  refetch?: boolean,
+): UseAxiosReturn<T, R> => {
   const [isLoading, setIsLoading] = useState(false);
-  const [response, setResponse] = useState<AxiosResponse<Response> | null>(null);
+  const [response, setResponse] = useState<AxiosResponse<R> | null>(null);
   const [error, setError] = useState<AxiosError | null>(null);
 
   const lastCallId = useRef(0);
@@ -31,11 +37,19 @@ const useAxios = <Request, Response>(
       .then((response) => {
         if (callId === lastCallId.current) {
           setResponse(response);
+          setError(null);
         }
       })
       .catch((error) => {
         if (callId === lastCallId.current) {
           setError(error);
+          setResponse(null);
+
+          if (error.response) {
+            errorHandler && errorHandler(error.response.status, error.message);
+          }
+
+          console.error(error);
         }
       })
       .finally(() => {
