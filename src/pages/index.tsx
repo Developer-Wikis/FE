@@ -3,8 +3,10 @@ import Head from 'next/head';
 import PageContainer from '~/components/common/PageContainer';
 import QuestionList from '~/components/domain/QuestionList';
 import styled from '@emotion/styled';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import MiddleCategory from '~/components/common/MiddleCategory';
+import useAxios from '../hooks/useAxios';
+import { getQuestionList } from '~/service/question';
 
 const questions = [
   {
@@ -41,10 +43,23 @@ const frontCategories = [
 ];
 const Home: NextPage = () => {
   const [selectedCategory, setSelectedCategory] = useState('전체');
+  const { isLoading, response, error, callback } = useAxios(
+    getQuestionList,
+    [selectedCategory],
+    (status, message) => {
+      alert(`status: ${status}, message: ${message}`);
+    },
+  );
 
   const onSelectCategory = (value: string) => {
     setSelectedCategory(value);
   };
+
+  useEffect(() => {
+    callback();
+    console.log(response, error);
+  }, [callback]);
+
   return (
     <div>
       <Head>
@@ -59,7 +74,9 @@ const Home: NextPage = () => {
             onSelect={onSelectCategory}
             currentCategory={selectedCategory}
           />
-          <QuestionList questions={questions} />
+          <QuestionList questions={response?.data.content ?? []} />
+          {!isLoading && error && <span>{JSON.stringify(error)}</span>}
+          {/* <QuestionList questions={questions} /> */}
         </MainContent>
       </main>
     </div>
