@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
 import Button from '~/components/base/Button';
 import Input from '~/components/base/Input';
+import { checkLength } from '~/utils/helper/validation';
 
 interface AddFormProps {
   type: string;
@@ -16,12 +17,16 @@ const AddForm = ({ buttonText, onSubmit, ...props }: AddFormProps) => {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    if (text.trim().length < 1) {
-      alert('내용을 입력해 주세요.');
+
+    const validText = text.trim();
+    setText(validText);
+
+    if (checkLength(validText, 2, 30)) {
+      alert('꼬리 질문은 2~30자로 입력해 주세요.');
       return;
     }
 
-    onSubmit(text);
+    onSubmit(validText);
     setText('');
   };
 
