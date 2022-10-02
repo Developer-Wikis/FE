@@ -13,7 +13,7 @@ import useForm from '~/hooks/useForm';
 import { createQuestion } from '~/service/question';
 import { IQuestion } from '~/types/question';
 import { middleCategories } from '~/utils/constant/category';
-import { checkLength, checkSpace, checkSpecial } from '~/utils/helper/validation';
+import { SUBMIT_CHECK } from '~/utils/helper/validation';
 
 const initialValues = {
   nickname: '',
@@ -29,15 +29,15 @@ type valuesType = {
 const validate = (values: valuesType) => {
   const errors = {} as valuesType;
 
-  if (checkLength(values.nickname, 2, 10) || checkSpecial(values.nickname)) {
-    errors.nickname = '닉네임은 특수문자 제외, 2~10자로 입력해 주세요.';
+  if (SUBMIT_CHECK.nickname.isValid(values.nickname)) {
+    errors.nickname = SUBMIT_CHECK.nickname.message;
   }
-  if (checkLength(values.password, 4, 10) || checkSpace(values.password)) {
-    errors.password = '비밀번호는 공백 제외, 4~10자 이상 입력해 주세요.';
+  if (SUBMIT_CHECK.password.isValid(values.password)) {
+    errors.password = SUBMIT_CHECK.password.message;
   }
 
-  if (checkLength(values.title, 2, 30)) {
-    errors.title = '질문 제목은 2~30자로 입력해 주세요.';
+  if (SUBMIT_CHECK.title.isValid(values.title)) {
+    errors.title = SUBMIT_CHECK.title.message;
   }
 
   if (values.category === 'none') {
