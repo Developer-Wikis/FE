@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import MiddleCategory from '~/components/common/MiddleCategory';
 import useAxios from '../hooks/useAxios';
 import { getQuestionList } from '~/service/question';
+import { IQuestionItem } from '~/types/question';
 
 const questions = [
   {
@@ -43,7 +44,8 @@ const frontCategories = [
 ];
 const Home: NextPage = () => {
   const [selectedCategory, setSelectedCategory] = useState('전체');
-  const { isLoading, response, error, callback } = useAxios(
+  const [questions, setQuestions] = useState<IQuestionItem[]>([]);
+  const { isLoading, error, request } = useAxios(
     getQuestionList,
     [selectedCategory],
     (status, message) => {
@@ -55,10 +57,16 @@ const Home: NextPage = () => {
     setSelectedCategory(value);
   };
 
+  const requestQuestionList = async () => {
+    const result = await request(selectedCategory);
+    if (result) {
+      setQuestions(result.data.content);
+    }
+  };
+
   useEffect(() => {
-    callback();
-    console.log(response, error);
-  }, [callback]);
+    requestQuestionList();
+  }, []);
 
   return (
     <div>
@@ -74,7 +82,7 @@ const Home: NextPage = () => {
             onSelect={onSelectCategory}
             currentCategory={selectedCategory}
           />
-          <QuestionList questions={response?.data.content ?? []} />
+          <QuestionList questions={questions} />
           {!isLoading && error && <span>{JSON.stringify(error)}</span>}
           {/* <QuestionList questions={questions} /> */}
         </MainContent>
