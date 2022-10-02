@@ -236,7 +236,7 @@ const QuestionDetail = ({ detailData }: QuestionDetailProps) => {
         <AdditionalQuestions questions={detailData.additionQuestions} />
         <MoveButtons prevId={detailData.prevId} nextId={detailData.nextId} />
       </PostContent>
-      <Comment total={2} comments={commentData} />
+      <Comment questionId={detailData.id} />
     </Container>
   );
 };

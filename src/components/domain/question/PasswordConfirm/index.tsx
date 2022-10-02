@@ -42,8 +42,8 @@ export default PasswordConfirm;
 const Container = styled.div`
   position: absolute;
   background-color: white;
-  right: 0;
-  top: -55px;
+  right: -9px;
+  top: -5px;
   padding: 8px;
   border: 1px solid ${({ theme }) => theme.colors.lightGray};
   border-radius: 4px;

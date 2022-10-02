@@ -1,12 +1,38 @@
 import styled from '@emotion/styled';
+import { ChangeEvent, FormEvent, useState } from 'react';
+import Button from '~/components/base/Button';
+import Icon from '~/components/base/Icon';
+import Input from '~/components/base/Input';
+import PasswordConfirm from '~/components/domain/question/PasswordConfirm';
 import { ICommentItem } from '~/types/comment';
+import { convertDate } from '~/utils/helper/convertor';
 
 interface CommentListProps {
+  id: number;
   comment: ICommentItem;
+  onOpenPassword: (id: number | null) => void;
+  onDeleteComment: (id: number, password: string) => void;
+  openPasswordId: number | null;
 }
 
-const CommentList = ({ comment }: CommentListProps) => {
-  const onDelete = () => {};
+const CommentList = ({
+  id,
+  comment,
+  onOpenPassword,
+  openPasswordId,
+  onDeleteComment,
+}: CommentListProps) => {
+  const handleDelete = () => {
+    onOpenPassword(id);
+  };
+
+  const handlePasswordSubmit = (password: string) => {
+    onDeleteComment(id, password);
+  };
+
+  const handleClose = () => {
+    onOpenPassword(null);
+  };
 
   return (
     <StyledLi>
@@ -17,9 +43,12 @@ const CommentList = ({ comment }: CommentListProps) => {
         <span>{comment.content}</span>
       </Content>
       <Info>
-        <span>{comment.createdAt}</span>
-        <button onClick={onDelete}>삭제</button>
+        <CreatedAt>{convertDate(comment.createdAt)}</CreatedAt>
+        <Icon.Button name="Close" color="mediumGray" size="12" onClick={handleDelete} />
       </Info>
+      {openPasswordId === id && (
+        <PasswordConfirm handlePasswordSubmit={handlePasswordSubmit} handleClose={handleClose} />
+      )}
     </StyledLi>
   );
 };
@@ -30,6 +59,7 @@ const StyledLi = styled.li`
   display: flex;
   padding: 16px 0;
   border-bottom: 1px solid ${({ theme }) => theme.colors.lightGray};
+  position: relative;
 `;
 
 const Writer = styled.div`
@@ -40,6 +70,7 @@ const Writer = styled.div`
   text-overflow: ellipsis;
   color: ${({ theme }) => theme.colors.darkGray};
 `;
+
 const Content = styled.div`
   flex-grow: 1;
   white-space: nowrap;
@@ -53,4 +84,9 @@ const Info = styled.div`
   margin-left: 16px;
   flex-shrink: 0;
   color: ${({ theme }) => theme.colors.mediumGray};
+`;
+
+const CreatedAt = styled.span`
+  font-size: 14px;
+  margin-right: 14px;
 `;
