@@ -4,7 +4,7 @@ interface objectType {
   [key: string]: string;
 }
 
-interface useFormProps<T> {
+interface useFormProps<T extends objectType> {
   initialValues: T;
   onSubmit: () => Promise<void>;
   validate: (values: T) => T | objectType;
@@ -12,12 +12,13 @@ interface useFormProps<T> {
 
 const useForm = <T extends objectType>({ initialValues, onSubmit, validate }: useFormProps<T>) => {
   const [values, setValues] = useState<T>(initialValues);
-  const [errors, setErrors] = useState<T | objectType>({});
+  const [errors, setErrors] = useState<T | objectType>({} as T);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setValues({ ...values, [name]: value });
+    const trimValue = value.trimStart();
+    setValues({ ...values, [name]: trimValue });
   };
 
   const handleSubmit = async (
@@ -26,7 +27,12 @@ const useForm = <T extends objectType>({ initialValues, onSubmit, validate }: us
     e.preventDefault();
     setIsLoading(true);
 
-    const newErrors = validate(values);
+    const trimValues: objectType = { ...values };
+
+    Object.keys(trimValues).map((key) => (trimValues[key] = trimValues[key].trim()));
+    setValues(trimValues as T);
+
+    const newErrors = validate(trimValues as T);
 
     if (Object.keys(newErrors).length === 0) {
       await onSubmit();
