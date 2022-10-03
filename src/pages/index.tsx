@@ -8,7 +8,6 @@ import MiddleCategory from '~/components/common/MiddleCategory';
 import useAxios from '~/hooks/useAxios';
 import { getQuestionList } from '~/service/question';
 import { IQuestionItem } from '~/types/question';
-import MainContainer from '~/components/common/MainContainer';
 import { categories, MainCategory } from '~/utils/constant/category';
 import { useRouter } from 'next/router';
 import { isString } from '~/utils/helper/checkType';
@@ -108,18 +107,16 @@ const Home: NextPage = () => {
         <meta name="description" content="Developer Wiki" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <MainContainer>
-        <MainContent>
-          {router.isReady && selectedCategories && (
-            <MiddleCategory
-              categories={['전체', ...categories[selectedCategories.main]]}
-              onSelect={onChangeSubCategory}
-              currentCategory={selectedCategories.sub}
-            />
-          )}
-          <QuestionList ref={setObserverTarget} questions={questions} />
-        </MainContent>
-      </MainContainer>
+      <MainContent>
+        {router.isReady && selectedCategories && (
+          <MiddleCategory
+            categories={['전체', ...categories[selectedCategories.main]]}
+            onSelect={onChangeSubCategory}
+            currentCategory={selectedCategories.sub}
+          />
+        )}
+        <QuestionList ref={setObserverTarget} questions={questions} />
+      </MainContent>
     </div>
   );
 };

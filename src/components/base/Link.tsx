@@ -4,7 +4,7 @@ import { ReactNode } from 'react';
 import { buttonSizes, buttonStyle } from './Button/types';
 
 type LinkTypes = { linkType?: keyof typeof buttonStyle; size?: keyof typeof buttonSizes };
-type LinkProps = Omit<NextLinkProps, 'as' | 'passHref'> & { children: ReactNode } & LinkTypes;
+type LinkProps = Omit<NextLinkProps, 'passHref'> & { children: ReactNode } & LinkTypes;
 
 const Link = ({
   linkType,

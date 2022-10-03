@@ -7,7 +7,6 @@ import Select from '~/components/base/select';
 import Title from '~/components/base/Title';
 import AddForm from '~/components/common/AddForm';
 import ErrorMessage from '~/components/common/ErrorMessage';
-import MainContainer from '~/components/common/MainContainer';
 import PageContainer from '~/components/common/PageContainer';
 import AdditionalList from '~/components/domain/question/AdditionalList';
 import useForm from '~/hooks/useForm';
@@ -59,7 +58,6 @@ const CreateQuestion = () => {
 
   async function onSubmit() {
     const newQuestion: IQuestion = { ...values, additionQuestions };
-    console.log(newQuestion);
     try {
       await createQuestion(newQuestion);
       alert('질문이 접수되었습니다. 질문은 관리자 확인 후 등록됩니다.');
@@ -84,73 +82,71 @@ const CreateQuestion = () => {
   };
 
   return (
-    <MainContainer>
-      <Container>
-        <Title>질문 등록하기</Title>
-        <FormContainer>
-          <UserInfo>
-            <InputField>
-              <Label htmlFor="nickname">닉네임</Label>
-              <Input
-                type="text"
-                name="nickname"
-                id="nickname"
-                placeholder="닉네임"
-                value={values.nickname}
-                onChange={handleChange}
-              />
-            </InputField>
-            <InputField>
-              <Label htmlFor="password">비밀번호</Label>
-              <Input
-                type="password"
-                name="password"
-                id="password"
-                placeholder="비밀번호"
-                value={values.password}
-                onChange={handleChange}
-              />
-            </InputField>
-          </UserInfo>
-          <ErrorMessage message={errors.nickname} />
-          <ErrorMessage message={errors.password} />
-
+    <Container>
+      <Title>질문 등록하기</Title>
+      <FormContainer>
+        <UserInfo>
           <InputField>
-            <Label htmlFor="title">제목</Label>
+            <Label htmlFor="nickname">닉네임</Label>
             <Input
               type="text"
-              name="title"
-              id="title"
-              placeholder="질문 제목을 입력해 주세요."
-              value={values.title}
+              name="nickname"
+              id="nickname"
+              placeholder="닉네임"
+              value={values.nickname}
               onChange={handleChange}
             />
-            <ErrorMessage message={errors.title} />
           </InputField>
           <InputField>
-            <Label htmlFor="category">분류</Label>
-            <Select list={middleCategories} name="category" onChange={handleChange} />
-            <ErrorMessage message={errors.category} />
-          </InputField>
-          <InputField>
-            <Label htmlFor="additional">꼬리질문</Label>
-            <AddForm
-              type="text"
-              buttonText="추가"
-              name="additional"
-              id="additional"
-              onSubmit={onAddQuestion}
+            <Label htmlFor="password">비밀번호</Label>
+            <Input
+              type="password"
+              name="password"
+              id="password"
+              placeholder="비밀번호"
+              value={values.password}
+              onChange={handleChange}
             />
           </InputField>
-          <AdditionalList list={additionQuestions} onRemove={onRemoveQuestion} />
-          <ButtonArea>
-            <Button onClick={handleSubmit} disabled={isLoading}>
-              등록
-            </Button>
-          </ButtonArea>
-        </FormContainer>
-      </Container>
-    </MainContainer>
+        </UserInfo>
+        <ErrorMessage message={errors.nickname} />
+        <ErrorMessage message={errors.password} />
+
+        <InputField>
+          <Label htmlFor="title">제목</Label>
+          <Input
+            type="text"
+            name="title"
+            id="title"
+            placeholder="질문 제목을 입력해 주세요."
+            value={values.title}
+            onChange={handleChange}
+          />
+          <ErrorMessage message={errors.title} />
+        </InputField>
+        <InputField>
+          <Label htmlFor="category">분류</Label>
+          <Select list={middleCategories} name="category" onChange={handleChange} />
+          <ErrorMessage message={errors.category} />
+        </InputField>
+        <InputField>
+          <Label htmlFor="additional">꼬리질문</Label>
+          <AddForm
+            type="text"
+            buttonText="추가"
+            name="additional"
+            id="additional"
+            onSubmit={onAddQuestion}
+          />
+        </InputField>
+        <AdditionalList list={additionQuestions} onRemove={onRemoveQuestion} />
+        <ButtonArea>
+          <Button onClick={handleSubmit} disabled={isLoading}>
+            등록
+          </Button>
+        </ButtonArea>
+      </FormContainer>
+    </Container>
   );
 };
 

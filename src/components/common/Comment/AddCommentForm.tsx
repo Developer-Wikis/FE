@@ -86,7 +86,7 @@ const AddCommentForm = ({ onAddComment }: AddCommentFormProps) => {
 export default AddCommentForm;
 
 const Container = styled.form`
-  background-color: #f9f9f9;
+  background-color: ${({ theme }) => theme.colors.bgLightGray};
   display: flex;
   flex-direction: column;
   padding: 16px;
