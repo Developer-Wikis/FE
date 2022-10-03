@@ -9,6 +9,11 @@ import useTimer from '~/hooks/useTimer';
 import Button from '~/components/base/Button';
 import Icon from '~/components/base/Icon';
 import MainContainer from '~/components/common/MainContainer';
+import { getQuestionDetail } from '~/service/question';
+import { NextPageContext } from 'next';
+import { IQuestionDetail } from '~/types/question';
+import { useRouter } from 'next/router';
+import MoveButtons from '~/components/domain/question/MoveButtons';
 
 const commentData: ICommentItem[] = [
   {
@@ -46,12 +51,39 @@ const commentData: ICommentItem[] = [
 
 */
 
-const questionDetail = () => {
+export const getServerSideProps = async (context: NextPageContext) => {
+  const { id } = context.query;
+  const questionId = Number(id);
+
+  if (Number.isNaN(questionId)) {
+    return {
+      notFound: true,
+    };
+  }
+
+  try {
+    const response = await getQuestionDetail(questionId);
+    return {
+      props: { detailData: response.data || null },
+    };
+  } catch (e) {
+    return {
+      notFound: true,
+    };
+  }
+};
+
+interface QuestionDetailProps {
+  detailData: IQuestionDetail;
+}
+
+const QuestionDetail = ({ detailData }: QuestionDetailProps) => {
   const [isRecording, setIsRecording] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [audioSrc, setAudioSrc] = useState('');
   const audioRef = useRef<null | HTMLAudioElement>(null);
+  const router = useRouter();
 
   let timeoutId = useRef<null | NodeJS.Timeout>(null);
   // 그냥 일반 변수or state 로 저장 시에 timeout을 삭제하려는 시점에 값이 null이기 때문에 초기화가 안됨.
@@ -150,70 +182,67 @@ const questionDetail = () => {
   };
 
   return (
-    <MainContainer>
-      <Container>
-        <PostHeader category="FE기본" title="ㅇㅇㅇ에 대해 설명해주세요" writer="ㅇㅇㅇ" />
-        <PostContent>
-          <RecordContainer>
-            {!isRecording && !isPlaying && !isCompleted ? (
-              <RecordStart>
-                <MikeButton onClick={onRecordAudio}>
-                  <Icon name="Microphone" color="white" size="30" />
-                </MikeButton>
-              </RecordStart>
-            ) : (
-              <Player>
-                <ButtonArea>
-                  {isRecording && (
-                    <StopButton onClick={onClickStop}>
-                      <Icon name="Stop" size="21" color="white" />
-                    </StopButton>
-                  )}
-                  {isCompleted &&
-                    (isPlaying ? (
-                      <PlayButton onClick={onPlayStop}>
-                        <Icon name="Pause" size="36" color="white" />
-                      </PlayButton>
-                    ) : (
-                      <PlayButton onClick={onPlay}>
-                        <Icon name="Play" size="21" color="white" />
-                      </PlayButton>
-                    ))}
-                </ButtonArea>
-                <TimeArea>
-                  <span>
-                    {minutes}:{seconds < 10 ? 0 : ''}
-                    {seconds}
-                  </span>
-                </TimeArea>
-              </Player>
-            )}
-          </RecordContainer>
-          <Button buttonType="borderGray" onClick={onRecordReset}>
-            다시 녹음하기
-          </Button>
-          <audio
-            controls
-            ref={audioRef}
-            src={audioSrc}
-            onEnded={onPlayEnded}
-            style={{ display: 'none' }}
-          ></audio>
-          <AdditionalQuestions
-            questions={['MVC의 문제점은 무엇인가요?', 'MVC의 문제점은 무엇인가요?']}
-          />
-          <MoveButtons>
-            <Button buttonType="borderGray">이전 질문</Button>
-            <Button buttonType="borderGray">다음 질문</Button>
-          </MoveButtons>
-        </PostContent>
-        <Comment total={2} comments={commentData} />
-      </Container>
-    </MainContainer>
+    <Container>
+      <PostHeader
+        category={detailData.category}
+        title={detailData.title}
+        writer={detailData.nickname}
+      />
+      <PostContent>
+        <RecordContainer>
+          {!isRecording && !isPlaying && !isCompleted ? (
+            <RecordStart>
+              <MikeButton onClick={onRecordAudio}>
+                <Icon name="Microphone" size="30" />
+              </MikeButton>
+            </RecordStart>
+          ) : (
+            <Player>
+              <ButtonArea>
+                {isRecording && (
+                  <StopButton onClick={onClickStop}>
+                    <Icon name="Stop" size="21" />
+                  </StopButton>
+                )}
+                {isCompleted &&
+                  (isPlaying ? (
+                    <PlayButton onClick={onPlayStop}>
+                      <Icon name="Pause" size="36" />
+                    </PlayButton>
+                  ) : (
+                    <PlayButton onClick={onPlay}>
+                      <Icon name="Play" size="21" />
+                    </PlayButton>
+                  ))}
+              </ButtonArea>
+              <TimeArea>
+                <span>
+                  {minutes}:{seconds < 10 ? 0 : ''}
+                  {seconds}
+                </span>
+              </TimeArea>
+            </Player>
+          )}
+        </RecordContainer>
+        <Button buttonType="borderGray" onClick={onRecordReset}>
+          다시 녹음하기
+        </Button>
+        <audio
+          controls
+          ref={audioRef}
+          src={audioSrc}
+          onEnded={onPlayEnded}
+          style={{ display: 'none' }}
+        ></audio>
+        <AdditionalQuestions questions={detailData.additionQuestions} />
+        <MoveButtons prevId={detailData.prevId} nextId={detailData.nextId} />
+      </PostContent>
+      <Comment questionId={detailData.id} />
+    </Container>
   );
 };
 
-export default questionDetail;
+export default QuestionDetail;
 
 const Container = styled(PageContainer)`
   margin-top: 32px;
@@ -285,12 +314,6 @@ const TimeArea = styled.div`
   padding-right: 30px;
   flex-grow: 1;
   text-align: center;
-`;
-const MoveButtons = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  margin-top: 56px;
 `;
 
 const MikeButton = styled.button`
