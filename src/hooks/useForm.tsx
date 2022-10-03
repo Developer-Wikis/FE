@@ -6,8 +6,8 @@ interface objectType {
 
 interface useFormProps<T extends objectType> {
   initialValues: T;
-  onSubmit: () => Promise<void>;
-  validate: (values: T) => T | objectType;
+  onSubmit: (e?: FormEvent) => Promise<void>;
+  validate?: (values: T) => T | objectType;
 }
 
 const useForm = <T extends objectType>({ initialValues, onSubmit, validate }: useFormProps<T>) => {
@@ -15,7 +15,9 @@ const useForm = <T extends objectType>({ initialValues, onSubmit, validate }: us
   const [errors, setErrors] = useState<T | objectType>({} as T);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = e.target;
     const trimValue = value.trimStart();
     setValues({ ...values, [name]: trimValue });
@@ -32,14 +34,27 @@ const useForm = <T extends objectType>({ initialValues, onSubmit, validate }: us
     Object.keys(trimValues).map((key) => (trimValues[key] = trimValues[key].trim()));
     setValues(trimValues as T);
 
-    const newErrors = validate(trimValues as T);
+    if (validate) {
+      const newErrors = validate(trimValues as T);
 
-    if (Object.keys(newErrors).length === 0) {
+      if (Object.keys(newErrors).length === 0) {
+        await onSubmit();
+      }
+
+      setErrors(newErrors);
+    } else {
       await onSubmit();
     }
 
-    setErrors(newErrors);
     setIsLoading(false);
+  };
+
+  const handleReset = (values?: T) => {
+    if (values) {
+      setValues(values);
+    } else {
+      setValues(initialValues);
+    }
   };
 
   return {
@@ -48,6 +63,7 @@ const useForm = <T extends objectType>({ initialValues, onSubmit, validate }: us
     isLoading,
     handleChange,
     handleSubmit,
+    handleReset,
   };
 };
 

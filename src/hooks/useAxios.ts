@@ -1,7 +1,7 @@
 import { AxiosError, AxiosResponse } from 'axios';
 import { DependencyList, useCallback, useRef, useState } from 'react';
 
-type AxiosFnVoid<T> = () => Promise<AxiosResponse<T>>;
+type AxiosFnVoid<R> = () => Promise<AxiosResponse<R>>;
 type AxiosFnParams<T, R> = (...args: [T]) => Promise<AxiosResponse<R>>;
 
 type CallbackVoid<R> = () => Promise<AxiosResponse<R> | void>;
@@ -14,7 +14,7 @@ type UseAxiosReturn<T, R> = {
 };
 
 const useAxios = <T, R>(
-  axiosFn: AxiosFnVoid<R> & AxiosFnParams<T, R>,
+  axiosFn: AxiosFnVoid<R> | AxiosFnParams<T, R>,
   dependency: DependencyList,
   errorHandler?: (status: number, message: string) => void,
 ): UseAxiosReturn<T, R> => {
