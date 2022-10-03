@@ -35,8 +35,15 @@ const CategoryList = styled.ul`
 
     padding: 12px;
     border-radius: 4px;
+    color: ${({ theme }) => theme.colors.darkGray};
+    cursor: pointer;
+
+    &:hover {
+      color: ${({ theme }) => theme.colors.blackGray};
+    }
 
     &.selected {
+      color: ${({ theme }) => theme.colors.blackGray};
       background-color: ${({ theme }) => theme.colors.bgGray};
     }
   }
