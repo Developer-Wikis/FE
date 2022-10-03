@@ -1,8 +1,8 @@
 import { AxiosError, AxiosResponse } from 'axios';
 import { DependencyList, useCallback, useRef, useState } from 'react';
 
-type AxiosFnVoid<T> = () => Promise<AxiosResponse<T>>;
-type AxiosFnParams<T, R> = (...args: [T]) => Promise<AxiosResponse<R>>;
+type AxiosFnVoid<R> = () => Promise<AxiosResponse<R>>;
+type AxiosFnParams<T, R> = (args: T) => Promise<AxiosResponse<R>>;
 
 type CallbackVoid<R> = () => Promise<AxiosResponse<R> | void>;
 type CallbackParams<T, R> = (args: T) => Promise<AxiosResponse<R> | void>;
@@ -10,11 +10,11 @@ type CallbackParams<T, R> = (args: T) => Promise<AxiosResponse<R> | void>;
 type UseAxiosReturn<T, R> = {
   isLoading: boolean;
   error: AxiosError | null;
-  request: CallbackVoid<R> & CallbackParams<T, R>;
+  request: CallbackVoid<R> | CallbackParams<T, R>;
 };
 
 const useAxios = <T, R>(
-  axiosFn: AxiosFnVoid<R> & AxiosFnParams<T, R>,
+  axiosFn: AxiosFnVoid<R> | AxiosFnParams<T, R>,
   dependency: DependencyList,
   errorHandler?: (status: number, message: string) => void,
 ): UseAxiosReturn<T, R> => {
@@ -23,7 +23,7 @@ const useAxios = <T, R>(
 
   const lastCallId = useRef(0);
 
-  const request = useCallback((...args: any) => {
+  const request = useCallback((args: T) => {
     const callId = ++lastCallId.current;
 
     if (!isLoading) {

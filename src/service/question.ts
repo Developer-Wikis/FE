@@ -44,6 +44,6 @@ export const matchQuestionPassword = (questionId: number, password: string) => {
   return unauth.post(`/questions/${questionId}/match`, { password });
 };
 
-export const getQuestionList = () => {
-  return unauth.get<QuestionListResponse>('/questions');
+export const getQuestionList = ({ category, page }: { category: string; page: number }) => {
+  return unauth.get<QuestionListResponse>(`/questions?category=${category}&page=${page}`);
 };
