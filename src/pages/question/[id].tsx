@@ -8,6 +8,7 @@ import { ICommentItem } from '~/types/comment';
 import useTimer from '~/hooks/useTimer';
 import Button from '~/components/base/Button';
 import Icon from '~/components/base/Icon';
+import MainContainer from '~/components/common/MainContainer';
 
 const commentData: ICommentItem[] = [
   {
@@ -149,64 +150,66 @@ const questionDetail = () => {
   };
 
   return (
-    <Container>
-      <PostHeader category="FE기본" title="ㅇㅇㅇ에 대해 설명해주세요" writer="ㅇㅇㅇ" />
-      <PostContent>
-        <RecordContainer>
-          {!isRecording && !isPlaying && !isCompleted ? (
-            <RecordStart>
-              <MikeButton onClick={onRecordAudio}>
-                <Icon name="Microphone" color="white" size="30" />
-              </MikeButton>
-            </RecordStart>
-          ) : (
-            <Player>
-              <ButtonArea>
-                {isRecording && (
-                  <StopButton onClick={onClickStop}>
-                    <Icon name="Stop" size="21" color="white" />
-                  </StopButton>
-                )}
-                {isCompleted &&
-                  (isPlaying ? (
-                    <PlayButton onClick={onPlayStop}>
-                      <Icon name="Pause" size="36" color="white" />
-                    </PlayButton>
-                  ) : (
-                    <PlayButton onClick={onPlay}>
-                      <Icon name="Play" size="21" color="white" />
-                    </PlayButton>
-                  ))}
-              </ButtonArea>
-              <TimeArea>
-                <span>
-                  {minutes}:{seconds < 10 ? 0 : ''}
-                  {seconds}
-                </span>
-              </TimeArea>
-            </Player>
-          )}
-        </RecordContainer>
-        <Button buttonType="borderGray" onClick={onRecordReset}>
-          다시 녹음하기
-        </Button>
-        <audio
-          controls
-          ref={audioRef}
-          src={audioSrc}
-          onEnded={onPlayEnded}
-          style={{ display: 'none' }}
-        ></audio>
-        <AdditionalQuestions
-          questions={['MVC의 문제점은 무엇인가요?', 'MVC의 문제점은 무엇인가요?']}
-        />
-        <MoveButtons>
-          <Button buttonType="borderGray">이전 질문</Button>
-          <Button buttonType="borderGray">다음 질문</Button>
-        </MoveButtons>
-      </PostContent>
-      <Comment total={2} comments={commentData} />
-    </Container>
+    <MainContainer>
+      <Container>
+        <PostHeader category="FE기본" title="ㅇㅇㅇ에 대해 설명해주세요" writer="ㅇㅇㅇ" />
+        <PostContent>
+          <RecordContainer>
+            {!isRecording && !isPlaying && !isCompleted ? (
+              <RecordStart>
+                <MikeButton onClick={onRecordAudio}>
+                  <Icon name="Microphone" color="white" size="30" />
+                </MikeButton>
+              </RecordStart>
+            ) : (
+              <Player>
+                <ButtonArea>
+                  {isRecording && (
+                    <StopButton onClick={onClickStop}>
+                      <Icon name="Stop" size="21" color="white" />
+                    </StopButton>
+                  )}
+                  {isCompleted &&
+                    (isPlaying ? (
+                      <PlayButton onClick={onPlayStop}>
+                        <Icon name="Pause" size="36" color="white" />
+                      </PlayButton>
+                    ) : (
+                      <PlayButton onClick={onPlay}>
+                        <Icon name="Play" size="21" color="white" />
+                      </PlayButton>
+                    ))}
+                </ButtonArea>
+                <TimeArea>
+                  <span>
+                    {minutes}:{seconds < 10 ? 0 : ''}
+                    {seconds}
+                  </span>
+                </TimeArea>
+              </Player>
+            )}
+          </RecordContainer>
+          <Button buttonType="borderGray" onClick={onRecordReset}>
+            다시 녹음하기
+          </Button>
+          <audio
+            controls
+            ref={audioRef}
+            src={audioSrc}
+            onEnded={onPlayEnded}
+            style={{ display: 'none' }}
+          ></audio>
+          <AdditionalQuestions
+            questions={['MVC의 문제점은 무엇인가요?', 'MVC의 문제점은 무엇인가요?']}
+          />
+          <MoveButtons>
+            <Button buttonType="borderGray">이전 질문</Button>
+            <Button buttonType="borderGray">다음 질문</Button>
+          </MoveButtons>
+        </PostContent>
+        <Comment total={2} comments={commentData} />
+      </Container>
+    </MainContainer>
   );
 };
 

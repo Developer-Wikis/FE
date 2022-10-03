@@ -8,6 +8,7 @@ import MiddleCategory from '~/components/common/MiddleCategory';
 import useAxios from '../hooks/useAxios';
 import { getQuestionList } from '~/service/question';
 import { IQuestionItem } from '~/types/question';
+import MainContainer from '~/components/common/MainContainer';
 
 const questions = [
   {
@@ -75,7 +76,7 @@ const Home: NextPage = () => {
         <meta name="description" content="Developer Wiki" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>
+      <MainContainer>
         <MainContent>
           <MiddleCategory
             categories={frontCategories}
@@ -86,7 +87,7 @@ const Home: NextPage = () => {
           {!isLoading && error && <span>{JSON.stringify(error)}</span>}
           {/* <QuestionList questions={questions} /> */}
         </MainContent>
-      </main>
+      </MainContainer>
     </div>
   );
 };
