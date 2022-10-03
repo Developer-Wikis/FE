@@ -19,3 +19,10 @@ a {
 li {
   list-style: none;
 }
+
+button {
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  background-color: transparent;
+}

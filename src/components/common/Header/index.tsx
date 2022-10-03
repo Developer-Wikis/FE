@@ -7,13 +7,16 @@ const Header = () => {
   return (
     <StyledHeader>
       <HeaderContent>
-        <h1>
-          <Link href="/">developerwiki</Link>
-        </h1>
-        <CategoryList>
-          <CategoryListItem href="/" name="프론트엔드" />
-          <CategoryListItem href="/" name="백엔드" />
-        </CategoryList>
+        <LeftArea>
+          <h1>
+            <Link href="/">developerwiki</Link>
+          </h1>
+          <CategoryList>
+            <CategoryListItem href="/?dev=fe" name="프론트엔드" />
+            <CategoryListItem href="/?dev=be" name="백엔드" />
+          </CategoryList>
+        </LeftArea>
+        <Link href="/question/create">질문 등록</Link>
       </HeaderContent>
     </StyledHeader>
   );
@@ -22,16 +25,21 @@ const Header = () => {
 export default Header;
 
 const StyledHeader = styled.div`
-  border-bottom: 1px solid ${({ theme }) => theme.colors.LightGray};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.lightGray};
 `;
 
 const HeaderContent = styled(PageContainer)`
   display: flex;
+  justify-content: space-between;
   height: 70px;
   align-items: center;
 `;
 
-const CategoryList = styled.div`
+const LeftArea = styled.div`
+  display: flex;
+`;
+
+const CategoryList = styled.ul`
   display: flex;
   margin-left: 40px;
 `;
