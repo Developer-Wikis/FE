@@ -3,14 +3,15 @@ import Icon from '~/components/base/Icon';
 import Link from '~/components/base/Link';
 import { IQuestionItem } from '~/types/question';
 import { formatNumber } from '../../../utils/helper/formatting';
+import { forwardRef, Ref } from 'react';
 
 interface QuestionItemProps {
   question: IQuestionItem;
 }
 
-const QuestionItem = ({ question }: QuestionItemProps) => {
+const QuestionItem = forwardRef(({ question }: QuestionItemProps, ref?: Ref<HTMLLIElement>) => {
   return (
-    <StyledItem>
+    <StyledItem ref={ref}>
       <Link href={`/question/${question.id}`}>
         <CategoryName title={question.category}>
           <span>{question.category}</span>
@@ -31,7 +32,7 @@ const QuestionItem = ({ question }: QuestionItemProps) => {
       </Link>
     </StyledItem>
   );
-};
+});
 
 export default QuestionItem;
 
