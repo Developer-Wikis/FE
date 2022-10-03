@@ -1,6 +1,8 @@
 import styled from '@emotion/styled';
+import Icon from '~/components/base/Icon';
 import Link from '~/components/base/Link';
 import { IQuestionItem } from '~/types/question';
+import { formatNumber } from '../../../utils/helper/formatting';
 
 interface QuestionItemProps {
   question: IQuestionItem;
@@ -8,17 +10,23 @@ interface QuestionItemProps {
 
 const QuestionItem = ({ question }: QuestionItemProps) => {
   return (
-    <StyledItem key={question.id}>
+    <StyledItem>
       <Link href={`/question/${question.id}`}>
-        <CategoryName>
+        <CategoryName title={question.category}>
           <span>{question.category}</span>
         </CategoryName>
-        <QuestionTitle>
+        <QuestionTitle title={question.title}>
           <span>{question.title}</span>
         </QuestionTitle>
         <QuestionInfo>
-          <i>댓글</i>
-          <span>{question.commentCount}</span>
+          <QuestionInfoItem title={String(question.commentCount)}>
+            <Icon name="Comment" color="darkGray" size="15" />
+            {formatNumber(question.commentCount)}
+          </QuestionInfoItem>
+          <QuestionInfoItem title={String(question.viewCount)}>
+            <Icon name="Comment" color="darkGray" size="15" />
+            {formatNumber(question.viewCount)}
+          </QuestionInfoItem>
         </QuestionInfo>
       </Link>
     </StyledItem>
@@ -54,4 +62,14 @@ const QuestionInfo = styled.div`
   text-align: right;
   padding: 0 20px;
   flex-shrink: 0;
+`;
+const QuestionInfoItem = styled.span`
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8.5px;
+
+  ~ span {
+    margin-left: 17.5px;
+  }
 `;
