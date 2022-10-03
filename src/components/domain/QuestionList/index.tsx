@@ -10,7 +10,7 @@ const QuestionList = ({ questions }: QuestionListProps) => {
   return (
     <Container>
       {questions.map((question) => (
-        <QuestionItem question={question} />
+        <QuestionItem question={question} key={question.id} />
       ))}
     </Container>
   );
