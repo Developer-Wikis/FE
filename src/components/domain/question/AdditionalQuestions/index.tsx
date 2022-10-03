@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { useState } from 'react';
+import Icon from '~/components/base/Icon';
 
 interface Props {
   questions: string[];
@@ -16,7 +17,13 @@ const AdditionalQuestions = ({ questions }: Props) => {
     <Container>
       <AccordionTitle>
         <h3>예상되는 꼬리 질문 보기</h3>
-        <button onClick={onClickButton}>버튼</button>
+        <button onClick={onClickButton}>
+          {isOpen ? (
+            <Icon name="ArrowUp" size="24" stroke="blackGray" />
+          ) : (
+            <Icon name="ArrowDown" size="24" stroke="blackGray" />
+          )}
+        </button>
       </AccordionTitle>
       {isOpen && (
         <AccordionContent>
