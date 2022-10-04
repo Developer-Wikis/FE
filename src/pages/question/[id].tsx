@@ -84,6 +84,8 @@ const QuestionDetail = ({ detailData }: QuestionDetailProps) => {
   const [audioSrc, setAudioSrc] = useState('');
   const audioRef = useRef<null | HTMLAudioElement>(null);
 
+  const [duration, setDuration] = useState({ minutes: 0, seconds: 0 });
+
   let timeoutId = useRef<null | NodeJS.Timeout>(null);
   // 그냥 일반 변수or state 로 저장 시에 timeout을 삭제하려는 시점에 값이 null이기 때문에 초기화가 안됨.
 
@@ -123,12 +125,12 @@ const QuestionDetail = ({ detailData }: QuestionDetailProps) => {
 
     timeoutId.current = setTimeout(() => {
       if (mediaRecorder.current?.state === 'recording') {
-        onRecordStop();
+        onRecordStop({ minutes: 1, seconds: 0 });
       }
     }, 61000);
   };
 
-  const onRecordStop = () => {
+  const onRecordStop = (time: { minutes: number; seconds: number }) => {
     if (mediaRecorder.current) {
       onFinish();
       mediaRecorder.current.stop();
@@ -136,6 +138,7 @@ const QuestionDetail = ({ detailData }: QuestionDetailProps) => {
         track.stop();
       });
 
+      setDuration(time);
       setIsRecording(false);
       setIsCompleted(true);
     }
@@ -155,7 +158,7 @@ const QuestionDetail = ({ detailData }: QuestionDetailProps) => {
 
   const onClickStop = () => {
     if (mediaRecorder.current) {
-      onRecordStop();
+      onRecordStop({ minutes, seconds });
     }
   };
 
@@ -219,6 +222,13 @@ const QuestionDetail = ({ detailData }: QuestionDetailProps) => {
                   {minutes}:{seconds < 10 ? 0 : ''}
                   {seconds}
                 </span>
+                {isCompleted && (
+                  <span>
+                    {' '}
+                    / {duration.minutes}:{duration.seconds < 10 ? 0 : ''}
+                    {duration.seconds}
+                  </span>
+                )}
               </TimeArea>
             </Player>
           )}
