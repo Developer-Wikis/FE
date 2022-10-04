@@ -1,20 +1,22 @@
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
-import { ReactNode } from 'react';
 import Button from '~/components/base/Button';
 import Icon from '~/components/base/Icon';
+import { QuestionCategoryQuery } from '~/types/question';
 
 interface MoveButtonProps {
+  categoryQuery: QuestionCategoryQuery;
   prevId: number;
   nextId: number;
 }
 
-const MoveButtons = ({ nextId, prevId }: MoveButtonProps) => {
+const MoveButtons = ({ categoryQuery, nextId, prevId }: MoveButtonProps) => {
   const router = useRouter();
+  const { main, sub } = categoryQuery;
 
   const onMovePrev = () => {
     if (prevId) {
-      router.push(`/question/${prevId}`);
+      router.push(`/question/${prevId}?main=${main}&sub=${sub}`);
     } else {
       alert('첫 번째 페이지 입니다.');
     }
@@ -22,7 +24,7 @@ const MoveButtons = ({ nextId, prevId }: MoveButtonProps) => {
 
   const onMoveNext = () => {
     if (nextId) {
-      router.push(`/question/${nextId}`);
+      router.push(`/question/${nextId}?main=${main}&sub=${sub}`);
     } else {
       alert('마지막 페이지 입니다.');
     }

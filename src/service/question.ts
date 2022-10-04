@@ -32,8 +32,8 @@ export const deleteQuestion = (questionId: number, password: string) => {
   return unauth.delete(`/questions/${questionId}`, { data: { password } });
 };
 
-export const getQuestionDetail = (questionId: number) => {
-  return unauth.get<QuestionDetailResponse>(`/questions/${questionId}`);
+export const getQuestionDetail = (questionId: number, category: string) => {
+  return unauth.get<QuestionDetailResponse>(`/questions/${questionId}?category=${category}`);
 };
 
 export const editQuestion = (questionId: number, question: Omit<IQuestion, 'nickname'>) => {
