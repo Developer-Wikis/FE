@@ -5,7 +5,7 @@ import Icon from '~/components/base/Icon';
 import Input from '~/components/base/Input';
 import PasswordConfirm from '~/components/domain/question/PasswordConfirm';
 import { ICommentItem } from '~/types/comment';
-import { convertDate } from '~/utils/helper/convertor';
+import { formatDate } from '~/utils/helper/formatting';
 
 interface CommentListProps {
   id: number;
@@ -43,7 +43,7 @@ const CommentList = ({
         <span>{comment.content}</span>
       </Content>
       <Info>
-        <CreatedAt>{convertDate(comment.createdAt)}</CreatedAt>
+        <CreatedAt>{formatDate(comment.createdAt)}</CreatedAt>
         <Icon.Button name="Close" color="mediumGray" size="12" onClick={handleDelete} />
       </Info>
       {openPasswordId === id && (
