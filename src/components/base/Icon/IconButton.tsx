@@ -7,16 +7,10 @@ interface IconButtonProps extends IconProps {
 
 const IconButton = ({ name, size = '20', color = 'white', onClick }: IconButtonProps) => {
   return (
-    <StyledButton onClick={onClick}>
+    <button onClick={onClick}>
       <Icon name={name} size={size} color={color} />
-    </StyledButton>
+    </button>
   );
 };
 
 export default IconButton;
-
-const StyledButton = styled.button`
-  svg {
-    display: block;
-  }
-`;
