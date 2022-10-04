@@ -37,8 +37,5 @@ const StyledUl = styled.ul`
     span {
       line-height: 1.5;
     }
-    svg {
-      display: block;
-    }
   }
 `;
