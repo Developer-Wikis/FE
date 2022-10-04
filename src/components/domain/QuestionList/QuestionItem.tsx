@@ -1,38 +1,46 @@
 import styled from '@emotion/styled';
 import Icon from '~/components/base/Icon';
 import Link from '~/components/base/Link';
-import { IQuestionItem } from '~/types/question';
+import { IQuestionItem, QuestionCategoryQuery } from '~/types/question';
 import { formatNumber } from '../../../utils/helper/formatting';
 import { forwardRef, Ref } from 'react';
 
 interface QuestionItemProps {
   question: IQuestionItem;
+  currentCategory: QuestionCategoryQuery;
 }
 
-const QuestionItem = forwardRef(({ question }: QuestionItemProps, ref?: Ref<HTMLLIElement>) => {
-  return (
-    <StyledItem ref={ref}>
-      <Link href={`/question/${question.id}`}>
-        <CategoryName title={question.category}>
-          <span>{question.category}</span>
-        </CategoryName>
-        <QuestionTitle title={question.title}>
-          <span>{question.title}</span>
-        </QuestionTitle>
-        <QuestionInfo>
-          <QuestionInfoItem title={String(question.viewCount)}>
-            <Icon name="Eye" color="darkGray" size="15" />
-            {formatNumber(question.viewCount)}
-          </QuestionInfoItem>
-          <QuestionInfoItem title={String(question.commentCount)}>
-            <Icon name="Comment" color="darkGray" size="15" />
-            {formatNumber(question.commentCount)}
-          </QuestionInfoItem>
-        </QuestionInfo>
-      </Link>
-    </StyledItem>
-  );
-});
+const QuestionItem = forwardRef(
+  ({ question, currentCategory }: QuestionItemProps, ref?: Ref<HTMLLIElement>) => {
+    return (
+      <StyledItem ref={ref}>
+        <Link
+          href={{
+            pathname: `/question/${question.id}`,
+            query: { main: currentCategory.main, sub: currentCategory.sub },
+          }}
+        >
+          <CategoryName title={question.category}>
+            <span>{question.category}</span>
+          </CategoryName>
+          <QuestionTitle title={question.title}>
+            <span>{question.title}</span>
+          </QuestionTitle>
+          <QuestionInfo>
+            <QuestionInfoItem title={String(question.viewCount)}>
+              <Icon name="Eye" color="darkGray" size="15" />
+              {formatNumber(question.viewCount)}
+            </QuestionInfoItem>
+            <QuestionInfoItem title={String(question.commentCount)}>
+              <Icon name="Comment" color="darkGray" size="15" />
+              {formatNumber(question.commentCount)}
+            </QuestionInfoItem>
+          </QuestionInfo>
+        </Link>
+      </StyledItem>
+    );
+  },
+);
 
 export default QuestionItem;
 

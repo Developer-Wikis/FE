@@ -33,3 +33,9 @@ export interface IQuestionDetail {
   prevId: number;
   nextId: number;
 }
+
+// 카테고리 확정되면 좀 더 세부적으로 타입 지정
+export interface QuestionCategoryQuery {
+  main: string;
+  sub: string;
+}
