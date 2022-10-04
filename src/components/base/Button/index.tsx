@@ -26,7 +26,6 @@ const Button = ({
 export default Button;
 
 const StyledButton = styled.button<ButtonProps>`
-  border-radius: 4px;
   white-space: nowrap;
 
   ${({ buttonType }) => buttonType && buttonStyle[buttonType]};
@@ -34,5 +33,6 @@ const StyledButton = styled.button<ButtonProps>`
 
   &:disabled {
     opacity: 0.7;
+    cursor: not-allowed;
   }
 `;

@@ -107,18 +107,16 @@ const Home: NextPage = () => {
         <meta name="description" content="Developer Wiki" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>
-        <MainContent>
-          {router.isReady && selectedCategories && (
-            <MiddleCategory
-              categories={['전체', ...categories[selectedCategories.main]]}
-              onSelect={onChangeSubCategory}
-              currentCategory={selectedCategories.sub}
-            />
-          )}
-          <QuestionList ref={setObserverTarget} questions={questions} />
-        </MainContent>
-      </main>
+      <MainContent>
+        {router.isReady && selectedCategories && (
+          <MiddleCategory
+            categories={['전체', ...categories[selectedCategories.main]]}
+            onSelect={onChangeSubCategory}
+            currentCategory={selectedCategories.sub}
+          />
+        )}
+        <QuestionList ref={setObserverTarget} questions={questions} />
+      </MainContent>
     </div>
   );
 };

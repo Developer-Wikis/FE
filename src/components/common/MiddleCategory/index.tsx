@@ -10,12 +10,8 @@ const MiddleCategory = ({ categories, onSelect, currentCategory }: MiddleCategor
   return (
     <CategoryList>
       {categories.map((category) => (
-        <li
-          key={category}
-          className={category === currentCategory ? 'selected' : ''}
-          onClick={() => onSelect(category)}
-        >
-          {category}
+        <li key={category} className={category === currentCategory ? 'selected' : ''}>
+          <button onClick={() => onSelect(category)}>{category}</button>
         </li>
       ))}
     </CategoryList>
@@ -30,20 +26,24 @@ const CategoryList = styled.ul`
   flex-wrap: wrap;
 
   li {
-    margin-right: 22px;
+    margin-right: 14px;
     margin-top: 12px;
 
-    padding: 12px;
-    border-radius: 4px;
-    color: ${({ theme }) => theme.colors.darkGray};
-    cursor: pointer;
+    button {
+      font-size: 14px;
+      padding: 8px 14px;
+      border-radius: 4px;
+      color: ${({ theme }) => theme.colors.darkGray};
+      cursor: pointer;
 
-    &:hover {
-      color: ${({ theme }) => theme.colors.blackGray};
+      &:hover {
+        color: ${({ theme }) => theme.colors.blackGray};
+      }
     }
 
-    &.selected {
+    &.selected button {
       color: ${({ theme }) => theme.colors.blackGray};
+      font-weight: 500;
       background-color: ${({ theme }) => theme.colors.bgGray};
     }
   }

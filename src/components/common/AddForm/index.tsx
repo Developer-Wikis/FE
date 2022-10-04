@@ -39,7 +39,9 @@ const AddForm = ({ buttonText, onSubmit, ...props }: AddFormProps) => {
         }}
         value={text}
       />
-      <Button onClick={handleSubmit}>{buttonText}</Button>
+      <Button size="sm" onClick={handleSubmit}>
+        {buttonText}
+      </Button>
     </Container>
   );
 };
@@ -54,5 +56,6 @@ const Container = styled.form`
 
   button {
     margin-left: 12px;
+    width: 80px;
   }
 `;

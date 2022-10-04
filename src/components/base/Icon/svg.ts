@@ -10,3 +10,4 @@ export { default as ArrowDown } from '~/assets/icons/arrow-down.svg';
 export { default as ArrowUp } from '~/assets/icons/arrow-up.svg';
 export { default as ArrowLeft } from '~/assets/icons/arrow-left.svg';
 export { default as ArrowRight } from '~/assets/icons/arrow-right.svg';
+export { default as Eye } from '~/assets/icons/eye.svg';

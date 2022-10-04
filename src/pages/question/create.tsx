@@ -58,7 +58,6 @@ const CreateQuestion = () => {
 
   async function onSubmit() {
     const newQuestion: IQuestion = { ...values, additionQuestions };
-    console.log(newQuestion);
     try {
       await createQuestion(newQuestion);
       alert('질문이 접수되었습니다. 질문은 관리자 확인 후 등록됩니다.');

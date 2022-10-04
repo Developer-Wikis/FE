@@ -20,13 +20,13 @@ const QuestionItem = forwardRef(({ question }: QuestionItemProps, ref?: Ref<HTML
           <span>{question.title}</span>
         </QuestionTitle>
         <QuestionInfo>
+          <QuestionInfoItem title={String(question.viewCount)}>
+            <Icon name="Eye" color="darkGray" size="15" />
+            {formatNumber(question.viewCount)}
+          </QuestionInfoItem>
           <QuestionInfoItem title={String(question.commentCount)}>
             <Icon name="Comment" color="darkGray" size="15" />
             {formatNumber(question.commentCount)}
-          </QuestionInfoItem>
-          <QuestionInfoItem title={String(question.viewCount)}>
-            <Icon name="Comment" color="darkGray" size="15" />
-            {formatNumber(question.viewCount)}
           </QuestionInfoItem>
         </QuestionInfo>
       </Link>
@@ -39,18 +39,22 @@ export default QuestionItem;
 const StyledItem = styled.li`
   a {
     display: flex;
+    align-items: center;
     padding: 20px 0;
     border-bottom: 1px solid ${({ theme }) => theme.colors.lightGray};
   }
 `;
 
 const CategoryName = styled.div`
+  font-size: 14px;
   padding: 0 20px;
-  width: 120px;
+  width: 140px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   flex-shrink: 0;
+  font-weight: 500;
+  color: ${({ theme }) => theme.colors.darkGray};
 `;
 
 const QuestionTitle = styled.div`
@@ -58,17 +62,20 @@ const QuestionTitle = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
 `;
+
 const QuestionInfo = styled.div`
   flex-grow: 1;
   text-align: right;
   padding: 0 20px;
   flex-shrink: 0;
+  font-size: 14px;
+  color: ${({ theme }) => theme.colors.darkGray};
 `;
 const QuestionInfoItem = styled.span`
   display: inline-flex;
   flex-direction: row;
   align-items: center;
-  gap: 8.5px;
+  gap: 7px;
 
   ~ span {
     margin-left: 17.5px;

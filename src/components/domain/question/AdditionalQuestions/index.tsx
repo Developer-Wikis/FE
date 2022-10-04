@@ -16,14 +16,12 @@ const AdditionalQuestions = ({ questions }: Props) => {
   return (
     <Container>
       <AccordionTitle>
-        <h3>예상되는 꼬리 질문 보기</h3>
-        <button onClick={onClickButton}>
-          {isOpen ? (
-            <Icon name="ArrowUp" size="24" stroke="blackGray" />
-          ) : (
-            <Icon name="ArrowDown" size="24" stroke="blackGray" />
-          )}
-        </button>
+        <Title>예상되는 꼬리 질문 보기</Title>
+        {isOpen ? (
+          <Icon.Button name="ArrowUp" size="24" color="blackGray" onClick={onClickButton} />
+        ) : (
+          <Icon.Button name="ArrowDown" size="24" color="blackGray" onClick={onClickButton} />
+        )}
       </AccordionTitle>
       {isOpen && (
         <AccordionContent>
@@ -42,6 +40,7 @@ const Container = styled.div`
   margin-top: 42px;
   width: 420px;
 `;
+
 const AccordionTitle = styled.div`
   display: flex;
   justify-content: space-between;
@@ -50,8 +49,13 @@ const AccordionTitle = styled.div`
   border-bottom: 1px solid ${({ theme }) => theme.colors.lightGray}; ;
 `;
 
+const Title = styled.h3`
+  font-size: 18px;
+`;
+
 const AccordionContent = styled.ul`
   padding: 16px 13px;
+
   li {
     padding: 8px 0;
   }

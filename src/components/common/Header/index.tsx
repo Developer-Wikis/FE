@@ -1,22 +1,51 @@
 import styled from '@emotion/styled';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 import Link from '~/components/base/Link';
 import PageContainer from '~/components/common/PageContainer';
 import CategoryListItem from './CategoryListItem';
 
 const Header = () => {
+  const router = useRouter();
+  const [selectedCategory, setSelectedCategory] = useState('');
+
+  useEffect(() => {
+    if (!router.isReady) {
+      return;
+    }
+
+    if (router.pathname === '/') {
+      if (router.query.dev === 'fe' || !router.query.dev) {
+        setSelectedCategory('fe');
+        return;
+      }
+      if (router.query.dev === 'be') {
+        setSelectedCategory('be');
+        return;
+      }
+    }
+    setSelectedCategory('');
+  }, [router.isReady, router.query]);
+
   return (
     <StyledHeader>
       <HeaderContent>
         <LeftArea>
-          <h1>
+          <Logo>
             <Link href="/">developerwiki</Link>
-          </h1>
+          </Logo>
           <CategoryList>
-            <CategoryListItem href="/?dev=fe" name="프론트엔드" />
-            <CategoryListItem href="/?dev=be" name="백엔드" />
+            <CategoryListItem
+              href="/?dev=fe"
+              select={selectedCategory === 'fe'}
+              name="프론트엔드"
+            />
+            <CategoryListItem href="/?dev=be" select={selectedCategory === 'be'} name="백엔드" />
           </CategoryList>
         </LeftArea>
-        <Link href="/question/create">질문 등록</Link>
+        <Link size="sm" linkType="black" href="/question/create">
+          질문 등록
+        </Link>
       </HeaderContent>
     </StyledHeader>
   );
@@ -37,9 +66,14 @@ const HeaderContent = styled(PageContainer)`
 
 const LeftArea = styled.div`
   display: flex;
+  align-items: center;
 `;
 
 const CategoryList = styled.ul`
   display: flex;
   margin-left: 40px;
+`;
+
+const Logo = styled.h1`
+  font-size: 20px;
 `;
