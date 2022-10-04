@@ -21,7 +21,7 @@ const Li = styled.li`
   margin-right: 16px;
 
   a {
-    font-size: 16px;
+    font-size: 18px;
   }
 
   &.selected a {

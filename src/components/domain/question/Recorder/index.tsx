@@ -201,32 +201,24 @@ const ButtonArea = styled.div`
 `;
 
 const StopButton = styled.button`
-  position: relative;
   width: 60px;
   height: 60px;
   border-radius: 50%;
   background: ${({ theme }) => theme.colors.red};
-  svg {
-    position: absolute;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    top: 50%;
-  }
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const PlayButton = styled.button`
-  position: relative;
   width: 60px;
   height: 60px;
   border-radius: 50%;
 
   background: ${({ theme }) => theme.colors.blackGray};
-  svg {
-    position: absolute;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    top: 50%;
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const TimeArea = styled.div`
