@@ -25,9 +25,9 @@ const AdditionalQuestions = ({ questions }: Props) => {
       </AccordionTitle>
       {isOpen && (
         <AccordionContent>
-          {questions.map((question, index) => (
-            <li key={index}>⦁ {question}</li>
-          ))}
+          {questions.length > 0
+            ? questions.map((question, index) => <li key={index}>⦁ {question}</li>)
+            : '등록된 꼬리 질문이 없습니다.'}
         </AccordionContent>
       )}
     </Container>

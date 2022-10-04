@@ -30,7 +30,7 @@ const CategoryList = styled.ul`
     margin-top: 12px;
 
     button {
-      font-size: 14px;
+      font-size: 16px;
       padding: 8px 14px;
       border-radius: 4px;
       color: ${({ theme }) => theme.colors.darkGray};
