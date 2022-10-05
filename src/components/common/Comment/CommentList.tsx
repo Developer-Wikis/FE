@@ -55,7 +55,7 @@ const CommentList = ({
         {!isEditing ? (
           <>
             <Content>
-              <span>{comment.content}</span>
+              <p>{comment.content}</p>
             </Content>
             <Info>
               <CreatedAt>{formatDate(comment.createdAt)}</CreatedAt>
@@ -104,14 +104,17 @@ const Writer = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   color: ${({ theme }) => theme.colors.darkGray};
+  flex-shrink: 0;
 `;
 
 const Content = styled.div`
   flex-grow: 1;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   margin-left: 16px;
+
+  p {
+    word-break: break-all;
+    white-space: pre-wrap;
+  }
 `;
 
 const Info = styled.div`
