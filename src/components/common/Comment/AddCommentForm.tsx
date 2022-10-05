@@ -1,8 +1,9 @@
 import styled from '@emotion/styled';
-import { ChangeEvent, FormEvent, useRef, useState } from 'react';
+import { useRef } from 'react';
 import Button from '~/components/base/Button';
 import useForm from '~/hooks/useForm';
 import { SUBMIT_CHECK } from '~/utils/helper/validation';
+import CommentTextArea from '../CommentTextArea';
 
 const initialValues = {
   nickname: '',
@@ -41,7 +42,7 @@ const AddCommentForm = ({ onAddComment }: AddCommentFormProps) => {
     }
 
     if (SUBMIT_CHECK.comment.isValid(values.content)) {
-      alert((errors.content = SUBMIT_CHECK.comment.message));
+      alert(SUBMIT_CHECK.comment.message);
       contentRef.current?.focus();
       return;
     }
@@ -70,15 +71,11 @@ const AddCommentForm = ({ onAddComment }: AddCommentFormProps) => {
             onChange={handleChange}
           />
         </Writer>
-        <Textarea
-          name="content"
-          ref={contentRef}
-          placeholder="댓글을 입력해주세요"
-          value={values.content}
-          onChange={handleChange}
-        />
+        <CommentTextArea value={values.content} ref={contentRef} onChange={handleChange} />
       </Content>
-      <AddButton onClick={handleSubmit}>등록</AddButton>
+      <AddButton size="sm" onClick={handleSubmit}>
+        등록
+      </AddButton>
     </Container>
   );
 };
@@ -97,6 +94,7 @@ const Writer = styled.div`
   display: flex;
   flex-direction: column;
   width: 132px;
+  margin-right: 10px;
 `;
 
 const Input = styled.input`
@@ -115,21 +113,7 @@ const Content = styled.div`
   display: flex;
 `;
 
-const Textarea = styled.textarea`
-  background-color: white;
-  border: 1px solid ${({ theme }) => theme.colors.lightGray};
-  border-radius: 4px;
-  font-size: 14px;
-
-  height: 74px;
-  padding: 8px;
-  box-sizing: border-box;
-  resize: none;
-  margin-left: 10px;
-
-  flex-grow: 1;
-`;
-
 const AddButton = styled(Button)`
   align-self: flex-end;
+  width: 80px;
 `;

@@ -5,10 +5,10 @@ import Icon from '~/components/base/Icon';
 import Input from '~/components/base/Input';
 
 interface PasswordConfirmProps {
-  handlePasswordSubmit: (password: string) => void;
+  handleSubmitPassword: (password: string) => void;
   handleClose: () => void;
 }
-const PasswordConfirm = ({ handlePasswordSubmit, handleClose }: PasswordConfirmProps) => {
+const PasswordConfirm = ({ handleSubmitPassword, handleClose }: PasswordConfirmProps) => {
   const [password, setPassword] = useState('');
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -17,8 +17,9 @@ const PasswordConfirm = ({ handlePasswordSubmit, handleClose }: PasswordConfirmP
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    handlePasswordSubmit(password);
+    handleSubmitPassword(password);
   };
+
   return (
     <Container>
       <PasswordForm onSubmit={handleSubmit}>
@@ -29,9 +30,7 @@ const PasswordConfirm = ({ handlePasswordSubmit, handleClose }: PasswordConfirmP
           onChange={handleChange}
         />
         <Button size="sm">확인</Button>
-        <button onClick={handleClose}>
-          <Icon name="Close" color="mediumGray" size="12" />
-        </button>
+        <Icon.Button name="Close" color="mediumGray" size="12" onClick={handleClose} />
       </PasswordForm>
     </Container>
   );
@@ -42,9 +41,9 @@ export default PasswordConfirm;
 const Container = styled.div`
   position: absolute;
   background-color: white;
-  right: -9px;
-  top: -5px;
-  padding: 8px;
+  right: 0;
+  top: -2px;
+  padding: 10px 15px 10px 10px;
   border: 1px solid ${({ theme }) => theme.colors.lightGray};
   border-radius: 4px;
   font-size: 14px;

@@ -1,8 +1,13 @@
 import styled from '@emotion/styled';
-import { useCallback, useEffect, useState } from 'react';
-import Input from '~/components/base/Input';
+import { useEffect, useState } from 'react';
 import useAxios from '~/hooks/useAxios';
-import { createComment, deleteComment, getCommentList } from '~/service/comment';
+import {
+  checkCommentPassword,
+  createComment,
+  deleteComment,
+  editComment,
+  getCommentList,
+} from '~/service/comment';
 import { ICommentItem } from '~/types/comment';
 import AddCommentForm, { commentValuesType } from './AddCommentForm';
 import CommentList from './CommentList';
@@ -11,10 +16,22 @@ interface CommentProps {
   questionId: number;
 }
 
+type CommentActionType = 'delete' | 'edit' | '';
+interface PasswordState {
+  commentId: null | number;
+  action: CommentActionType;
+  password: string;
+}
+
 const Comment = ({ questionId }: CommentProps) => {
   const [comments, setComments] = useState<ICommentItem[]>([]);
   const { isLoading, error, request } = useAxios(getCommentList, []);
-  const [openPasswordId, setOpenPasswordId] = useState<null | number>(null);
+  const [editId, setEditId] = useState<null | number>(null);
+  const [passwordState, setPasswordState] = useState<PasswordState>({
+    commentId: null,
+    action: '',
+    password: '',
+  });
 
   const getComments = async () => {
     const result = await request(questionId);
@@ -23,31 +40,61 @@ const Comment = ({ questionId }: CommentProps) => {
     }
   };
 
-  const onOpenPassword = (commentId: number | null) => {
-    setOpenPasswordId(commentId);
+  const onOpenPassword = (commentId: number | null, action: CommentActionType) => {
+    setPasswordState({ commentId, action, password: '' });
   };
 
-  const onDeleteComment = async (commentId: number, password: string) => {
+  const onSubmitPassword = async (commentId: number, password: string) => {
     try {
-      await deleteComment(questionId, commentId, password);
-      getComments();
-      setOpenPasswordId(null);
-    } catch {
+      if (passwordState.action === 'delete') {
+        await deleteComment(questionId, commentId, password);
+        await getComments();
+        setPasswordState({ commentId: null, action: '', password: '' });
+
+        return;
+      }
+
+      if (passwordState.action === 'edit') {
+        const isCorrectPassword = await checkCommentPassword(questionId, commentId, password);
+        if (isCorrectPassword.data) {
+          setEditId(commentId);
+          setPasswordState({ commentId: null, action: 'edit', password: password });
+        } else {
+          alert('비밀번호가 일치하지 않습니다.');
+        }
+      }
+    } catch (e) {
       // 상태코드에 따라 다르게 에러 출력하기
-      alert('비밀번호 변경에 실패했습니다.');
+      alert('비밀번호가 일치하지 않습니다.');
     }
   };
 
-  const onAddComment = useCallback(async (values: commentValuesType) => {
+  const onAddComment = async (values: commentValuesType) => {
     try {
       await createComment(questionId, values);
-      getComments();
-      setOpenPasswordId(null);
-    } catch {
+      await getComments();
+      setPasswordState({ commentId: null, action: '', password: '' });
+    } catch (e) {
       // 상태코드에 따라 다르게 에러 출력하기
       alert('댓글 등록에 실패했습니다.');
     }
-  }, []);
+  };
+
+  const onEditComment = async (commentId: number, content: string) => {
+    try {
+      await editComment(questionId, commentId, { password: passwordState.password, content });
+      await getComments();
+      setPasswordState({ commentId: null, action: '', password: '' });
+      setEditId(null);
+    } catch (e) {
+      // 상태코드에 따라 다르게 에러 출력하기
+      alert('댓글 수정에 실패했습니다.');
+    }
+  };
+
+  const onCancelEdit = () => {
+    setEditId(null);
+  };
 
   useEffect(() => {
     getComments();
@@ -64,8 +111,11 @@ const Comment = ({ questionId }: CommentProps) => {
             id={comment.id}
             comment={comment}
             onOpenPassword={onOpenPassword}
-            openPasswordId={openPasswordId}
-            onDeleteComment={onDeleteComment}
+            onSubmitPassword={onSubmitPassword}
+            onEditComment={onEditComment}
+            onCancelEdit={onCancelEdit}
+            isPasswordCheck={comment.id == passwordState.commentId}
+            isEditing={comment.id === editId}
           />
         ))}
         <AddCommentForm onAddComment={onAddComment} />
