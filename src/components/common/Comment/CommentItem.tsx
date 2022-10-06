@@ -1,9 +1,8 @@
 import styled from '@emotion/styled';
 import { useContext } from 'react';
-import Icon from '~/components/base/Icon';
 import PasswordConfirm from '~/components/domain/question/PasswordConfirm';
 import { ICommentItem } from '~/types/comment';
-import { formatDate } from '~/utils/helper/formatting';
+import CommentContent from './CommentContent';
 import { CommentContext } from './context';
 import EditCommentForm from './EditCommentForm';
 
@@ -13,15 +12,7 @@ interface CommentListProps {
 }
 
 const CommentItem = ({ commentId, comment }: CommentListProps) => {
-  const { onOpenPassword, editId, passwordState } = useContext(CommentContext);
-
-  const handleDelete = () => {
-    onOpenPassword(commentId, 'delete');
-  };
-
-  const handleEditStart = () => {
-    onOpenPassword(commentId, 'edit');
-  };
+  const { editId, passwordState } = useContext(CommentContext);
 
   return (
     <StyledLi>
@@ -30,16 +21,11 @@ const CommentItem = ({ commentId, comment }: CommentListProps) => {
           <span title={comment.nickname}>{comment.nickname}</span>
         </Writer>
         {editId !== commentId ? (
-          <>
-            <Content>
-              <p>{comment.content}</p>
-            </Content>
-            <Info>
-              <CreatedAt>{formatDate(comment.createdAt)}</CreatedAt>
-              <Icon.Button name="Pencil" color="mediumGray" size="25" onClick={handleEditStart} />
-              <Icon.Button name="Close" color="mediumGray" size="12" onClick={handleDelete} />
-            </Info>
-          </>
+          <CommentContent
+            commentId={commentId}
+            content={comment.content}
+            createdAt={comment.createdAt}
+          />
         ) : (
           <EditorContainer>
             <EditCommentForm defaultValue={comment.content} commentId={commentId} />
@@ -76,30 +62,4 @@ const Writer = styled.div`
   text-overflow: ellipsis;
   color: ${({ theme }) => theme.colors.darkGray};
   flex-shrink: 0;
-`;
-
-const Content = styled.div`
-  flex-grow: 1;
-  margin-left: 16px;
-
-  p {
-    word-break: break-all;
-    white-space: pre-wrap;
-  }
-`;
-
-const Info = styled.div`
-  display: flex;
-  align-items: center;
-  text-align: right;
-  margin-left: 16px;
-  margin-right: 16px;
-  flex-shrink: 0;
-  gap: 4px;
-  color: ${({ theme }) => theme.colors.mediumGray};
-  align-self: flex-start;
-`;
-
-const CreatedAt = styled.span`
-  font-size: 14px;
 `;
