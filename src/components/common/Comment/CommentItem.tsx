@@ -1,48 +1,26 @@
 import styled from '@emotion/styled';
+import { useContext } from 'react';
 import Icon from '~/components/base/Icon';
 import PasswordConfirm from '~/components/domain/question/PasswordConfirm';
 import { ICommentItem } from '~/types/comment';
 import { formatDate } from '~/utils/helper/formatting';
+import { CommentContext } from './context';
 import EditCommentForm from './EditCommentForm';
 
 interface CommentListProps {
-  id: number;
+  commentId: number;
   comment: ICommentItem;
-  onOpenPassword: (id: number | null, action: 'edit' | 'delete' | '') => void;
-  isPasswordCheck: boolean;
-  isEditing: boolean;
-  onSubmitPassword: (id: number, password: string) => void;
-  onEditComment: (commentId: number, content: string) => void;
-  onCancelEdit: () => void;
 }
-const CommentItem = ({
-  id,
-  comment,
-  onOpenPassword,
-  isPasswordCheck,
-  onSubmitPassword,
-  isEditing,
-  onEditComment,
-  onCancelEdit,
-}: CommentListProps) => {
+
+const CommentItem = ({ commentId, comment }: CommentListProps) => {
+  const { onOpenPassword, editId, passwordState } = useContext(CommentContext);
+
   const handleDelete = () => {
-    onOpenPassword(id, 'delete');
-  };
-
-  const handleSubmitPassword = (password: string) => {
-    onSubmitPassword(id, password);
-  };
-
-  const handleClose = () => {
-    onOpenPassword(null, '');
+    onOpenPassword(commentId, 'delete');
   };
 
   const handleEditStart = () => {
-    onOpenPassword(id, 'edit');
-  };
-
-  const handleEdit = (content: string) => {
-    onEditComment(id, content);
+    onOpenPassword(commentId, 'edit');
   };
 
   return (
@@ -51,7 +29,7 @@ const CommentItem = ({
         <Writer>
           <span title={comment.nickname}>{comment.nickname}</span>
         </Writer>
-        {!isEditing ? (
+        {editId !== commentId ? (
           <>
             <Content>
               <p>{comment.content}</p>
@@ -64,17 +42,11 @@ const CommentItem = ({
           </>
         ) : (
           <EditorContainer>
-            <EditCommentForm
-              defaultValue={comment.content}
-              onSubmitEdit={handleEdit}
-              onCancelEdit={onCancelEdit}
-            />
+            <EditCommentForm defaultValue={comment.content} commentId={commentId} />
           </EditorContainer>
         )}
 
-        {isPasswordCheck && (
-          <PasswordConfirm handleSubmitPassword={handleSubmitPassword} handleClose={handleClose} />
-        )}
+        {passwordState.commentId === commentId && <PasswordConfirm commentId={commentId} />}
       </CommentContainer>
     </StyledLi>
   );
