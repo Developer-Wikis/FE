@@ -12,8 +12,8 @@ export const createComment = (
   return unauth.post(`/questions/${questionId}/comments`, payload);
 };
 
-export const matchCommentPassword = (questionId: number, commentId: number, password: string) => {
-  return unauth.post(`/questions/${questionId}/comments/${commentId}`, {
+export const checkCommentPassword = (questionId: number, commentId: number, password: string) => {
+  return unauth.post(`/questions/${questionId}/comments/${commentId}/check`, {
     password,
   });
 };
