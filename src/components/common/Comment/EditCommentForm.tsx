@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { ChangeEvent, FormEvent, useContext, useRef, useState } from 'react';
 import Button from '~/components/base/Button';
 import { SUBMIT_CHECK } from '~/utils/helper/validation';
-import CommentTextArea from '../CommentTextArea';
+import CommentTextArea from './CommentTextArea';
 import { CommentContext } from './context';
 
 interface EditCommentFormProps {

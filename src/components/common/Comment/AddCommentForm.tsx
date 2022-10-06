@@ -3,7 +3,7 @@ import { useContext, useRef } from 'react';
 import Button from '~/components/base/Button';
 import useForm from '~/hooks/useForm';
 import { SUBMIT_CHECK } from '~/utils/helper/validation';
-import CommentTextArea from '../CommentTextArea';
+import CommentTextArea from './CommentTextArea';
 import { CommentContext } from './context';
 
 const initialValues = {
