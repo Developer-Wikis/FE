@@ -10,7 +10,7 @@ import {
 } from '~/service/comment';
 import { ICommentItem } from '~/types/comment';
 import AddCommentForm, { commentValuesType } from './AddCommentForm';
-import CommentList from './CommentList';
+import CommentItem from './CommentItem';
 
 interface CommentProps {
   questionId: number;
@@ -105,19 +105,21 @@ const Comment = ({ questionId }: CommentProps) => {
       <TotalCount>댓글 {comments.length}</TotalCount>
 
       <CommentContent>
-        {comments.map((comment) => (
-          <CommentList
-            key={comment.id}
-            id={comment.id}
-            comment={comment}
-            onOpenPassword={onOpenPassword}
-            onSubmitPassword={onSubmitPassword}
-            onEditComment={onEditComment}
-            onCancelEdit={onCancelEdit}
-            isPasswordCheck={comment.id == passwordState.commentId}
-            isEditing={comment.id === editId}
-          />
-        ))}
+        <ul>
+          {comments.map((comment) => (
+            <CommentItem
+              key={comment.id}
+              id={comment.id}
+              comment={comment}
+              onOpenPassword={onOpenPassword}
+              onSubmitPassword={onSubmitPassword}
+              onEditComment={onEditComment}
+              onCancelEdit={onCancelEdit}
+              isPasswordCheck={comment.id == passwordState.commentId}
+              isEditing={comment.id === editId}
+            />
+          ))}
+        </ul>
         <AddCommentForm onAddComment={onAddComment} />
       </CommentContent>
     </Container>

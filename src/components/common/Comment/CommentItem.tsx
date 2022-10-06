@@ -15,7 +15,7 @@ interface CommentListProps {
   onEditComment: (commentId: number, content: string) => void;
   onCancelEdit: () => void;
 }
-const CommentList = ({
+const CommentItem = ({
   id,
   comment,
   onOpenPassword,
@@ -42,7 +42,6 @@ const CommentList = ({
   };
 
   const handleEdit = (content: string) => {
-    console.log(content);
     onEditComment(id, content);
   };
 
@@ -50,7 +49,7 @@ const CommentList = ({
     <StyledLi>
       <CommentContainer>
         <Writer>
-          <span>{comment.nickname}</span>
+          <span title={comment.nickname}>{comment.nickname}</span>
         </Writer>
         {!isEditing ? (
           <>
@@ -81,7 +80,7 @@ const CommentList = ({
   );
 };
 
-export default CommentList;
+export default CommentItem;
 
 const StyledLi = styled.li`
   padding: 16px 0;
@@ -126,6 +125,7 @@ const Info = styled.div`
   flex-shrink: 0;
   gap: 4px;
   color: ${({ theme }) => theme.colors.mediumGray};
+  align-self: flex-start;
 `;
 
 const CreatedAt = styled.span`
