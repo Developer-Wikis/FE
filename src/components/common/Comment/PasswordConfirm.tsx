@@ -1,15 +1,17 @@
 import styled from '@emotion/styled';
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useContext, useState } from 'react';
 import Button from '~/components/base/Button';
 import Icon from '~/components/base/Icon';
 import Input from '~/components/base/Input';
+import { CommentContext } from '~/components/common/Comment/context';
 
 interface PasswordConfirmProps {
-  handleSubmitPassword: (password: string) => void;
-  handleClose: () => void;
+  commentId: number;
 }
-const PasswordConfirm = ({ handleSubmitPassword, handleClose }: PasswordConfirmProps) => {
+
+const PasswordConfirm = ({ commentId }: PasswordConfirmProps) => {
   const [password, setPassword] = useState('');
+  const { onOpenPassword, onSubmitPassword } = useContext(CommentContext);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
@@ -17,7 +19,11 @@ const PasswordConfirm = ({ handleSubmitPassword, handleClose }: PasswordConfirmP
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    handleSubmitPassword(password);
+    onSubmitPassword(commentId, password);
+  };
+
+  const handleClose = () => {
+    onOpenPassword(null, '');
   };
 
   return (

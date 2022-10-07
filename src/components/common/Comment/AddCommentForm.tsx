@@ -1,9 +1,10 @@
 import styled from '@emotion/styled';
-import { useRef } from 'react';
+import { useContext, useRef } from 'react';
 import Button from '~/components/base/Button';
 import useForm from '~/hooks/useForm';
 import { SUBMIT_CHECK } from '~/utils/helper/validation';
-import CommentTextArea from '../CommentTextArea';
+import CommentTextArea from './CommentTextArea';
+import { CommentContext } from './context';
 
 const initialValues = {
   nickname: '',
@@ -15,15 +16,13 @@ export type commentValuesType = {
   [key in keyof typeof initialValues]: string;
 };
 
-interface AddCommentFormProps {
-  onAddComment: (values: commentValuesType) => void;
-}
-
-const AddCommentForm = ({ onAddComment }: AddCommentFormProps) => {
-  const { values, errors, isLoading, handleChange, handleSubmit, handleReset } = useForm({
+const AddCommentForm = () => {
+  const { values, handleChange, handleSubmit, handleReset } = useForm({
     initialValues,
     onSubmit,
   });
+
+  const { onAddComment } = useContext(CommentContext);
 
   const nicknameRef = useRef<null | HTMLInputElement>(null);
   const passwordRef = useRef<null | HTMLInputElement>(null);

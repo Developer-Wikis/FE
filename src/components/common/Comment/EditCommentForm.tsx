@@ -1,18 +1,19 @@
 import styled from '@emotion/styled';
-import { ChangeEvent, FormEvent, useRef, useState } from 'react';
+import { ChangeEvent, FormEvent, useContext, useRef, useState } from 'react';
 import Button from '~/components/base/Button';
 import { SUBMIT_CHECK } from '~/utils/helper/validation';
-import CommentTextArea from '../CommentTextArea';
+import CommentTextArea from './CommentTextArea';
+import { CommentContext } from './context';
 
 interface EditCommentFormProps {
   defaultValue: string;
-  onSubmitEdit: (content: string) => void;
-  onCancelEdit: () => void;
+  commentId: number;
 }
 
-const EditCommentForm = ({ defaultValue, onSubmitEdit, onCancelEdit }: EditCommentFormProps) => {
+const EditCommentForm = ({ defaultValue, commentId }: EditCommentFormProps) => {
   const [content, setContent] = useState(defaultValue);
   const contentRef = useRef<null | HTMLTextAreaElement>(null);
+  const { onEditComment, onCancelEdit } = useContext(CommentContext);
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setContent(e.target.value);
@@ -27,7 +28,7 @@ const EditCommentForm = ({ defaultValue, onSubmitEdit, onCancelEdit }: EditComme
       return;
     }
 
-    onSubmitEdit(content);
+    onEditComment(commentId, content);
   };
 
   return (
