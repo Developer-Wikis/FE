@@ -109,13 +109,19 @@ const Home: NextPage = () => {
       </Head>
       <MainContent>
         {router.isReady && selectedCategories && (
-          <MiddleCategory
-            categories={['전체', ...categories[selectedCategories.main]]}
-            onSelect={onChangeSubCategory}
-            currentCategory={selectedCategories.sub}
-          />
+          <>
+            <MiddleCategory
+              categories={['전체', ...categories[selectedCategories.main]]}
+              onSelect={onChangeSubCategory}
+              currentCategory={selectedCategories.sub}
+            />
+            <QuestionList
+              ref={setObserverTarget}
+              questions={questions}
+              currentCategory={{ main: selectedCategories.main, sub: selectedCategories.sub }}
+            />
+          </>
         )}
-        <QuestionList ref={setObserverTarget} questions={questions} />
       </MainContent>
     </div>
   );
