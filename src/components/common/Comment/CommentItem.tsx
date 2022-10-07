@@ -1,10 +1,10 @@
 import styled from '@emotion/styled';
 import { useContext } from 'react';
-import PasswordConfirm from '~/components/domain/question/PasswordConfirm';
 import { ICommentItem } from '~/types/comment';
 import CommentContent from './CommentContent';
 import { CommentContext } from './context';
 import EditCommentForm from './EditCommentForm';
+import PasswordConfirm from './PasswordConfirm';
 
 interface CommentListProps {
   commentId: number;
