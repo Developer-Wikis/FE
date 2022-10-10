@@ -32,8 +32,11 @@ export const deleteQuestion = (questionId: number, password: string) => {
   return unauth.delete(`/questions/${questionId}`, { data: { password } });
 };
 
-export const getQuestionDetail = (questionId: number, category: string) => {
-  return unauth.get<QuestionDetailResponse>(`/questions/${questionId}?category=${category}`);
+export const getQuestionDetail = (
+  questionId: number,
+  params: { mainCategory: string; subCategory: string },
+) => {
+  return unauth.get<QuestionDetailResponse>(`/questions/${questionId}`, { params });
 };
 
 export const editQuestion = (questionId: number, question: Omit<IQuestion, 'nickname'>) => {
@@ -44,6 +47,10 @@ export const matchQuestionPassword = (questionId: number, password: string) => {
   return unauth.post(`/questions/${questionId}/match`, { password });
 };
 
-export const getQuestionList = ({ category, page }: { category: string; page: number }) => {
-  return unauth.get<QuestionListResponse>(`/questions?category=${category}&page=${page}`);
+export const getQuestionList = (params: {
+  mainCategory: string;
+  subCategory: string;
+  page: number;
+}) => {
+  return unauth.get<QuestionListResponse>('/questions', { params });
 };

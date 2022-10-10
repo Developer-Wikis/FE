@@ -2,8 +2,9 @@ import styled from '@emotion/styled';
 import Icon from '~/components/base/Icon';
 import Link from '~/components/base/Link';
 import { IQuestionItem, QuestionCategoryQuery } from '~/types/question';
-import { formatNumber } from '../../../utils/helper/formatting';
+import { formatNumber } from '~/utils/helper/formatting';
 import { forwardRef, Ref } from 'react';
+import { convertSubCategory } from '~/utils/helper/converter';
 
 interface QuestionItemProps {
   question: IQuestionItem;
@@ -17,11 +18,11 @@ const QuestionItem = forwardRef(
         <Link
           href={{
             pathname: `/question/${question.id}`,
-            query: { main: currentCategory.main, sub: currentCategory.sub },
+            query: { ...currentCategory },
           }}
         >
-          <CategoryName title={question.category}>
-            <span>{question.category}</span>
+          <CategoryName title={question.subCategory}>
+            <span>{convertSubCategory(question.subCategory)}</span>
           </CategoryName>
           <QuestionTitle title={question.title}>
             <span>{question.title}</span>

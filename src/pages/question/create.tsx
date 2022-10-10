@@ -12,14 +12,16 @@ import AdditionalList from '~/components/domain/question/AdditionalList';
 import useForm from '~/hooks/useForm';
 import { createQuestion } from '~/service/question';
 import { IQuestion } from '~/types/question';
-import { middleCategories } from '~/utils/constant/category';
+import { MAIN_CATEGORIES, SUB_CATEGORIES } from '~/utils/constant/category';
+import { convertMainCategory, convertSubCategory } from '~/utils/helper/converter';
 import { SUBMIT_CHECK } from '~/utils/helper/validation';
 
 const initialValues = {
   nickname: '',
   password: '',
   title: '',
-  category: 'none',
+  mainCategory: '',
+  subCategory: 'none',
 };
 
 type valuesType = {
@@ -29,19 +31,16 @@ type valuesType = {
 const validate = (values: valuesType) => {
   const errors = {} as valuesType;
 
-  if (SUBMIT_CHECK.nickname.isValid(values.nickname)) {
-    errors.nickname = SUBMIT_CHECK.nickname.message;
-  }
-  if (SUBMIT_CHECK.password.isValid(values.password)) {
-    errors.password = SUBMIT_CHECK.password.message;
-  }
-
   if (SUBMIT_CHECK.title.isValid(values.title)) {
     errors.title = SUBMIT_CHECK.title.message;
   }
 
-  if (values.category === 'none') {
-    errors.category = '분류를 선택해 주세요.';
+  if (values.mainCategory === 'none') {
+    errors.mainCategory = '직군·직무를 선택해 주세요.';
+  }
+
+  if (values.subCategory === 'none') {
+    errors.subCategory = '분류를 선택해 주세요.';
   }
 
   return errors;
@@ -125,10 +124,32 @@ const CreateQuestion = () => {
           <ErrorMessage message={errors.title} />
         </InputField>
         <InputField>
-          <Label htmlFor="category">분류</Label>
-          <Select list={middleCategories} name="category" onChange={handleChange} />
-          <ErrorMessage message={errors.category} />
+          <Label htmlFor="mainCategory">직군·직무</Label>
+          <Select
+            list={MAIN_CATEGORIES.map((mainCode) => ({
+              value: mainCode,
+              text: convertMainCategory(mainCode),
+            }))}
+            name="mainCategory"
+            onChange={handleChange}
+          />
+          <ErrorMessage message={errors.mainCategory} />
         </InputField>
+        {values.mainCategory && values.mainCategory !== 'none' && (
+          <InputField>
+            <Label htmlFor="subCategory">분류</Label>
+            <Select
+              list={SUB_CATEGORIES[values.mainCategory].map((subCode) => ({
+                value: subCode,
+                text: convertSubCategory(subCode),
+              }))}
+              name="subCategory"
+              onChange={handleChange}
+              value={values.subCategory}
+            />
+            <ErrorMessage message={errors.subCategory} />
+          </InputField>
+        )}
         <InputField>
           <Label htmlFor="additional">꼬리질문</Label>
           <AddForm

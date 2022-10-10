@@ -1,20 +1,19 @@
 import styled from '@emotion/styled';
 import Title from '~/components/base/Title';
+import { SubType } from '~/utils/constant/category';
+import { convertSubCategory } from '~/utils/helper/converter';
 
 interface PostHeaderProps {
-  category: string;
+  subCategory: SubType;
   title: string;
   writer: string;
 }
 
-const PostHeader = ({ category, title, writer }: PostHeaderProps) => {
+const PostHeader = ({ subCategory, title, writer }: PostHeaderProps) => {
   return (
     <Container>
-      <CategoryName>{category}</CategoryName>
+      <CategoryName>{convertSubCategory(subCategory)}</CategoryName>
       <PostTitle>{title}</PostTitle>
-      <Writer>
-        <span>작성자: {writer}</span>
-      </Writer>
     </Container>
   );
 };
