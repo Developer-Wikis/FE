@@ -1,17 +1,19 @@
 import styled from '@emotion/styled';
+import { SubWithAllType } from '~/utils/constant/category';
+import { convertSubCategory } from '~/utils/helper/converter';
 
 interface MiddleCategoryProps {
-  categories: string[];
-  onSelect: (value: string) => void;
-  currentCategory: string;
+  subCategories: SubWithAllType[];
+  onSelect: (category: SubWithAllType) => void;
+  currentCategory: SubWithAllType;
 }
 
-const MiddleCategory = ({ categories, onSelect, currentCategory }: MiddleCategoryProps) => {
+const MiddleCategory = ({ subCategories, onSelect, currentCategory }: MiddleCategoryProps) => {
   return (
     <CategoryList>
-      {categories.map((category) => (
-        <li key={category} className={category === currentCategory ? 'selected' : ''}>
-          <button onClick={() => onSelect(category)}>{category}</button>
+      {subCategories.map((subCode) => (
+        <li key={subCode} className={subCode === currentCategory ? 'selected' : ''}>
+          <button onClick={() => onSelect(subCode)}>{convertSubCategory(subCode)}</button>
         </li>
       ))}
     </CategoryList>

@@ -1,5 +1,4 @@
 import { unauth } from './base';
-import { ICommentItem } from '~/types/comment';
 
 export const getCommentList = (questionId: number) => {
   return unauth.get(`/questions/${questionId}/comments`);

@@ -9,8 +9,7 @@ import { NextPageContext } from 'next';
 import { IQuestionDetail, QuestionCategoryQuery } from '~/types/question';
 import MoveButtons from '~/components/domain/question/MoveButtons';
 import Recorder from '~/components/domain/question/Recorder';
-import { formatCategory } from '~/utils/helper/formatting';
-import { isString } from '~/utils/helper/checkType';
+import { isMainType, isString, isSubWithAllType } from '~/utils/helper/checkType';
 
 /*
 
@@ -19,27 +18,26 @@ TODO: progress UI 처리
 */
 
 export const getServerSideProps = async (context: NextPageContext) => {
-  const { id, main, sub } = context.query;
+  const { id, mainCategory, subCategory } = context.query;
   const questionId = Number(id);
 
-  if (!isString(id) || !isString(main) || !isString(sub)) {
+  if (!isString(id) || !isMainType(mainCategory) || !isSubWithAllType(subCategory)) {
     return {
       notFound: true,
     };
   }
 
-  const category = formatCategory(main, sub);
-
-  if (Number.isNaN(questionId) || !category) {
+  if (Number.isNaN(questionId)) {
     return {
       notFound: true,
     };
   }
 
   try {
-    const response = await getQuestionDetail(questionId, category);
+    const query = { mainCategory, subCategory };
+    const response = await getQuestionDetail(questionId, query);
     return {
-      props: { detailData: response.data || null, query: { main, sub } },
+      props: { detailData: response.data || null, query },
     };
   } catch (e) {
     return {
@@ -57,7 +55,7 @@ const QuestionDetail = ({ detailData, query }: QuestionDetailProps) => {
   return (
     <Container>
       <PostHeader
-        category={detailData.category}
+        subCategory={detailData.subCategory}
         title={detailData.title}
         writer={detailData.nickname}
       />

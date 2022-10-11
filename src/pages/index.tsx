@@ -8,30 +8,30 @@ import MiddleCategory from '~/components/common/MiddleCategory';
 import useAxios from '~/hooks/useAxios';
 import { getQuestionList } from '~/service/question';
 import { IQuestionItem } from '~/types/question';
-import { categories, MainCategory } from '~/utils/constant/category';
 import { useRouter } from 'next/router';
-import { isString } from '~/utils/helper/checkType';
+import { isMainType, isSubWithAllType } from '~/utils/helper/checkType';
 import useIntersectionObserver from '~/hooks/useIntersectionObserver';
+import { MainType, SubWithAllType, SUB_CATEGORIES } from '~/utils/constant/category';
 
-type Categories = {
-  main: MainCategory;
-  sub: string;
+type QueryParams = {
+  mainCategory: MainType;
+  subCategory: SubWithAllType;
   page: number;
 };
 
-const initialValues: Categories = {
-  main: 'fe',
-  sub: '전체',
+const initialValues: QueryParams = {
+  mainCategory: 'fe',
+  subCategory: 'all',
   page: 0,
 };
 
 const Home: NextPage = () => {
-  const [selectedCategories, setSelectedCategories] = useState<Categories | null>();
+  const [queryParams, setQueryParams] = useState<QueryParams>();
   const [questions, setQuestions] = useState<IQuestionItem[]>([]);
   const [isEndPage, setIsEndPage] = useState(false);
 
   const router = useRouter();
-  const { isLoading, request } = useAxios(getQuestionList, [selectedCategories]);
+  const { isLoading, request } = useAxios(getQuestionList, [queryParams]);
 
   const onIntersect: IntersectionObserverCallback = ([{ isIntersecting }]) => {
     if (isEndPage) {
@@ -39,33 +39,32 @@ const Home: NextPage = () => {
       return;
     }
 
-    if (isIntersecting && !isLoading && selectedCategories) {
-      setSelectedCategories({ ...selectedCategories, page: selectedCategories.page + 1 });
+    if (isIntersecting && !isLoading && queryParams) {
+      setQueryParams({ ...queryParams, page: queryParams.page + 1 });
     }
   };
   const { setTarget: setObserverTarget } = useIntersectionObserver({ onIntersect, threshold: 0.2 });
 
-  const onChangeSubCategory = (subCategory: string) => {
-    if (selectedCategories?.sub === subCategory || !selectedCategories) return;
+  const onChangeSubCategory = (subCategory: SubWithAllType) => {
+    if (!queryParams || queryParams.subCategory === subCategory) return;
 
-    setSelectedCategories({ ...selectedCategories, sub: subCategory, page: initialValues.page });
+    setQueryParams({ ...queryParams, subCategory, page: initialValues.page });
     setIsEndPage(false);
     router.push({
       pathname: '/',
-      query: { dev: selectedCategories.main, category: subCategory },
+      query: { mainCategory: queryParams.mainCategory, subCategory },
     });
   };
 
   const requestQuestionList = async () => {
-    if (!router.isReady || !selectedCategories) return;
+    if (!router.isReady || !queryParams) return;
 
-    const { main, sub, page } = selectedCategories;
-    const requestCategory = sub === '전체' ? `${main.toUpperCase()} ALL` : sub.toUpperCase();
-
-    const result = await request({ category: requestCategory, page });
+    const result = await request(queryParams);
     if (result) {
       setQuestions(
-        page === initialValues.page ? result.data.content : [...questions, ...result.data.content],
+        queryParams.page === initialValues.page
+          ? result.data.content
+          : [...questions, ...result.data.content],
       );
 
       if (result.data.last) {
@@ -81,24 +80,21 @@ const Home: NextPage = () => {
   useEffect(() => {
     if (!router.isReady) return;
 
-    let { dev, category } = router.query;
+    let { mainCategory, subCategory } = router.query;
 
-    const isValidDev = isString(dev) && Object.keys(categories).includes(dev);
-    if (!isValidDev) dev = initialValues.main;
+    if (!isMainType(mainCategory)) mainCategory = initialValues.mainCategory;
+    if (!isSubWithAllType(subCategory)) subCategory = initialValues.subCategory;
 
-    const isValidCategory =
-      isString(category) && categories[dev as MainCategory].includes(category);
-    if (!isValidCategory) category = initialValues.sub;
-
-    const notChanged = dev === selectedCategories?.main && category === selectedCategories?.sub;
+    const notChanged =
+      mainCategory === queryParams?.mainCategory && subCategory === queryParams?.subCategory;
     if (notChanged) return;
 
-    setSelectedCategories({
-      main: dev as MainCategory,
-      sub: category as string,
+    setQueryParams({
+      mainCategory: mainCategory as MainType,
+      subCategory: subCategory as SubWithAllType,
       page: initialValues.page,
     });
-  }, [router.isReady, router.query.dev, router.query.category]);
+  }, [router.isReady, router.query.mainCategory, router.query.subCategory]);
 
   return (
     <div>
@@ -108,17 +104,20 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <MainContent>
-        {router.isReady && selectedCategories && (
+        {router.isReady && queryParams && (
           <>
             <MiddleCategory
-              categories={['전체', ...categories[selectedCategories.main]]}
+              subCategories={['all', ...SUB_CATEGORIES[queryParams.mainCategory]]}
               onSelect={onChangeSubCategory}
-              currentCategory={selectedCategories.sub}
+              currentCategory={queryParams.subCategory}
             />
             <QuestionList
               ref={setObserverTarget}
               questions={questions}
-              currentCategory={{ main: selectedCategories.main, sub: selectedCategories.sub }}
+              currentCategory={{
+                mainCategory: queryParams.mainCategory,
+                subCategory: queryParams.subCategory,
+              }}
             />
           </>
         )}

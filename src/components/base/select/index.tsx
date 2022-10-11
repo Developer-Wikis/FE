@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
-import { ChangeEvent } from 'react';
+import { ChangeEvent, SelectHTMLAttributes } from 'react';
 
-interface SelectProps {
-  list: string[];
+interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
+  list: { value: string; text: string }[];
   name?: string;
   onChange: (e: ChangeEvent<HTMLSelectElement>) => void;
 }
@@ -11,8 +11,8 @@ const Select = ({ list, name, onChange, ...props }: SelectProps) => {
     <StyledSelect name={name} id={name} onChange={onChange} {...props}>
       <option value="none">선택해주세요</option>
       {list.map((category, index) => (
-        <option key={index} value={category}>
-          {category}
+        <option key={index} value={category.value}>
+          {category.text}
         </option>
       ))}
     </StyledSelect>

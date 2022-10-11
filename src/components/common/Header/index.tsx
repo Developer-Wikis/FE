@@ -15,11 +15,11 @@ const Header = () => {
     }
 
     if (router.pathname === '/') {
-      if (router.query.dev === 'fe' || !router.query.dev) {
+      if (router.query.mainCategory === 'fe' || !router.query.mainCategory) {
         setSelectedCategory('fe');
         return;
       }
-      if (router.query.dev === 'be') {
+      if (router.query.mainCategory === 'be') {
         setSelectedCategory('be');
         return;
       }
@@ -36,11 +36,15 @@ const Header = () => {
           </Logo>
           <CategoryList>
             <CategoryListItem
-              href="/?dev=fe"
+              href="/?mainCategory=fe"
               select={selectedCategory === 'fe'}
               name="프론트엔드"
             />
-            <CategoryListItem href="/?dev=be" select={selectedCategory === 'be'} name="백엔드" />
+            <CategoryListItem
+              href="/?mainCategory=be"
+              select={selectedCategory === 'be'}
+              name="백엔드"
+            />
           </CategoryList>
         </LeftArea>
         <Link size="sm" linkType="black" href="/question/create">

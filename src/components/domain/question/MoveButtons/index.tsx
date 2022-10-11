@@ -12,11 +12,10 @@ interface MoveButtonProps {
 
 const MoveButtons = ({ categoryQuery, nextId, prevId }: MoveButtonProps) => {
   const router = useRouter();
-  const { main, sub } = categoryQuery;
 
   const onMovePrev = () => {
     if (prevId) {
-      router.push(`/question/${prevId}?main=${main}&sub=${sub}`);
+      router.push({ pathname: `/question/${prevId}`, query: { ...categoryQuery } });
     } else {
       alert('첫 번째 페이지 입니다.');
     }
@@ -24,7 +23,7 @@ const MoveButtons = ({ categoryQuery, nextId, prevId }: MoveButtonProps) => {
 
   const onMoveNext = () => {
     if (nextId) {
-      router.push(`/question/${nextId}?main=${main}&sub=${sub}`);
+      router.push({ pathname: `/question/${nextId}`, query: { ...categoryQuery } });
     } else {
       alert('마지막 페이지 입니다.');
     }
