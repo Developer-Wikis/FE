@@ -1,5 +1,6 @@
 import { unauth } from './base';
 import { IQuestion, IQuestionItem, ISort } from '~/types/question';
+import { MainType, SubWithAllType } from '~/utils/constant/category';
 
 type QuestionListResponse = {
   content: IQuestionItem[];
@@ -34,7 +35,7 @@ export const deleteQuestion = (questionId: number, password: string) => {
 
 export const getQuestionDetail = (
   questionId: number,
-  params: { mainCategory: string; subCategory: string },
+  params: { mainCategory: MainType; subCategory: SubWithAllType },
 ) => {
   return unauth.get<QuestionDetailResponse>(`/questions/${questionId}`, { params });
 };
@@ -48,8 +49,8 @@ export const matchQuestionPassword = (questionId: number, password: string) => {
 };
 
 export const getQuestionList = (params: {
-  mainCategory: string;
-  subCategory: string;
+  mainCategory: MainType;
+  subCategory: SubWithAllType;
   page: number;
 }) => {
   return unauth.get<QuestionListResponse>('/questions', { params });
