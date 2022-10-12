@@ -21,7 +21,7 @@ const QuestionItem = forwardRef(
             query: { ...currentCategory },
           }}
         >
-          <CategoryName title={question.subCategory}>
+          <CategoryName title={convertSubCategory(question.subCategory)}>
             <span>{convertSubCategory(question.subCategory)}</span>
           </CategoryName>
           <QuestionTitle title={question.title}>
