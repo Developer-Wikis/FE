@@ -69,7 +69,8 @@ const Home: NextPage<HomeProps> = (homeData) => {
   const [isEndPage, setIsEndPage] = useState(homeData.isEndPage);
 
   const router = useRouter();
-  const { isLoading, request } = useAxios(getQuestionList, [queryParams]);
+  const { request } = useAxios(getQuestionList, [queryParams]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const onIntersect: IntersectionObserverCallback = ([{ isIntersecting }]) => {
     if (isEndPage) {
@@ -78,7 +79,9 @@ const Home: NextPage<HomeProps> = (homeData) => {
     }
 
     if (isIntersecting && !isLoading) {
-      setQueryParams({ ...queryParams, page: queryParams.page + 1 });
+      const nextQueryParams = { ...queryParams, page: queryParams.page + 1 };
+      setQueryParams(nextQueryParams);
+      requestQuestionList(nextQueryParams);
     }
   };
   const { setTarget: setObserverTarget } = useIntersectionObserver({ onIntersect, threshold: 0.2 });
@@ -86,8 +89,9 @@ const Home: NextPage<HomeProps> = (homeData) => {
   const onChangeSubCategory = (subCategory: SubWithAllType) => {
     if (queryParams.subCategory === subCategory) return;
 
-    setQueryParams({ ...queryParams, subCategory, page: initialValues.page });
+    const nextQueryParams = { ...queryParams, subCategory, page: initialValues.page };
     setIsEndPage(false);
+    setQueryParams(nextQueryParams);
     router.push(
       {
         pathname: '/',
@@ -96,9 +100,11 @@ const Home: NextPage<HomeProps> = (homeData) => {
       undefined,
       { shallow: true },
     );
+    requestQuestionList(nextQueryParams);
   };
 
-  const requestQuestionList = async () => {
+  const requestQuestionList = async (queryParams: QueryParams) => {
+    setIsLoading(true);
     const result = await request(queryParams);
     if (!result) return;
 
@@ -111,11 +117,8 @@ const Home: NextPage<HomeProps> = (homeData) => {
     if (result.data.last) {
       setIsEndPage(true);
     }
+    setIsLoading(false);
   };
-
-  useEffect(() => {
-    requestQuestionList();
-  }, [request]);
 
   useEffect(() => {
     const { query } = router;
