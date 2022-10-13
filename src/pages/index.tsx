@@ -12,7 +12,7 @@ import { useRouter } from 'next/router';
 import { isMainType, isSubWithAllType } from '~/utils/helper/checkType';
 import useIntersectionObserver from '~/hooks/useIntersectionObserver';
 import { MainType, SubWithAllType, SUB_CATEGORIES } from '~/utils/constant/category';
-import { isValidCategoryPair } from '../utils/helper/validation';
+import { isValidCategoryPair } from '~/utils/helper/validation';
 
 type QueryParams = {
   mainCategory: MainType;
@@ -140,6 +140,7 @@ const Home: NextPage<HomeProps> = (homeData) => {
     if (notChanged) return;
 
     setQueryParams(nextQueryParams);
+    requestQuestionList(nextQueryParams);
   }, [router.query.mainCategory, router.query.subCategory]);
 
   return (
