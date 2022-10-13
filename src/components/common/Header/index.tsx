@@ -15,16 +15,10 @@ const Header = () => {
     }
 
     if (router.pathname === '/') {
-      if (router.query.mainCategory === 'fe' || !router.query.mainCategory) {
-        setSelectedCategory('fe');
-        return;
-      }
-      if (router.query.mainCategory === 'be') {
-        setSelectedCategory('be');
-        return;
-      }
+      setSelectedCategory(router.query.mainCategory === 'be' ? 'be' : 'fe');
+    } else {
+      setSelectedCategory('');
     }
-    setSelectedCategory('');
   }, [router.isReady, router.query]);
 
   return (
@@ -39,11 +33,13 @@ const Header = () => {
               href="/?mainCategory=fe"
               select={selectedCategory === 'fe'}
               name="프론트엔드"
+              shallow
             />
             <CategoryListItem
               href="/?mainCategory=be"
               select={selectedCategory === 'be'}
               name="백엔드"
+              shallow
             />
           </CategoryList>
         </LeftArea>

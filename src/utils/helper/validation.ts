@@ -1,3 +1,5 @@
+import { MainType, SubType, SubWithAllType, SUB_CATEGORIES } from '../constant/category';
+
 export const checkLength = (str: string, min: number, max: number) => {
   return str.length < min || str.length > max ? true : false;
 };
@@ -45,4 +47,8 @@ export const SUBMIT_CHECK = {
     isValid: checkTitle,
     message: '질문 제목은 2~30자로 입력해 주세요.',
   },
+};
+
+export const isValidCategoryPair = (main: MainType, sub: SubWithAllType) => {
+  return sub === 'all' || (SUB_CATEGORIES[main] as ReadonlyArray<SubType>).includes(sub);
 };

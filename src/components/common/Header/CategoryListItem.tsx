@@ -5,12 +5,15 @@ interface CategoryListItemProps {
   href: string;
   name: string;
   select: boolean;
+  shallow?: boolean;
 }
 
-const CategoryListItem = ({ href, name, select }: CategoryListItemProps) => {
+const CategoryListItem = ({ href, name, select, shallow = false }: CategoryListItemProps) => {
   return (
     <Li className={select ? 'selected' : ''}>
-      <Link href={href}>{name}</Link>
+      <Link href={href} shallow={shallow}>
+        {name}
+      </Link>
     </Li>
   );
 };
