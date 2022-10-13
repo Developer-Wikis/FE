@@ -15,16 +15,10 @@ const Header = () => {
     }
 
     if (router.pathname === '/') {
-      if (router.query.mainCategory === 'fe' || !router.query.mainCategory) {
-        setSelectedCategory('fe');
-        return;
-      }
-      if (router.query.mainCategory === 'be') {
-        setSelectedCategory('be');
-        return;
-      }
+      setSelectedCategory(router.query.mainCategory === 'be' ? 'be' : 'fe');
+    } else {
+      setSelectedCategory('');
     }
-    setSelectedCategory('');
   }, [router.isReady, router.query]);
 
   return (
