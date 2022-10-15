@@ -91,6 +91,7 @@ const Article = styled.article`
   margin: 0 auto;
   padding: 42px 28px 45px;
   border: 1px solid ${({ theme }) => theme.colors.lightGray};
+  border-radius: 4px;
 `;
 
 const Title = styled.h2`
@@ -102,10 +103,10 @@ const Title = styled.h2`
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 38px;
+  gap: 42px;
 `;
 
 const StyledButton = styled(Button)`
-  margin: calc(64px - 38px) auto 0;
+  margin: calc(64px - 42px) auto 0;
   width: fit-content;
 `;

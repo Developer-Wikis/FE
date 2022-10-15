@@ -71,5 +71,5 @@ const Notice = styled.div`
 const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 4px;
+  gap: 6px;
 `;

@@ -21,11 +21,16 @@ const SubCategoryCheckbox = ({ value, checked, handleChange }: SubCategoryCheckb
 export default SubCategoryCheckbox;
 
 const Checkbox = styled.input`
-  display: none;
+  position: absolute;
+  opacity: 0;
 
   &:checked + label {
     border-color: ${({ theme }) => theme.colors.red};
     color: ${({ theme }) => theme.colors.red};
+  }
+
+  &:focus-visible&&:focus + label {
+    outline: -webkit-focus-ring-color auto 1px;
   }
 `;
 
