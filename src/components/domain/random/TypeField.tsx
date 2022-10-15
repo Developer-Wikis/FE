@@ -1,7 +1,5 @@
 import styled from '@emotion/styled';
 import { ChangeEvent } from 'react';
-import IconButton from '../../base/Icon/IconButton';
-import { useState } from 'react';
 
 interface TypeFieldProps {
   type: string;
@@ -9,26 +7,9 @@ interface TypeFieldProps {
 }
 
 const TypeField = ({ type, handleChange }: TypeFieldProps) => {
-  const [show, setShow] = useState(false);
-
   return (
     <fieldset>
-      <TypeLegend>
-        <Legend>질문 유형</Legend>
-        <IconButton
-          name="AlertCircle"
-          color="red"
-          size="14px"
-          type="button"
-          onClick={() => setShow(!show)}
-        />
-
-        <Tooltip show={show}>
-          음성 면접 연습 : 질문이 <strong>음성</strong>으로 나타나며 1분의 답변 시간이 주어집니다.
-          <br />
-          자유 면접 연습 : 질문이 <strong>텍스트</strong>로 나타나며 자유롭게 답변하실 수 있습니다.
-        </Tooltip>
-      </TypeLegend>
+      <Legend>질문 유형</Legend>
 
       <Radio
         type="radio"
@@ -38,14 +19,27 @@ const TypeField = ({ type, handleChange }: TypeFieldProps) => {
         onChange={handleChange}
       />
       <RadioLabel htmlFor="voice"> 음성 면접 연습</RadioLabel>
+      <FirstNotice>
+        질문이 <strong>음성</strong>으로 나타나며 1분의 답변 시간이 주어집니다.
+      </FirstNotice>
 
       <Radio type="radio" name="type" id="text" checked={type === 'text'} onChange={handleChange} />
       <RadioLabel htmlFor="text"> 자유 면접 연습</RadioLabel>
+      <Notice>
+        질문이 <strong>텍스트</strong>로 나타나며 자유롭게 답변하실 수 있습니다.
+      </Notice>
     </fieldset>
   );
 };
 
 export default TypeField;
+
+const Legend = styled.legend`
+  margin-bottom: 19px;
+  font-size: 16px;
+  font-weight: 700;
+  color: ${({ theme }) => theme.colors.blackGray};
+`;
 
 const Radio = styled.input`
   width: 16px;
@@ -54,52 +48,26 @@ const Radio = styled.input`
   vertical-align: middle;
   accent-color: ${({ theme }) => theme.colors.red};
   cursor: pointer;
-
-  ~ input {
-    margin-left: 18px;
-  }
 `;
 
 const RadioLabel = styled.label`
-  margin: 0;
   font-size: 14px;
   color: ${({ theme }) => theme.colors.blackGray};
   vertical-align: bottom;
   cursor: pointer;
 `;
 
-const TypeLegend = styled.div`
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  margin-bottom: 12px;
-
-  svg {
-    cursor: pointer;
-  }
-`;
-
-const Legend = styled.legend`
-  font-size: 16px;
-  font-weight: 700;
-  color: ${({ theme }) => theme.colors.blackGray};
-`;
-
-const Tooltip = styled.div<{ show: boolean }>`
-  position: absolute;
-  top: 100%;
-  border: 1px solid ${({ theme }) => theme.colors.lightGray};
-  border-radius: 4px;
-  padding: 8px 16px;
+const Notice = styled.div`
+  margin-top: 6px;
   font-size: 13px;
   color: ${({ theme }) => theme.colors.darkGray};
-  background-color: ${({ theme }) => theme.colors.white};
-  opacity: ${({ show }) => (show ? 1 : 0)};
-  pointer-events: none;
 
   strong {
     font-weight: 600;
     color: ${({ theme }) => theme.colors.blackGray};
   }
+`;
+
+const FirstNotice = styled(Notice)`
+  margin-bottom: 18px;
 `;
