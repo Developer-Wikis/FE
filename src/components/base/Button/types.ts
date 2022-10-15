@@ -16,6 +16,11 @@ export const buttonStyle = {
       background-color: ${theme.colors.bgLightGray};
     }
   `,
+  red: `
+    background-color: ${theme.colors.red};
+    color: white;
+    border-radius: 4px;
+  `,
 };
 
 export const buttonSizes = {
@@ -26,5 +31,9 @@ export const buttonSizes = {
   md: `
     font-size: 14px;
     padding: 12px 26px;
+  `,
+  lg: `
+    font-size: 16px;
+    padding: 12px 16px;
   `,
 };

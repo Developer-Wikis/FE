@@ -43,9 +43,14 @@ const Header = () => {
             />
           </CategoryList>
         </LeftArea>
-        <Link size="sm" linkType="black" href="/question/create">
-          질문 등록
-        </Link>
+        <RightArea>
+          <Link size="sm" linkType="red" href="/random/create">
+            랜덤 질문
+          </Link>
+          <Link size="sm" linkType="black" href="/question/create">
+            질문 등록
+          </Link>
+        </RightArea>
       </HeaderContent>
     </StyledHeader>
   );
@@ -76,4 +81,9 @@ const CategoryList = styled.ul`
 
 const Logo = styled.h1`
   font-size: 20px;
+`;
+
+const RightArea = styled.div`
+  display: flex;
+  gap: 15px;
 `;

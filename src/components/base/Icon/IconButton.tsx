@@ -3,11 +3,18 @@ import Icon, { IconProps } from '.';
 
 interface IconButtonProps extends IconProps {
   onClick?: () => void;
+  type?: 'submit' | 'reset' | 'button' | undefined;
 }
 
-const IconButton = ({ name, size = '20', color = 'white', onClick }: IconButtonProps) => {
+const IconButton = ({
+  name,
+  size = '20',
+  color = 'white',
+  onClick,
+  type = 'button',
+}: IconButtonProps) => {
   return (
-    <button onClick={onClick}>
+    <button onClick={onClick} type={type}>
       <Icon name={name} size={size} color={color} />
     </button>
   );
