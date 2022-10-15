@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { ChangeEvent } from 'react';
-import Icon from '~/components/base/Icon';
-import useHover from '~/hooks/useHover';
+import IconButton from '../../base/Icon/IconButton';
+import { useState } from 'react';
 
 interface TypeFieldProps {
   type: string;
@@ -9,22 +9,24 @@ interface TypeFieldProps {
 }
 
 const TypeField = ({ type, handleChange }: TypeFieldProps) => {
-  const [hoverRef, isHover] = useHover<HTMLSpanElement>();
+  const [show, setShow] = useState(false);
 
   return (
     <fieldset>
       <TypeLegend>
         <Legend>질문 유형</Legend>
-        <span ref={hoverRef}>
-          <Icon name="AlertCircle" color="red" size="14px" block={false} />
-        </span>
+        <IconButton
+          name="AlertCircle"
+          color="red"
+          size="14px"
+          type="button"
+          onClick={() => setShow(!show)}
+        />
 
-        <Tooltip show={isHover}>
-          음성 면접 연습 : 랜덤 질문이 <strong>음성</strong>으로 나타나며 1분의 답변 시간이
-          주어집니다.
+        <Tooltip show={show}>
+          음성 면접 연습 : 질문이 <strong>음성</strong>으로 나타나며 1분의 답변 시간이 주어집니다.
           <br />
-          자유 면접 연습 : 랜덤 질문이 <strong>텍스트</strong>로 나타나며 자유롭게 답변하실 수
-          있습니다.
+          자유 면접 연습 : 질문이 <strong>텍스트</strong>로 나타나며 자유롭게 답변하실 수 있습니다.
         </Tooltip>
       </TypeLegend>
 
@@ -87,8 +89,8 @@ const Legend = styled.legend`
 const Tooltip = styled.div<{ show: boolean }>`
   position: absolute;
   top: 100%;
-  width: 478px;
   border: 1px solid ${({ theme }) => theme.colors.lightGray};
+  border-radius: 4px;
   padding: 8px 16px;
   font-size: 13px;
   color: ${({ theme }) => theme.colors.darkGray};
