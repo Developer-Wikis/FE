@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { useState } from 'react';
+import Button from '~/components/base/Button';
 import Icon from '~/components/base/Icon';
 
 interface Props {
@@ -7,7 +8,7 @@ interface Props {
 }
 
 const AdditionalQuestions = ({ questions }: Props) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(questions.length === 0);
 
   const onClickButton = () => {
     setIsOpen(!isOpen);
@@ -24,11 +25,16 @@ const AdditionalQuestions = ({ questions }: Props) => {
         )}
       </AccordionTitle>
       {isOpen && (
-        <AccordionContent>
-          {questions.length > 0
-            ? questions.map((question, index) => <li key={index}>⦁ {question}</li>)
-            : '등록된 꼬리 질문이 없습니다.'}
-        </AccordionContent>
+        <>
+          <AccordionContent>
+            {questions.length > 0 ? (
+              questions.map((question, index) => <li key={index}>⦁ {question}</li>)
+            ) : (
+              <p>등록된 꼬리 질문이 없습니다.</p>
+            )}
+          </AccordionContent>
+          <AddButton size="sm">꼬리 질문 등록</AddButton>
+        </>
       )}
     </Container>
   );
@@ -39,12 +45,13 @@ export default AdditionalQuestions;
 const Container = styled.div`
   margin-top: 42px;
   width: 420px;
+  padding: 0 14px;
 `;
 
 const AccordionTitle = styled.div`
   display: flex;
   justify-content: space-between;
-  padding: 16px 13px;
+  padding: 16px 0;
   align-items: center;
   border-bottom: 1px solid ${({ theme }) => theme.colors.lightGray}; ;
 `;
@@ -54,9 +61,16 @@ const Title = styled.h3`
 `;
 
 const AccordionContent = styled.ul`
-  padding: 16px 13px;
+  padding: 16px 0;
 
   li {
     padding: 8px 0;
   }
+`;
+
+const AddButton = styled(Button)`
+  display: block;
+  font-size: 14px;
+  margin: 0 auto;
+  margin-top: 14px;
 `;
