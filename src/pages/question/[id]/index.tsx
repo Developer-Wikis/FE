@@ -61,7 +61,11 @@ const QuestionDetail = ({ detailData, query }: QuestionDetailProps) => {
       />
       <PostContent>
         <Recorder />
-        <AdditionalQuestions questionId={detailData.id} questions={detailData.additionQuestions} />
+        <AdditionalQuestions
+          questionId={detailData.id}
+          title={detailData.title}
+          questions={detailData.additionQuestions}
+        />
         <MoveButtons categoryQuery={query} prevId={detailData.prevId} nextId={detailData.nextId} />
       </PostContent>
       <Comment questionId={detailData.id} />
