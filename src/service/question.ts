@@ -22,7 +22,7 @@ type QuestionListResponse = {
   empty: boolean;
 };
 
-type QuestionDetailResponse = IQuestionItem & {
+export type QuestionDetailResponse = IQuestionItem & {
   additionQuestions: string[];
 };
 

@@ -9,11 +9,14 @@ import { MainType, SubWithAllType } from '~/utils/constant/category';
 import Icon from '~/components/base/Icon';
 import { useRouter } from 'next/router';
 import useStorage from '~/hooks/useStorage';
+import { getRandomQuestions } from '~/service/question';
+import useAxios from '~/hooks/useAxios';
 
 const STORAGE_KEY = {
   step: 'step',
   stepOneValues: 'stepOneValues',
   stepTwoValues: 'stepTwoValues',
+  randomQuestions: 'randomQuestions',
 };
 
 type InputValues = {
@@ -29,6 +32,7 @@ const initialInputValues: InputValues = {
 const initialPermission = { audio: false, mic: false };
 
 const CreateRandom = () => {
+  const local = useStorage('local');
   const session = useStorage('session');
   const clearSession = useCallback(
     () => Object.values(STORAGE_KEY).forEach(session.removeItem),
@@ -41,6 +45,23 @@ const CreateRandom = () => {
   const [step, setStep] = useState<number>();
   const [inputValues, setInputValues] = useState<InputValues>();
   const [permission, setPermission] = useState<typeof initialPermission>();
+
+  const { request } = useAxios(getRandomQuestions, [
+    inputValues?.mainCategory,
+    inputValues?.subCategories,
+  ]);
+  const getQuestions = async () => {
+    if (!inputValues || inputValues?.mainCategory === 'none') return;
+
+    const { mainCategory, subCategories } = inputValues;
+    const response = await request({
+      mainCategory,
+      subCategories: subCategories.join(' '),
+    });
+
+    if (!response) return;
+    local.setItem(STORAGE_KEY.randomQuestions, response.data);
+  };
 
   const handleChange = (name: string, value: string | SubWithAllType[]) => {
     if (!inputValues) return;
@@ -79,6 +100,7 @@ const CreateRandom = () => {
     }
 
     clearSession();
+    getQuestions();
 
     const { type, mainCategory, subCategories } = inputValues;
     router.push(
