@@ -44,7 +44,7 @@ const Header = () => {
           </CategoryList>
         </LeftArea>
         <RightArea>
-          <Link size="sm" linkType="red" href="/random/create">
+          <Link size="sm" linkType="red" href="/random/create?step=0" as="/random/create">
             랜덤 질문
           </Link>
           <Link size="sm" linkType="black" href="/question/create">

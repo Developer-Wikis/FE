@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { FormEvent, useEffect, useRef, useState } from 'react';
+import { FormEvent, useCallback, useEffect, useRef, useState } from 'react';
 import Button from '~/components/base/Button';
 import PageContainer from '~/components/common/PageContainer';
 import MainCategoryField from '~/components/domain/random/MainCategoryField';
@@ -8,41 +8,77 @@ import TypeField from '~/components/domain/random/TypeField';
 import { MainType, SubWithAllType } from '~/utils/constant/category';
 import Icon from '~/components/base/Icon';
 import { useRouter } from 'next/router';
+import useStorage from '~/hooks/useStorage';
 
-interface InputValues {
+const STORAGE_KEY = {
+  step: 'step',
+  stepOneValues: 'stepOneValues',
+  stepTwoValues: 'stepTwoValues',
+};
+
+type InputValues = {
   type: 'voice' | 'text';
   mainCategory: MainType | 'none';
   subCategories: SubWithAllType[];
-}
+};
+const initialInputValues: InputValues = {
+  type: 'voice',
+  mainCategory: 'none',
+  subCategories: [],
+};
+const initialPermission = { audio: false, mic: false };
 
 const CreateRandom = () => {
-  const [step, setStep] = useState(1);
-  const [inputValues, setInputValues] = useState<InputValues>({
-    type: 'voice',
-    mainCategory: 'none',
-    subCategories: [],
-  });
-  const [permission, setPermission] = useState({ audio: false, mic: false });
+  const session = useStorage('session');
+  const clearSession = useCallback(
+    () => Object.values(STORAGE_KEY).forEach(session.removeItem),
+    [session],
+  );
 
   const audioRef = useRef<HTMLAudioElement>(null);
-
   const router = useRouter();
 
+  const [step, setStep] = useState<number>();
+  const [inputValues, setInputValues] = useState<InputValues>();
+  const [permission, setPermission] = useState<typeof initialPermission>();
+
   const handleChange = (name: string, value: string | SubWithAllType[]) => {
+    if (!inputValues) return;
+
+    const nextInputValues = { ...inputValues, [name]: value };
     if (name === 'mainCategory') {
-      setInputValues({ ...inputValues, [name]: value as MainType | 'none', subCategories: [] });
-    } else {
-      setInputValues({ ...inputValues, [name]: value });
+      nextInputValues.subCategories = [];
     }
+
+    session.setItem(STORAGE_KEY.stepOneValues, nextInputValues);
+    setInputValues(nextInputValues);
+  };
+
+  const handlePermissionChange = (name: string, value: boolean) => {
+    if (!permission) return;
+
+    const nextPermission = { ...permission, [name]: value };
+
+    session.setItem(STORAGE_KEY.stepTwoValues, nextPermission);
+    setPermission(nextPermission);
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!inputValues) return;
 
     if (step === 1 && inputValues.type === 'voice') {
+      session.setItem(STORAGE_KEY.step, 2);
+      session.setItem(STORAGE_KEY.stepTwoValues, initialPermission);
+
       setStep(2);
+      setPermission(initialPermission);
+
+      scrollTo(0, 0);
       return;
     }
+
+    clearSession();
 
     const { type, mainCategory, subCategories } = inputValues;
     router.push(
@@ -54,23 +90,75 @@ const CreateRandom = () => {
     );
   };
 
+  const handleBack = () => {
+    session.setItem(STORAGE_KEY.step, 1);
+    session.removeItem(STORAGE_KEY.stepTwoValues);
+
+    setStep(1);
+  };
+
   useEffect(() => {
     if (step !== 2) return;
 
-    scrollTo(0, 0);
-
     navigator.mediaDevices
       .getUserMedia({ audio: true })
-      .then(() => setPermission({ ...permission, mic: true }))
-      .catch(() => setPermission({ ...permission, mic: false }));
+      .then(() => handlePermissionChange('mic', true))
+      .catch(() => handlePermissionChange('mic', false));
   }, [step]);
+
+  useEffect(() => {
+    const [storedStep, stepOneValues, stepTwoValues] = Object.values(STORAGE_KEY).map((key) =>
+      session.getItem(key, null),
+    );
+    const queryStep = Number(router.query.step);
+    if (queryStep === 0) {
+      clearSession();
+      router.push('/random/create');
+    }
+
+    const isEmptyStoredValues = queryStep === 0 || storedStep === null;
+    if (isEmptyStoredValues) {
+      session.setItem(STORAGE_KEY.step, 1);
+
+      setStep(1);
+      setInputValues(initialInputValues);
+      return;
+    }
+
+    // stepOneValues, stepTwoValues 검증 필요
+    if (storedStep === 1 && stepOneValues) {
+      setStep(storedStep);
+      setInputValues(stepOneValues);
+    } else if (storedStep === 2 && stepOneValues && stepTwoValues) {
+      setStep(storedStep);
+      setInputValues(stepOneValues);
+      setPermission(stepTwoValues);
+    } else {
+      session.setItem(STORAGE_KEY.step, 1);
+
+      setStep(1);
+      setInputValues(initialInputValues);
+    }
+  }, [router.query.step]);
 
   return (
     <MainContent>
       <Article>
-        <Title>{step === 1 ? '랜덤 질문' : '안내 사항'}</Title>
+        {step === 1 && <Title>랜덤 질문</Title>}
+        {step === 2 && (
+          <div>
+            <Icon.Button
+              name="ArrowLeft"
+              color="blackGray"
+              style={{ position: 'absolute' }}
+              size="36px"
+              onClick={handleBack}
+            />
+            <Title>안내 사항</Title>
+          </div>
+        )}
 
-        {step === 1 && (
+        {step === 1 && inputValues && (
           <Form action="submit" onSubmit={handleSubmit}>
             <TypeField
               type={inputValues.type}
@@ -78,6 +166,7 @@ const CreateRandom = () => {
             />
             <MainCategoryField
               handleChange={({ target }) => handleChange(target.name, target.value)}
+              selected={inputValues.mainCategory}
             />
             <SubCategoryField
               mainCategory={inputValues.mainCategory}
@@ -97,7 +186,7 @@ const CreateRandom = () => {
           </Form>
         )}
 
-        {step === 2 && (
+        {step === 2 && permission && (
           <form onSubmit={handleSubmit}>
             <Subtitle>알림음이 잘 들리는지 확인해주세요.</Subtitle>
 
@@ -114,7 +203,7 @@ const CreateRandom = () => {
                 id="soundTest"
                 required
                 checked={permission.audio}
-                onChange={() => setPermission({ ...permission, audio: !permission.audio })}
+                onChange={() => handlePermissionChange('audio', !permission.audio)}
               />
               <label htmlFor="soundTest">알림음이 정상적으로 들리신다면 옵션을 체크해주세요.</label>
             </AudioCheckbox>
@@ -235,7 +324,7 @@ const LI = styled.li`
   word-break: keep-all;
 
   strong {
-    font-weight: 500;
+    font-weight: 600;
     color: ${({ theme }) => theme.colors.blackGray};
   }
 
