@@ -30,6 +30,10 @@ export const checkTitle = (title: string) => {
   return checkLength(title, 2, 30);
 };
 
+export const checkAdditionalQuestion = (text: string) => {
+  return checkLength(text, 2, 30);
+};
+
 export const SUBMIT_CHECK = {
   nickname: {
     isValid: checkNickname,
@@ -46,6 +50,10 @@ export const SUBMIT_CHECK = {
   title: {
     isValid: checkTitle,
     message: '질문 제목은 2~30자로 입력해 주세요.',
+  },
+  additionalQuestion: {
+    isValid: checkAdditionalQuestion,
+    message: '꼬리 질문은 2~30자로 입력해 주세요.',
   },
 };
 
