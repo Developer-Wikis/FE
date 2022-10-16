@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import Title from '~/components/base/Title';
+import PageTitle from '~/components/base/PageTitle';
 import { SubType } from '~/utils/constant/category';
 import { convertSubCategory } from '~/utils/helper/converter';
 
@@ -30,7 +30,7 @@ const CategoryName = styled.div`
   color: ${({ theme }) => theme.colors.mediumGray};
 `;
 
-const PostTitle = styled(Title)`
+const PostTitle = styled(PageTitle)`
   margin-top: 18px;
 `;
 

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Button from '~/components/base/Button';
 import Input from '~/components/base/Input';
 import Select from '~/components/base/select';
-import Title from '~/components/base/Title';
+import PageTitle from '~/components/base/PageTitle';
 import AddForm from '~/components/common/AddForm';
 import ErrorMessage from '~/components/common/ErrorMessage';
 import PageContainer from '~/components/common/PageContainer';
@@ -82,7 +82,7 @@ const CreateQuestion = () => {
 
   return (
     <Container>
-      <Title>질문 등록하기</Title>
+      <PageTitle>질문 등록하기</PageTitle>
       <FormContainer>
         <UserInfo>
           <InputField>
