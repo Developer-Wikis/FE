@@ -5,6 +5,10 @@ export function isString(value: unknown): value is string {
   return typeof value === 'string' || value instanceof String;
 }
 
+export function isBoolean(value: unknown): value is boolean {
+  return typeof value === 'boolean';
+}
+
 export function isMainType(value: unknown): value is MainType {
   return isString(value) && value in mainCategories;
 }

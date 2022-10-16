@@ -11,6 +11,8 @@ import { useRouter } from 'next/router';
 import useStorage from '~/hooks/useStorage';
 import { getRandomQuestions } from '~/service/question';
 import useAxios from '~/hooks/useAxios';
+import { isBoolean, isMainType, isString } from '~/utils/helper/checkType';
+import { isValidCategoryPair } from '~/utils/helper/validation';
 
 const STORAGE_KEY = {
   step: 'step',
@@ -19,11 +21,13 @@ const STORAGE_KEY = {
   randomQuestions: 'randomQuestions',
 };
 
+type Step = 1 | 2;
 type InputValues = {
   type: 'voice' | 'text';
   mainCategory: MainType | 'none';
   subCategories: SubWithAllType[];
 };
+
 const initialInputValues: InputValues = {
   type: 'voice',
   mainCategory: 'none',
@@ -42,7 +46,7 @@ const CreateRandom = () => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const router = useRouter();
 
-  const [step, setStep] = useState<number>();
+  const [step, setStep] = useState<Step>();
   const [inputValues, setInputValues] = useState<InputValues>();
   const [permission, setPermission] = useState<typeof initialPermission>();
 
@@ -93,8 +97,6 @@ const CreateRandom = () => {
       session.setItem(STORAGE_KEY.stepTwoValues, initialPermission);
 
       setStep(2);
-      setPermission(initialPermission);
-
       scrollTo(0, 0);
       return;
     }
@@ -117,6 +119,7 @@ const CreateRandom = () => {
     session.removeItem(STORAGE_KEY.stepTwoValues);
 
     setStep(1);
+    setPermission(initialPermission);
   };
 
   useEffect(() => {
@@ -138,8 +141,8 @@ const CreateRandom = () => {
       router.push('/random/create');
     }
 
-    const isEmptyStoredValues = queryStep === 0 || storedStep === null;
-    if (isEmptyStoredValues) {
+    const isInit = queryStep === 0 || storedStep === null;
+    if (isInit) {
       session.setItem(STORAGE_KEY.step, 1);
 
       setStep(1);
@@ -147,20 +150,12 @@ const CreateRandom = () => {
       return;
     }
 
-    // stepOneValues, stepTwoValues 검증 필요
-    if (storedStep === 1 && stepOneValues) {
-      setStep(storedStep);
-      setInputValues(stepOneValues);
-    } else if (storedStep === 2 && stepOneValues && stepTwoValues) {
-      setStep(storedStep);
-      setInputValues(stepOneValues);
-      setPermission(stepTwoValues);
-    } else {
-      session.setItem(STORAGE_KEY.step, 1);
+    const validStepOneValues = getValidStepOneValues(stepOneValues);
+    const validStepTwoValues = getValidStepTwoValues(stepTwoValues);
 
-      setStep(1);
-      setInputValues(initialInputValues);
-    }
+    setStep(isValidStep(storedStep) ? storedStep : 1);
+    setInputValues(validStepOneValues);
+    setPermission(validStepTwoValues);
   }, [router.query.step]);
 
   return (
@@ -190,6 +185,7 @@ const CreateRandom = () => {
               handleChange={({ target }) => handleChange(target.name, target.value)}
               selected={inputValues.mainCategory}
             />
+
             <SubCategoryField
               mainCategory={inputValues.mainCategory}
               subCategories={inputValues.subCategories}
@@ -259,6 +255,60 @@ const CreateRandom = () => {
 
 export default CreateRandom;
 
+function isValidStep(value: unknown): value is Step {
+  return [1, 2].includes(Number(value));
+}
+
+function isValidType(value: unknown): value is 'voice' | 'text' {
+  return isString(value) && ['voice', 'text'].includes(value);
+}
+
+function isValidMainCategory(value: unknown): value is typeof initialInputValues.mainCategory {
+  return value === 'none' || isMainType(value);
+}
+
+function getValidSubCategories(value: unknown, mainCategory: MainType): SubWithAllType[] {
+  if (!Array.isArray(value)) return initialInputValues.subCategories;
+  if (value.includes('all')) {
+    if (value.length === 1) return value;
+    else return initialInputValues.subCategories;
+  }
+
+  return value
+    .filter((sub) => isValidCategoryPair(mainCategory, sub))
+    .filter((sub, index, arr) => arr.indexOf(sub) === index);
+}
+
+function getValidStepOneValues(value: unknown): InputValues {
+  const validValues = { ...initialInputValues };
+  if (!value) return validValues;
+
+  const { type, mainCategory, subCategories } = value as Record<keyof InputValues, unknown>;
+
+  if (isValidType(type)) {
+    validValues.type = type;
+
+    if (isValidMainCategory(mainCategory)) {
+      validValues.mainCategory = mainCategory;
+      validValues.subCategories =
+        mainCategory === 'none' ? [] : getValidSubCategories(subCategories, mainCategory);
+    }
+  }
+
+  return validValues;
+}
+
+function getValidStepTwoValues(value: unknown): typeof initialPermission {
+  const validValues = { ...initialPermission };
+  if (!value) return validValues;
+
+  const { audio, mic } = value as Record<keyof typeof initialPermission, unknown>;
+
+  if (isBoolean(audio)) validValues.audio = audio;
+  if (isBoolean(mic)) validValues.mic = mic;
+  return validValues;
+}
+
 const MainContent = styled(PageContainer)`
   margin-top: 50px;
 `;
@@ -294,7 +344,7 @@ const Subtitle = styled.h3`
   text-align: center;
   margin-bottom: 21px;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
   color: ${({ theme }) => theme.colors.blackGray};
 `;
 
