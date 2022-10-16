@@ -16,3 +16,7 @@ export function isSubType(value: unknown): value is SubType {
 export function isSubWithAllType(value: unknown): value is SubWithAllType {
   return isSubType(value);
 }
+
+export function isBrowser() {
+  return typeof window !== 'undefined';
+}
