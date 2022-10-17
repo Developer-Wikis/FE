@@ -42,6 +42,10 @@ export const theme = {
       font-size: 14px;
       line-height: 1.5;
     `,
+    caption: `
+      font-size: 13px;
+      line-height: 1.5;
+    `,
   },
 };
 

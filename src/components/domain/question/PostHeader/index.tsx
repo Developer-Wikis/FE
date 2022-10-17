@@ -22,21 +22,14 @@ export default PostHeader;
 
 const Container = styled.div`
   text-align: center;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.mediumGray};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.gray500};
   padding-bottom: 22px;
 `;
 const CategoryName = styled.div`
-  font-size: 14px;
-  color: ${({ theme }) => theme.colors.mediumGray};
+  ${({ theme }) => theme.fontStyle.body2};
+  color: ${({ theme }) => theme.colors.gray500};
 `;
 
 const PostTitle = styled(PageTitle)`
   margin-top: 18px;
-`;
-
-const Writer = styled.div`
-  font-size: 14px;
-  color: ${({ theme }) => theme.colors.mediumGray};
-  text-align: right;
-  margin-top: 12px;
 `;

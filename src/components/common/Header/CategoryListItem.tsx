@@ -21,10 +21,10 @@ const CategoryListItem = ({ href, name, select, shallow = false }: CategoryListI
 export default CategoryListItem;
 
 const Li = styled.li`
-  margin-right: 16px;
+  margin-right: 22px;
 
   a {
-    font-size: 18px;
+    ${({ theme }) => theme.fontStyle.subtitle1};
   }
 
   &.selected a {

@@ -70,8 +70,8 @@ const AccordionTitle = styled.div`
   border-bottom: 1px solid ${({ theme }) => theme.colors.lightGray}; ;
 `;
 
-const Title = styled.h3`
-  font-size: 18px;
+const Title = styled.strong`
+  ${({ theme }) => theme.fontStyle.subtitle2};
 `;
 
 const AccordionContent = styled.ul`

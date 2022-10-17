@@ -29,5 +29,5 @@ export default QuestionList;
 
 const Container = styled.ul`
   margin-top: 32px;
-  border-top: 1px solid ${({ theme }) => theme.colors.lightGray};
+  border-top: 1px solid ${({ theme }) => theme.colors.gray300};
 `;
