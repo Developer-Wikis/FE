@@ -23,9 +23,9 @@ export default CommentTextArea;
 
 const StyledTextArea = styled.textarea`
   background-color: white;
-  border: 1px solid ${({ theme }) => theme.colors.lightGray};
+  border: 1px solid ${({ theme }) => theme.colors.gray300};
   border-radius: 4px;
-  font-size: 14px;
+  ${({ theme }) => theme.fontStyle.body2};
 
   height: 74px;
   padding: 8px;

@@ -41,5 +41,6 @@ export default Link;
 
 const StyledA = styled.a<LinkTypes>`
   ${({ linkType }) => linkType && buttonStyle[linkType]};
+  ${({ linkType }) => linkType && `display: inline-block;`};
   ${({ size }) => size && buttonSizes[size]};
 `;

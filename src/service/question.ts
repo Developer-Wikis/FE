@@ -61,3 +61,7 @@ export const getRandomQuestions = (params: { mainCategory: MainType; subCategori
   // 실제 API 연결 시 unauth로 변경
   return axios.get('/random', { params });
 };
+
+export const createAddition = (questionId: number, text: string) => {
+  return axios.post(`/questions/${questionId}/addition`, { additionQuestion: text });
+};

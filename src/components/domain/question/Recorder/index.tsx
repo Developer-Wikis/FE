@@ -180,7 +180,7 @@ const RecordContainer = styled.div`
   width: 352px;
   height: 95px;
   display: flex;
-  background: ${({ theme }) => theme.colors.bgGray};
+  background: ${({ theme }) => theme.colors.gray200};
   border-radius: 100px;
   justify-content: center;
   align-items: center;
@@ -215,7 +215,7 @@ const PlayButton = styled.button`
   height: 60px;
   border-radius: 50%;
 
-  background: ${({ theme }) => theme.colors.blackGray};
+  background: ${({ theme }) => theme.colors.gray800};
   display: flex;
   justify-content: center;
   align-items: center;

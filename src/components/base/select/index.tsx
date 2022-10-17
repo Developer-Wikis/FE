@@ -26,5 +26,5 @@ const StyledSelect = styled.select`
   padding: 8px 10px;
   border-radius: 4px;
   border: 1px solid ${({ theme }) => theme.colors.lightGray};
-  font-size: 14px;
+  ${({ theme }) => theme.fontStyle.body2};
 `;

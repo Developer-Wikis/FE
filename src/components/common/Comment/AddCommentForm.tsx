@@ -82,7 +82,7 @@ const AddCommentForm = () => {
 export default AddCommentForm;
 
 const Container = styled.form`
-  background-color: ${({ theme }) => theme.colors.bgLightGray};
+  background-color: ${({ theme }) => theme.colors.gray100};
   display: flex;
   flex-direction: column;
   padding: 16px;
@@ -98,9 +98,9 @@ const Writer = styled.div`
 
 const Input = styled.input`
   background-color: white;
-  border: 1px solid ${({ theme }) => theme.colors.lightGray};
+  border: 1px solid ${({ theme }) => theme.colors.gray300};
   border-radius: 4px;
-  font-size: 14px;
+  ${({ theme }) => theme.fontStyle.body2};
 
   height: 32px;
   padding-left: 8px;

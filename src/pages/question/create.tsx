@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Button from '~/components/base/Button';
 import Input from '~/components/base/Input';
 import Select from '~/components/base/select';
-import Title from '~/components/base/Title';
+import PageTitle from '~/components/base/PageTitle';
 import AddForm from '~/components/common/AddForm';
 import ErrorMessage from '~/components/common/ErrorMessage';
 import PageContainer from '~/components/common/PageContainer';
@@ -82,7 +82,7 @@ const CreateQuestion = () => {
 
   return (
     <Container>
-      <Title>질문 등록하기</Title>
+      <PageTitle>질문 등록하기</PageTitle>
       <FormContainer>
         <UserInfo>
           <InputField>
@@ -180,7 +180,7 @@ const Container = styled(PageContainer)`
 
 const Label = styled.label`
   font-size: 14px;
-  color: ${({ theme }) => theme.colors.darkGray};
+  color: ${({ theme }) => theme.colors.gray600};
   margin-bottom: 12px;
 `;
 
@@ -192,7 +192,7 @@ const InputField = styled.div`
   select {
     padding: 8px 10px;
     border-radius: 4px;
-    border: 1px solid ${({ theme }) => theme.colors.lightGray};
+    border: 1px solid ${({ theme }) => theme.colors.gray300};
     font-size: 14px;
   }
 `;
