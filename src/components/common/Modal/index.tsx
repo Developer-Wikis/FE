@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { ReactNode, useEffect, useMemo } from 'react';
+import { ReactNode, useEffect } from 'react';
 import useClickAway from '~/hooks/useClickAway';
 import Portal from './Portal';
 
@@ -25,7 +25,7 @@ const Modal = ({ children, visible = false, onClose, ...props }: ModalProps) => 
 
   return (
     <Portal>
-      <BackgroundDim style={{ display: visible ? 'block' : 'none' }}>
+      <BackgroundDim style={{ display: visible ? 'block' : 'none' }} {...props}>
         <ModalContainer ref={ref} role="dialog" tabIndex={0}>
           {children}
         </ModalContainer>

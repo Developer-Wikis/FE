@@ -1,21 +1,21 @@
 import styled from '@emotion/styled';
-import { useRouter } from 'next/router';
 import { ChangeEvent, FormEvent, useState } from 'react';
 import Button from '~/components/base/Button';
 import Input from '~/components/base/Input';
 import Label from '~/components/base/Label';
 import PageTitle from '~/components/base/PageTitle';
 import Article from '~/components/common/Article';
+import { createTailQuestion } from '~/service/question';
 import { SUBMIT_CHECK } from '~/utils/helper/validation';
 
 interface AdditionModalProps {
   title: string;
   id: number;
+  onClose: () => void;
 }
 
-const AdditionModal = ({ title, id }: AdditionModalProps) => {
+const AdditionModal = ({ title, id, onClose }: AdditionModalProps) => {
   const [text, setText] = useState('');
-  const router = useRouter();
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
@@ -28,10 +28,10 @@ const AdditionModal = ({ title, id }: AdditionModalProps) => {
     }
 
     try {
-      // await createAddition(Number(id), text);
+      await createTailQuestion(Number(id), text);
       alert('질문이 접수되었습니다. 질문은 관리자 확인 후 등록됩니다.');
       setText('');
-      router.push('/');
+      onClose();
     } catch {
       alert('질문 등록에 실패했습니다.');
       return;
@@ -39,7 +39,7 @@ const AdditionModal = ({ title, id }: AdditionModalProps) => {
   };
 
   return (
-    <Article>
+    <Container>
       <PageTitle>꼬리 질문 등록</PageTitle>
       <Form onSubmit={onSubmit}>
         <div>
@@ -58,11 +58,15 @@ const AdditionModal = ({ title, id }: AdditionModalProps) => {
 
         <SubmitButton>등록</SubmitButton>
       </Form>
-    </Article>
+    </Container>
   );
 };
 
 export default AdditionModal;
+
+const Container = styled(Article)`
+  margin-top: 0;
+`;
 
 const Form = styled.form`
   margin-top: 34px;

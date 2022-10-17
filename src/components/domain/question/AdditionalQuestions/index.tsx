@@ -1,15 +1,15 @@
 import styled from '@emotion/styled';
 import { useState } from 'react';
+import Button from '~/components/base/Button';
 import Icon from '~/components/base/Icon';
 import Link from '~/components/base/Link';
 
 interface Props {
-  questionId: number;
   questions: string[];
-  title: string;
+  onModalOpen: () => void;
 }
 
-const AdditionalQuestions = ({ questionId, questions, title }: Props) => {
+const AdditionalQuestions = ({ questions, onModalOpen }: Props) => {
   const [isOpen, setIsOpen] = useState(questions.length === 0);
 
   const onClickButton = () => {
@@ -35,19 +35,9 @@ const AdditionalQuestions = ({ questionId, questions, title }: Props) => {
               <p>등록된 꼬리 질문이 없습니다.</p>
             )}
           </AccordionContent>
-          <LinkArea>
-            <Link
-              size="sm"
-              linkType="black"
-              href={{
-                pathname: `/question/${questionId}/create-addition`,
-                query: { title },
-              }}
-              as={`/question/${questionId}/create-addition`}
-            >
-              꼬리 질문 등록
-            </Link>
-          </LinkArea>
+          <StyledButton size="sm" buttonType="black" onClick={onModalOpen}>
+            꼬리 질문 등록
+          </StyledButton>
         </>
       )}
     </Container>
@@ -82,7 +72,8 @@ const AccordionContent = styled.ul`
   }
 `;
 
-const LinkArea = styled.div`
+const StyledButton = styled(Button)`
+  display: block;
+  margin: 0 auto;
   margin-top: 14px;
-  text-align: center;
 `;

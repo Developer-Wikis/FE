@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PageContainer from '~/components/common/PageContainer';
 import styled from '@emotion/styled';
 import AdditionalQuestions from '~/components/domain/question/AdditionalQuestions';
@@ -10,6 +10,8 @@ import { IQuestionDetail, QuestionCategoryQuery } from '~/types/question';
 import MoveButtons from '~/components/domain/question/MoveButtons';
 import Recorder from '~/components/domain/question/Recorder';
 import { isMainType, isString, isSubWithAllType } from '~/utils/helper/checkType';
+import Modal from '~/components/common/Modal';
+import AdditionModal from '~/components/domain/question/AdditionModal';
 
 /*
 
@@ -52,6 +54,16 @@ interface QuestionDetailProps {
 }
 
 const QuestionDetail = ({ detailData, query }: QuestionDetailProps) => {
+  const [isOpenModal, setIsOpenModal] = useState(false);
+
+  const onModalOpen = () => {
+    setIsOpenModal(true);
+  };
+
+  const onModalClose = () => {
+    setIsOpenModal(false);
+  };
+
   return (
     <Container>
       <PostHeader
@@ -61,13 +73,12 @@ const QuestionDetail = ({ detailData, query }: QuestionDetailProps) => {
       />
       <PostContent>
         <Recorder />
-        <AdditionalQuestions
-          questionId={detailData.id}
-          title={detailData.title}
-          questions={detailData.additionQuestions}
-        />
+        <AdditionalQuestions questions={detailData.tailQuestions} onModalOpen={onModalOpen} />
         <MoveButtons categoryQuery={query} prevId={detailData.prevId} nextId={detailData.nextId} />
       </PostContent>
+      <Modal visible={isOpenModal} onClose={onModalClose}>
+        <AdditionModal id={detailData.id} title={detailData.title} onClose={onModalClose} />
+      </Modal>
       <Comment questionId={detailData.id} />
     </Container>
   );
