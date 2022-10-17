@@ -147,6 +147,7 @@ const CreateRandom = () => {
 
       setStep(1);
       setInputValues(initialInputValues);
+      setPermission(initialPermission);
       return;
     }
 
