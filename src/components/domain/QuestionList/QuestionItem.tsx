@@ -50,20 +50,20 @@ const StyledItem = styled.li`
     display: flex;
     align-items: center;
     padding: 20px 0;
-    border-bottom: 1px solid ${({ theme }) => theme.colors.lightGray};
+    border-bottom: 1px solid ${({ theme }) => theme.colors.gray300};
   }
 `;
 
 const CategoryName = styled.div`
-  font-size: 14px;
   padding: 0 20px;
   width: 140px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   flex-shrink: 0;
+  ${({ theme }) => theme.fontStyle.body2};
   font-weight: 500;
-  color: ${({ theme }) => theme.colors.darkGray};
+  color: ${({ theme }) => theme.colors.gray600};
 `;
 
 const QuestionTitle = styled.div`
@@ -77,8 +77,8 @@ const QuestionInfo = styled.div`
   text-align: right;
   padding: 0 20px;
   flex-shrink: 0;
-  font-size: 14px;
-  color: ${({ theme }) => theme.colors.darkGray};
+  ${({ theme }) => theme.fontStyle.body2};
+  color: ${({ theme }) => theme.colors.gray600};
 `;
 const QuestionInfoItem = styled.span`
   display: inline-flex;

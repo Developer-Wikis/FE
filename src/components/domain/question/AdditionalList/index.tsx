@@ -26,9 +26,9 @@ export default AdditionalList;
 const StyledUl = styled.ul`
   li {
     margin-top: 12px;
-    font-size: 14px;
+    ${({ theme }) => theme.fontStyle.body2};
     padding: 8px 10px;
-    background-color: ${({ theme }) => theme.colors.bgGray};
+    background-color: ${({ theme }) => theme.colors.gray200};
     border-radius: 4px;
     display: flex;
     justify-content: space-between;

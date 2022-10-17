@@ -50,9 +50,9 @@ const Container = styled.div`
   right: 0;
   top: -2px;
   padding: 10px 15px 10px 10px;
-  border: 1px solid ${({ theme }) => theme.colors.lightGray};
+  border: 1px solid ${({ theme }) => theme.colors.gray300};
   border-radius: 4px;
-  font-size: 14px;
+  ${({ theme }) => theme.fontStyle.body2};
   box-shadow: 0px 0px 4px 1px rgb(0 0 0 / 5%);
 `;
 
