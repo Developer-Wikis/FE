@@ -36,7 +36,7 @@ const PasswordConfirm = ({ commentId }: PasswordConfirmProps) => {
           onChange={handleChange}
         />
         <Button size="sm">확인</Button>
-        <Icon.Button name="Close" color="mediumGray" size="12" onClick={handleClose} />
+        <Icon.Button name="Close" color="gray500" size="12" onClick={handleClose} />
       </PasswordForm>
     </Container>
   );

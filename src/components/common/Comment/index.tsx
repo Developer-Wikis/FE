@@ -30,6 +30,6 @@ const Container = styled.div`
 
 const CommentContent = styled.div`
   margin-top: 18px;
-  border-top: 2px solid ${({ theme }) => theme.colors.blackGray};
+  border-top: 2px solid ${({ theme }) => theme.colors.gray800};
   align-items: center;
 `;

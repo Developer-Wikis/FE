@@ -59,13 +59,13 @@ const Label = styled.label`
   display: block;
   font-size: 16px;
   font-weight: 700;
-  color: ${({ theme }) => theme.colors.blackGray};
+  color: ${({ theme }) => theme.colors.gray800};
   margin-bottom: 12px;
 `;
 
 const Notice = styled.div`
   font-size: 13px;
-  color: ${({ theme }) => theme.colors.darkGray};
+  color: ${({ theme }) => theme.colors.gray600};
 `;
 
 const Container = styled.div`

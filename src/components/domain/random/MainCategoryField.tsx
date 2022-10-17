@@ -6,9 +6,10 @@ import { convertMainCategory } from '~/utils/helper/converter';
 
 interface MainCategoryFieldProps {
   handleChange: (e: ChangeEvent<HTMLSelectElement>) => void;
+  selected: string;
 }
 
-const MainCategoryField = ({ handleChange }: MainCategoryFieldProps) => {
+const MainCategoryField = ({ handleChange, selected }: MainCategoryFieldProps) => {
   return (
     <div>
       <Label htmlFor="mainCategory">직무 선택</Label>
@@ -20,6 +21,7 @@ const MainCategoryField = ({ handleChange }: MainCategoryFieldProps) => {
         name="mainCategory"
         style={{ width: '383px' }}
         onChange={handleChange}
+        selected={selected}
       />
     </div>
   );
@@ -31,6 +33,6 @@ const Label = styled.label`
   display: block;
   font-size: 16px;
   font-weight: 700;
-  color: ${({ theme }) => theme.colors.blackGray};
+  color: ${({ theme }) => theme.colors.gray800};
   margin-bottom: 12px;
 `;

@@ -44,7 +44,7 @@ const Header = () => {
           </CategoryList>
         </LeftArea>
         <RightArea>
-          <Link size="sm" linkType="red" href="/random/create">
+          <Link size="sm" linkType="red" href="/random/create?step=0" as="/random/create">
             랜덤 질문
           </Link>
           <Link size="sm" linkType="black" href="/question/create">
@@ -59,7 +59,7 @@ const Header = () => {
 export default Header;
 
 const StyledHeader = styled.div`
-  border-bottom: 1px solid ${({ theme }) => theme.colors.lightGray};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.gray300};
 `;
 
 const HeaderContent = styled(PageContainer)`

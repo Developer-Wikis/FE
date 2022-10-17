@@ -13,7 +13,7 @@ const AdditionalList = ({ list, onRemove }: AdditionalListProps) => {
         <li key={index}>
           <span>{question}</span>
           <button onClick={() => onRemove(index)}>
-            <Icon name="Close" size="10" color="darkGray" />
+            <Icon name="Close" size="10" color="gray600" />
           </button>
         </li>
       ))}
