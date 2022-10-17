@@ -7,6 +7,7 @@ const Article = styled.article`
   padding: 42px 28px 45px;
   border: 1px solid ${({ theme }) => theme.colors.lightGray};
   border-radius: 4px;
+  background-color: ${({ theme }) => theme.colors.white};
 `;
 
 export default Article;
