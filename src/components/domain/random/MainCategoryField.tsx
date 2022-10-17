@@ -33,6 +33,6 @@ const Label = styled.label`
   display: block;
   font-size: 16px;
   font-weight: 700;
-  color: ${({ theme }) => theme.colors.blackGray};
+  color: ${({ theme }) => theme.colors.gray800};
   margin-bottom: 12px;
 `;

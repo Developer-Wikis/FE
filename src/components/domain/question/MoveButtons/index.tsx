@@ -32,12 +32,12 @@ const MoveButtons = ({ categoryQuery, nextId, prevId }: MoveButtonProps) => {
   return (
     <Buttons>
       <PrevButton buttonType="borderGray" onClick={onMovePrev}>
-        <Icon name="ArrowLeft" size="20" color="darkGray" />
+        <Icon name="ArrowLeft" size="20" color="gray600" />
         <span>이전 질문</span>
       </PrevButton>
       <NextButton buttonType="borderGray" onClick={onMoveNext}>
         <span> 다음 질문</span>
-        <Icon name="ArrowRight" size="20" color="darkGray" />
+        <Icon name="ArrowRight" size="20" color="gray600" />
       </NextButton>
     </Buttons>
   );

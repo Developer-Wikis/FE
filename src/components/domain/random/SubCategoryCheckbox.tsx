@@ -41,7 +41,7 @@ const Label = styled.label`
   border-radius: 15px;
   padding: 5px 14px;
   font-size: 14px;
-  color: ${({ theme }) => theme.colors.darkGray};
+  color: ${({ theme }) => theme.colors.gray600};
   background-color: ${({ theme }) => theme.colors.white};
   user-select: none;
   cursor: pointer;

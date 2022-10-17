@@ -30,7 +30,7 @@ const StepTwo = ({ step, permission, handleSubmit, handleChange, handleBack }: S
       <div>
         <Icon.Button
           name="ArrowLeft"
-          color="blackGray"
+          color="gray800"
           style={{ position: 'absolute' }}
           size="36px"
           onClick={handleBack}
@@ -42,7 +42,7 @@ const StepTwo = ({ step, permission, handleSubmit, handleChange, handleBack }: S
         <Subtitle>알림음이 잘 들리는지 확인해주세요.</Subtitle>
 
         <AudioButton type="button" onClick={() => audioRef.current?.play()}>
-          <Icon name="Play" color="blackGray" />
+          <Icon name="Play" color="gray800" />
           알림음 듣기
           <audio src="/assets/audio/mixkit-positive-notification-951.wav" ref={audioRef} />
         </AudioButton>
@@ -97,7 +97,7 @@ const Subtitle = styled.h3`
   margin-bottom: 21px;
   font-size: 16px;
   font-weight: 600;
-  color: ${({ theme }) => theme.colors.blackGray};
+  color: ${({ theme }) => theme.colors.gray800};
 `;
 
 const AudioButton = styled.button`
@@ -106,11 +106,11 @@ const AudioButton = styled.button`
   align-items: center;
   gap: 4px;
   margin: 0 auto 21px;
-  border: 1px solid ${({ theme }) => theme.colors.lightGray};
+  border: 1px solid ${({ theme }) => theme.colors.gray300};
   border-radius: 4px;
   padding: 20px 76px 14px;
   text-align: center;
-  color: ${({ theme }) => theme.colors.darkGray};
+  color: ${({ theme }) => theme.colors.gray600};
   background-color: ${({ theme }) => theme.colors.white};
 `;
 
@@ -129,7 +129,7 @@ const AudioCheckbox = styled.div`
 
   label {
     font-size: 14px;
-    color: ${({ theme }) => theme.colors.darkGray};
+    color: ${({ theme }) => theme.colors.gray600};
   }
 `;
 
@@ -137,19 +137,19 @@ const UL = styled.ul`
   border-radius: 4px;
   margin-bottom: 30px;
   padding: 26px 23px 26px;
-  background-color: ${({ theme }) => theme.colors.bgGray};
+  background-color: ${({ theme }) => theme.colors.gray200};
 `;
 
 const LI = styled.li`
   margin-left: 16px;
   font-size: 13px;
-  color: ${({ theme }) => theme.colors.darkGray};
+  color: ${({ theme }) => theme.colors.gray600};
   list-style: outside;
   word-break: keep-all;
 
   strong {
     font-weight: 600;
-    color: ${({ theme }) => theme.colors.blackGray};
+    color: ${({ theme }) => theme.colors.gray800};
   }
 
   ~ li {

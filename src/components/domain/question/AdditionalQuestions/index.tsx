@@ -21,9 +21,9 @@ const AdditionalQuestions = ({ questionId, questions, title }: Props) => {
       <AccordionTitle>
         <Title>예상되는 꼬리 질문 보기</Title>
         {isOpen ? (
-          <Icon.Button name="ArrowUp" size="24" color="blackGray" onClick={onClickButton} />
+          <Icon.Button name="ArrowUp" size="24" color="gray800" onClick={onClickButton} />
         ) : (
-          <Icon.Button name="ArrowDown" size="24" color="blackGray" onClick={onClickButton} />
+          <Icon.Button name="ArrowDown" size="24" color="gray800" onClick={onClickButton} />
         )}
       </AccordionTitle>
       {isOpen && (
@@ -67,7 +67,7 @@ const AccordionTitle = styled.div`
   justify-content: space-between;
   padding: 16px 0;
   align-items: center;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.lightGray}; ;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.gray300}; ;
 `;
 
 const Title = styled.strong`

@@ -236,6 +236,6 @@ const Article = styled.article`
   width: 440px;
   margin: 0 auto;
   padding: 42px 28px;
-  border: 1px solid ${({ theme }) => theme.colors.lightGray};
+  border: 1px solid ${({ theme }) => theme.colors.gray300};
   border-radius: 4px;
 `;

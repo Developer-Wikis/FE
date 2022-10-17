@@ -38,7 +38,7 @@ const Legend = styled.legend`
   margin-bottom: 19px;
   font-size: 16px;
   font-weight: 700;
-  color: ${({ theme }) => theme.colors.blackGray};
+  color: ${({ theme }) => theme.colors.gray800};
 `;
 
 const Radio = styled.input`
@@ -52,7 +52,7 @@ const Radio = styled.input`
 
 const RadioLabel = styled.label`
   font-size: 14px;
-  color: ${({ theme }) => theme.colors.blackGray};
+  color: ${({ theme }) => theme.colors.gray800};
   vertical-align: bottom;
   cursor: pointer;
 `;
@@ -60,11 +60,11 @@ const RadioLabel = styled.label`
 const Notice = styled.div`
   margin-top: 6px;
   font-size: 13px;
-  color: ${({ theme }) => theme.colors.darkGray};
+  color: ${({ theme }) => theme.colors.gray600};
 
   strong {
     font-weight: 600;
-    color: ${({ theme }) => theme.colors.blackGray};
+    color: ${({ theme }) => theme.colors.gray800};
   }
 `;
 

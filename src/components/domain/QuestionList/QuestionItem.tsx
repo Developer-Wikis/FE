@@ -29,11 +29,11 @@ const QuestionItem = forwardRef(
           </QuestionTitle>
           <QuestionInfo>
             <QuestionInfoItem title={String(question.viewCount)}>
-              <Icon name="Eye" color="darkGray" size="15" />
+              <Icon name="Eye" color="gray600" size="15" />
               {formatNumber(question.viewCount)}
             </QuestionInfoItem>
             <QuestionInfoItem title={String(question.commentCount)}>
-              <Icon name="Comment" color="darkGray" size="15" />
+              <Icon name="Comment" color="gray600" size="15" />
               {formatNumber(question.commentCount)}
             </QuestionInfoItem>
           </QuestionInfo>

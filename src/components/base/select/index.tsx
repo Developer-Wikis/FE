@@ -25,6 +25,6 @@ export default Select;
 const StyledSelect = styled.select`
   padding: 8px 10px;
   border-radius: 4px;
-  border: 1px solid ${({ theme }) => theme.colors.lightGray};
+  border: 1px solid ${({ theme }) => theme.colors.gray300};
   ${({ theme }) => theme.fontStyle.body2};
 `;

@@ -59,7 +59,7 @@ const Header = () => {
 export default Header;
 
 const StyledHeader = styled.div`
-  border-bottom: 1px solid ${({ theme }) => theme.colors.lightGray};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.gray300};
 `;
 
 const HeaderContent = styled(PageContainer)`
