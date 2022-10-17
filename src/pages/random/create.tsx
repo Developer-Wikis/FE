@@ -1,18 +1,15 @@
 import styled from '@emotion/styled';
-import { FormEvent, useCallback, useEffect, useRef, useState } from 'react';
-import Button from '~/components/base/Button';
+import { FormEvent, useCallback, useEffect, useState } from 'react';
 import PageContainer from '~/components/common/PageContainer';
-import MainCategoryField from '~/components/domain/random/MainCategoryField';
-import SubCategoryField from '~/components/domain/random/SubCategoryField';
-import TypeField from '~/components/domain/random/TypeField';
 import { MainType, SubWithAllType } from '~/utils/constant/category';
-import Icon from '~/components/base/Icon';
 import { useRouter } from 'next/router';
 import useStorage from '~/hooks/useStorage';
 import { getRandomQuestions } from '~/service/question';
 import useAxios from '~/hooks/useAxios';
 import { isBoolean, isMainType, isString } from '~/utils/helper/checkType';
 import { isValidCategoryPair } from '~/utils/helper/validation';
+import StepTwo from '~/components/domain/random/StepTwo';
+import StepOne from '~/components/domain/random/StepOne';
 
 const STORAGE_KEY = {
   step: 'step',
@@ -21,8 +18,8 @@ const STORAGE_KEY = {
   randomQuestions: 'randomQuestions',
 };
 
-type Step = 1 | 2;
-type InputValues = {
+export type Step = 1 | 2;
+export type InputValues = {
   type: 'voice' | 'text';
   mainCategory: MainType | 'none';
   subCategories: SubWithAllType[];
@@ -33,7 +30,7 @@ const initialInputValues: InputValues = {
   mainCategory: 'none',
   subCategories: [],
 };
-const initialPermission = { audio: false, mic: false };
+export const initialPermission = { audio: false, mic: false };
 
 const CreateRandom = () => {
   const local = useStorage('local');
@@ -43,7 +40,6 @@ const CreateRandom = () => {
     [session],
   );
 
-  const audioRef = useRef<HTMLAudioElement>(null);
   const router = useRouter();
 
   const [step, setStep] = useState<Step>();
@@ -123,15 +119,6 @@ const CreateRandom = () => {
   };
 
   useEffect(() => {
-    if (step !== 2) return;
-
-    navigator.mediaDevices
-      .getUserMedia({ audio: true })
-      .then(() => handlePermissionChange('mic', true))
-      .catch(() => handlePermissionChange('mic', false));
-  }, [step]);
-
-  useEffect(() => {
     const [storedStep, stepOneValues, stepTwoValues] = Object.values(STORAGE_KEY).map((key) =>
       session.getItem(key, null),
     );
@@ -162,92 +149,23 @@ const CreateRandom = () => {
   return (
     <MainContent>
       <Article>
-        {step === 1 && <Title>랜덤 질문</Title>}
-        {step === 2 && (
-          <div>
-            <Icon.Button
-              name="ArrowLeft"
-              color="blackGray"
-              style={{ position: 'absolute' }}
-              size="36px"
-              onClick={handleBack}
-            />
-            <Title>안내 사항</Title>
-          </div>
-        )}
-
         {step === 1 && inputValues && (
-          <Form action="submit" onSubmit={handleSubmit}>
-            <TypeField
-              type={inputValues.type}
-              handleChange={({ target }) => handleChange(target.name, target.id)}
-            />
-            <MainCategoryField
-              handleChange={({ target }) => handleChange(target.name, target.value)}
-              selected={inputValues.mainCategory}
-            />
-
-            <SubCategoryField
-              mainCategory={inputValues.mainCategory}
-              subCategories={inputValues.subCategories}
-              handleChange={handleChange}
-            />
-
-            <StyledButton
-              type="submit"
-              buttonType="red"
-              size="lg"
-              disabled={inputValues.subCategories.length === 0}
-              step={step}
-            >
-              면접 연습 시작
-            </StyledButton>
-          </Form>
+          <StepOne
+            step={step}
+            inputValues={inputValues}
+            handleChange={handleChange}
+            handleSubmit={handleSubmit}
+          />
         )}
 
         {step === 2 && permission && (
-          <form onSubmit={handleSubmit}>
-            <Subtitle>알림음이 잘 들리는지 확인해주세요.</Subtitle>
-
-            <AudioButton type="button" onClick={() => audioRef.current?.play()}>
-              <Icon name="Play" color="blackGray" />
-              알림음 듣기
-              <audio src="/assets/audio/mixkit-positive-notification-951.wav" ref={audioRef} />
-            </AudioButton>
-
-            <AudioCheckbox>
-              <input
-                type="checkbox"
-                name="soundTest"
-                id="soundTest"
-                required
-                checked={permission.audio}
-                onChange={() => handlePermissionChange('audio', !permission.audio)}
-              />
-              <label htmlFor="soundTest">알림음이 정상적으로 들리신다면 옵션을 체크해주세요.</label>
-            </AudioCheckbox>
-
-            <UL>
-              <LI>
-                면접 연습 시작 버튼을 클릭하면 음성으로 질문이 진행되며{' '}
-                <strong>질문이 끝난 뒤 바로 녹음이 시작</strong>됩니다.
-              </LI>
-              <LI>
-                <strong>마이크 권한이 허용</strong>이 되어있어야 면접 연습을 시작하실 수 있습니다.
-              </LI>
-              <LI>다시 녹음하기는 질문마다 한 번만 사용할 수 있습니다.</LI>
-            </UL>
-
-            <StyledButton
-              type="submit"
-              buttonType="red"
-              size="lg"
-              disabled={!permission.audio || !permission.mic}
-              step={step}
-            >
-              면접 연습 시작
-            </StyledButton>
-          </form>
+          <StepTwo
+            step={step}
+            permission={permission}
+            handleSubmit={handleSubmit}
+            handleChange={handlePermissionChange}
+            handleBack={handleBack}
+          />
         )}
       </Article>
     </MainContent>
@@ -320,88 +238,4 @@ const Article = styled.article`
   padding: 42px 28px;
   border: 1px solid ${({ theme }) => theme.colors.lightGray};
   border-radius: 4px;
-`;
-
-const Title = styled.h2`
-  font-size: 24px;
-  text-align: center;
-  margin-bottom: 34px;
-`;
-
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 42px;
-`;
-
-const StyledButton = styled(Button)<{ step: number }>`
-  display: block;
-  margin: ${({ step }) => (step === 1 ? 'calc(64px - 42px)' : '0')} auto 0;
-  width: fit-content;
-`;
-
-const Subtitle = styled.h3`
-  display: block;
-  text-align: center;
-  margin-bottom: 21px;
-  font-size: 16px;
-  font-weight: 600;
-  color: ${({ theme }) => theme.colors.blackGray};
-`;
-
-const AudioButton = styled.button`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  margin: 0 auto 21px;
-  border: 1px solid ${({ theme }) => theme.colors.lightGray};
-  border-radius: 4px;
-  padding: 20px 76px 14px;
-  text-align: center;
-  color: ${({ theme }) => theme.colors.darkGray};
-  background-color: ${({ theme }) => theme.colors.white};
-`;
-
-const AudioCheckbox = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 28px;
-
-  input {
-    margin: 0 6px 0 0;
-    width: 16px;
-    height: 16px;
-    accent-color: ${({ theme }) => theme.colors.red};
-  }
-
-  label {
-    font-size: 14px;
-    color: ${({ theme }) => theme.colors.darkGray};
-  }
-`;
-
-const UL = styled.ul`
-  border-radius: 4px;
-  margin-bottom: 30px;
-  padding: 26px 23px 26px;
-  background-color: ${({ theme }) => theme.colors.bgGray};
-`;
-
-const LI = styled.li`
-  margin-left: 16px;
-  font-size: 13px;
-  color: ${({ theme }) => theme.colors.darkGray};
-  list-style: outside;
-  word-break: keep-all;
-
-  strong {
-    font-weight: 600;
-    color: ${({ theme }) => theme.colors.blackGray};
-  }
-
-  ~ li {
-    margin-top: 7px;
-  }
 `;
