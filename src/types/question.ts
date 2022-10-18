@@ -17,7 +17,7 @@ export interface IQuestion {
   title: string;
   mainCategory: string;
   subCategory: string;
-  additionQuestions: string[];
+  tailQuestions: string[];
 }
 
 export interface ISort {
@@ -31,7 +31,7 @@ export interface IQuestionDetail {
   title: string;
   mainCategory: MainType;
   subCategory: SubType;
-  additionQuestions: string[];
+  tailQuestions: string[];
   viewCount: number;
   commentCount: number;
   createdAt: string;

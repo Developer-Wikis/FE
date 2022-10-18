@@ -15,9 +15,10 @@ const IconButton = ({
   onClick,
   type = 'button',
   style,
+  ...props
 }: IconButtonProps) => {
   return (
-    <button onClick={onClick} type={type} style={style}>
+    <button onClick={onClick} type={type} style={style} {...props}>
       <Icon name={name} size={size} color={color} />
     </button>
   );

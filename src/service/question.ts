@@ -23,7 +23,7 @@ type QuestionListResponse = {
 };
 
 export type QuestionDetailResponse = IQuestionItem & {
-  additionQuestions: string[];
+  tailQuestions: string[];
 };
 
 export const createQuestion = (question: IQuestion) => {
@@ -62,6 +62,6 @@ export const getRandomQuestions = (params: { mainCategory: MainType; subCategori
   return axios.get('/random', { params });
 };
 
-export const createAddition = (questionId: number, text: string) => {
-  return axios.post(`/questions/${questionId}/addition`, { additionQuestion: text });
+export const createTailQuestion = (questionId: number, text: string) => {
+  return unauth.post(`/questions/${questionId}/tail`, { tailQuestion: text });
 };

@@ -8,7 +8,7 @@ import PageTitle from '~/components/base/PageTitle';
 import AddForm from '~/components/common/AddForm';
 import ErrorMessage from '~/components/common/ErrorMessage';
 import PageContainer from '~/components/common/PageContainer';
-import AdditionalList from '~/components/domain/question/AdditionalList';
+import TailQuestionList from '~/components/domain/question/TailQuestionList';
 import useForm from '~/hooks/useForm';
 import { createQuestion } from '~/service/question';
 import { IQuestion } from '~/types/question';
@@ -47,7 +47,7 @@ const validate = (values: valuesType) => {
 };
 
 const CreateQuestion = () => {
-  const [additionQuestions, setAdditionQuestions] = useState<string[]>([]);
+  const [tailQuestions, setTailQuestions] = useState<string[]>([]);
   const { values, errors, isLoading, handleChange, handleSubmit } = useForm({
     initialValues,
     onSubmit,
@@ -56,7 +56,7 @@ const CreateQuestion = () => {
   const router = useRouter();
 
   async function onSubmit() {
-    const newQuestion: IQuestion = { ...values, additionQuestions };
+    const newQuestion: IQuestion = { ...values, tailQuestions };
     try {
       await createQuestion(newQuestion);
       alert('질문이 접수되었습니다. 질문은 관리자 확인 후 등록됩니다.');
@@ -67,17 +67,17 @@ const CreateQuestion = () => {
   }
 
   const onAddQuestion = (value: string) => {
-    if (additionQuestions.length >= 5) {
+    if (tailQuestions.length >= 5) {
       alert('꼬리 질문은 5개까지 등록 가능합니다.');
       return;
     }
 
-    setAdditionQuestions([...additionQuestions, value]);
+    setTailQuestions([...tailQuestions, value]);
   };
 
   const onRemoveQuestion = (index: number) => {
-    const updateList = additionQuestions.filter((_, idx) => idx !== index);
-    setAdditionQuestions(updateList);
+    const updateList = tailQuestions.filter((_, idx) => idx !== index);
+    setTailQuestions(updateList);
   };
 
   return (
@@ -151,16 +151,16 @@ const CreateQuestion = () => {
           </InputField>
         )}
         <InputField>
-          <Label htmlFor="additional">꼬리질문</Label>
+          <Label htmlFor="tailQuestion">꼬리질문</Label>
           <AddForm
             type="text"
             buttonText="추가"
-            name="additional"
-            id="additional"
+            name="tailQuestion"
+            id="tailQuestion"
             onSubmit={onAddQuestion}
           />
         </InputField>
-        <AdditionalList list={additionQuestions} onRemove={onRemoveQuestion} />
+        <TailQuestionList list={tailQuestions} onRemove={onRemoveQuestion} />
         <ButtonArea>
           <Button onClick={handleSubmit} disabled={isLoading}>
             등록

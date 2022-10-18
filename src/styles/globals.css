@@ -8,6 +8,10 @@ body {
     Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
+body.modal-open {
+  overflow: hidden;
+}
+
 a {
   color: inherit;
   text-decoration: none;

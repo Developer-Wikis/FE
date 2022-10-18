@@ -21,8 +21,8 @@ const AddForm = ({ buttonText, onSubmit, ...props }: AddFormProps) => {
     const validText = text.trim();
     setText(validText);
 
-    if (SUBMIT_CHECK.additionalQuestion.isValid(text)) {
-      alert(SUBMIT_CHECK.additionalQuestion.message);
+    if (SUBMIT_CHECK.tailQuestion.isValid(text)) {
+      alert(SUBMIT_CHECK.tailQuestion.message);
       return;
     }
 
