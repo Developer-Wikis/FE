@@ -84,7 +84,7 @@ const CreateRandom = () => {
     setPermission(nextPermission);
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!inputValues) return;
 
@@ -98,7 +98,7 @@ const CreateRandom = () => {
     }
 
     clearSession();
-    getQuestions();
+    await getQuestions();
 
     const { type, mainCategory, subCategories } = inputValues;
     router.push(
