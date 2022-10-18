@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import Button from '~/components/base/Button';
 import Input from '~/components/base/Input';
 import Label from '~/components/base/Label';
@@ -13,10 +13,12 @@ interface TailQuestionModalProps {
   title: string;
   id: number;
   onClose: () => void;
+  isOpenModal: boolean;
 }
 
-const TailQuestionModal = ({ title, id, onClose }: TailQuestionModalProps) => {
+const TailQuestionModal = ({ title, id, onClose, isOpenModal }: TailQuestionModalProps) => {
   const [text, setText] = useState('');
+
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
@@ -31,13 +33,18 @@ const TailQuestionModal = ({ title, id, onClose }: TailQuestionModalProps) => {
     try {
       await createTailQuestion(Number(id), text);
       alert('질문이 접수되었습니다. 질문은 관리자 확인 후 등록됩니다.');
-      setText('');
       onClose();
     } catch {
       alert('질문 등록에 실패했습니다.');
       return;
     }
   };
+
+  useEffect(() => {
+    if (isOpenModal) {
+      setText('');
+    }
+  }, [isOpenModal]);
 
   return (
     <Container>
