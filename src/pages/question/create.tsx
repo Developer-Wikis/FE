@@ -180,7 +180,7 @@ const Container = styled(PageContainer)`
 
 const Label = styled.label`
   font-size: 14px;
-  color: ${({ theme }) => theme.colors.darkGray};
+  color: ${({ theme }) => theme.colors.gray600};
   margin-bottom: 12px;
 `;
 
@@ -192,7 +192,7 @@ const InputField = styled.div`
   select {
     padding: 8px 10px;
     border-radius: 4px;
-    border: 1px solid ${({ theme }) => theme.colors.lightGray};
+    border: 1px solid ${({ theme }) => theme.colors.gray300};
     font-size: 14px;
   }
 `;

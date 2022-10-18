@@ -42,7 +42,7 @@ export default CommentItem;
 
 const StyledLi = styled.li`
   padding: 16px 0;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.lightGray};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.gray300};
   position: relative;
 `;
 
@@ -60,6 +60,6 @@ const Writer = styled.div`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: ${({ theme }) => theme.colors.darkGray};
+  color: ${({ theme }) => theme.colors.gray600};
   flex-shrink: 0;
 `;

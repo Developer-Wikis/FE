@@ -2,18 +2,18 @@ import { theme } from '~/types/theme';
 
 export const buttonStyle = {
   black: `
-    background-color: ${theme.colors.blackGray};
+    background-color: ${theme.colors.gray700};
     color: white;
     border-radius: 4px;
   `,
   borderGray: `
-    border: 1px solid ${theme.colors.lightGray};
+    border: 1px solid ${theme.colors.gray300};
     background-color: white;
-    color: ${theme.colors.darkGray};
+    color: ${theme.colors.gray600};
     border-radius: 4px;
 
     &:hover {
-      background-color: ${theme.colors.bgLightGray};
+      background-color: ${theme.colors.gray100};
     }
   `,
   red: `
@@ -25,15 +25,15 @@ export const buttonStyle = {
 
 export const buttonSizes = {
   sm: `
-    font-size: 14px;
+    ${theme.fontStyle.body2}
     padding: 8px 12px;
   `,
   md: `
-    font-size: 14px;
+    ${theme.fontStyle.body2}
     padding: 12px 26px;
   `,
   lg: `
-    font-size: 16px;
+    ${theme.fontStyle.body1}
     padding: 12px 16px;
   `,
 };

@@ -36,7 +36,7 @@ const PasswordConfirm = ({ commentId }: PasswordConfirmProps) => {
           onChange={handleChange}
         />
         <Button size="sm">확인</Button>
-        <Icon.Button name="Close" color="mediumGray" size="12" onClick={handleClose} />
+        <Icon.Button name="Close" color="gray500" size="12" onClick={handleClose} />
       </PasswordForm>
     </Container>
   );
@@ -50,9 +50,9 @@ const Container = styled.div`
   right: 0;
   top: -2px;
   padding: 10px 15px 10px 10px;
-  border: 1px solid ${({ theme }) => theme.colors.lightGray};
+  border: 1px solid ${({ theme }) => theme.colors.gray300};
   border-radius: 4px;
-  font-size: 14px;
+  ${({ theme }) => theme.fontStyle.body2};
   box-shadow: 0px 0px 4px 1px rgb(0 0 0 / 5%);
 `;
 

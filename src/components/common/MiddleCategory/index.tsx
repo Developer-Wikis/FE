@@ -32,21 +32,21 @@ const CategoryList = styled.ul`
     margin-top: 12px;
 
     button {
-      font-size: 16px;
+      ${({ theme }) => theme.fontStyle.body1};
       padding: 8px 14px;
       border-radius: 4px;
-      color: ${({ theme }) => theme.colors.darkGray};
+      color: ${({ theme }) => theme.colors.gray600};
       cursor: pointer;
 
       &:hover {
-        color: ${({ theme }) => theme.colors.blackGray};
+        color: ${({ theme }) => theme.colors.gray800};
       }
     }
 
     &.selected button {
-      color: ${({ theme }) => theme.colors.blackGray};
+      color: ${({ theme }) => theme.colors.gray800};
       font-weight: 500;
-      background-color: ${({ theme }) => theme.colors.bgGray};
+      background-color: ${({ theme }) => theme.colors.gray200};
     }
   }
 `;

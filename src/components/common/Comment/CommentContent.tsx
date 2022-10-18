@@ -27,8 +27,8 @@ const CommentContent = ({ commentId, content, createdAt }: CommentContentProps) 
       </Content>
       <Info>
         <CreatedAt>{formatDate(createdAt)}</CreatedAt>
-        <Icon.Button name="Pencil" color="mediumGray" size="25" onClick={handleEditStart} />
-        <Icon.Button name="Close" color="mediumGray" size="12" onClick={handleDelete} />
+        <Icon.Button name="Pencil" color="gray500" size="25" onClick={handleEditStart} />
+        <Icon.Button name="Close" color="gray500" size="12" onClick={handleDelete} />
       </Info>
     </>
   );
@@ -54,10 +54,10 @@ const Info = styled.div`
   margin-right: 16px;
   flex-shrink: 0;
   gap: 4px;
-  color: ${({ theme }) => theme.colors.mediumGray};
+  color: ${({ theme }) => theme.colors.gray500};
   align-self: flex-start;
 `;
 
 const CreatedAt = styled.span`
-  font-size: 14px;
+  ${({ theme }) => theme.fontStyle.body2};
 `;

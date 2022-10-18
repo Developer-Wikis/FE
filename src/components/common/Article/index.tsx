@@ -5,7 +5,7 @@ const Article = styled.article`
   margin: 0 auto;
   margin-top: 50px;
   padding: 42px 28px 45px;
-  border: 1px solid ${({ theme }) => theme.colors.lightGray};
+  border: 1px solid ${({ theme }) => theme.colors.gray300};
   border-radius: 4px;
   background-color: ${({ theme }) => theme.colors.white};
 `;

@@ -17,7 +17,6 @@ const PageTitle = ({ children, align = 'center', ...props }: PageTitleProps) => 
 export default PageTitle;
 
 const StyleH = styled.h3<PageTitleProps>`
-  font-size: 24px;
-  font-weight: 700;
+  ${({ theme }) => theme.fontStyle.headline1};
   text-align: ${({ align }) => align};
 `;

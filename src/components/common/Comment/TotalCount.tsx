@@ -11,6 +11,5 @@ const TotalCount = () => {
 export default TotalCount;
 
 const StyledSpan = styled.span`
-  font-size: 18px;
-  font-weight: 700;
+  ${({ theme }) => theme.fontStyle.subtitle1};
 `;

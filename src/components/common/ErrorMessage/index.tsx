@@ -23,9 +23,10 @@ export default ErrorMessage;
 const Message = styled.p`
   display: flex;
   margin-top: 8px;
+
   span {
-    font-size: 12px;
     margin-left: 4px;
     color: ${({ theme }) => theme.colors.red};
+    ${({ theme }) => theme.fontStyle.caption};
   }
 `;
