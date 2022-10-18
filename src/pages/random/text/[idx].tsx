@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import useStorage from '~/hooks/useStorage';
 import { QuestionDetailResponse } from '~/service/question';
 
+const STORAGE_KEY = 'random';
+
 const RandomText = () => {
   const local = useStorage('local');
   const router = useRouter();
@@ -11,7 +13,7 @@ const RandomText = () => {
   const [questions, setQuestions] = useState<QuestionDetailResponse[]>([]);
 
   useEffect(() => {
-    const questions = local.getItem('randomQuestions', []);
+    const questions = local.getItem(STORAGE_KEY, []);
     console.log(questions);
 
     setQuestions(questions);

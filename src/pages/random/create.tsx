@@ -15,7 +15,7 @@ const STORAGE_KEY = {
   step: 'step',
   stepOneValues: 'stepOneValues',
   stepTwoValues: 'stepTwoValues',
-  randomQuestions: 'randomQuestions',
+  random: 'random',
 };
 
 export type Step = 1 | 2;
@@ -60,7 +60,7 @@ const CreateRandom = () => {
     });
 
     if (!response) return;
-    local.setItem(STORAGE_KEY.randomQuestions, response.data);
+    local.setItem(STORAGE_KEY.random, { type: inputValues.type, questions: response.data.content });
   };
 
   const handleChange = (name: string, value: string | SubWithAllType[]) => {
@@ -84,7 +84,7 @@ const CreateRandom = () => {
     setPermission(nextPermission);
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!inputValues) return;
 
@@ -98,7 +98,7 @@ const CreateRandom = () => {
     }
 
     clearSession();
-    getQuestions();
+    await getQuestions();
 
     const { type, mainCategory, subCategories } = inputValues;
     router.push(
