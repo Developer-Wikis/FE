@@ -1,4 +1,5 @@
 import { MainType, SubType, SubWithAllType, SUB_CATEGORIES } from '../constant/category';
+import { isString } from './checkType';
 
 export const checkLength = (str: string, min: number, max: number) => {
   return str.length < min || str.length > max ? true : false;
@@ -59,4 +60,8 @@ export const SUBMIT_CHECK = {
 
 export const isValidCategoryPair = (main: MainType, sub: SubWithAllType) => {
   return sub === 'all' || (SUB_CATEGORIES[main] as ReadonlyArray<SubType>).includes(sub);
+};
+
+export const isValidRandomType = (type: unknown) => {
+  return isString(type) && ['voice', 'text'].includes(type);
 };
