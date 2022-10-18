@@ -1,11 +1,16 @@
 import styled from '@emotion/styled';
-import { useRef, useState } from 'react';
+import { forwardRef, Ref, useRef, useState } from 'react';
 import Button from '~/components/base/Button';
 import Icon from '~/components/base/Icon';
 import useTimer from '~/hooks/useTimer';
 import { formatTime } from '~/utils/helper/formatting';
 
-const Recorder = () => {
+interface RecorderProps {
+  limit?: number;
+}
+
+const Recorder = forwardRef(({ limit }: RecorderProps, ref?: Ref<HTMLButtonElement>) => {
+  const [recordCount, setRecordCount] = useState(0);
   const [isRecording, setIsRecording] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -73,6 +78,7 @@ const Recorder = () => {
   };
 
   const onRecordReset = () => {
+    limit && setRecordCount(recordCount + 1);
     onPlayStop();
     onFinish();
     setIsRecording(false);
@@ -116,7 +122,7 @@ const Recorder = () => {
       <RecordContainer>
         {!isRecording && !isPlaying && !isCompleted ? (
           <RecordStart>
-            <MikeButton onClick={onRecordAudio}>
+            <MikeButton onClick={onRecordAudio} ref={ref}>
               <Icon name="Microphone" size="30" />
             </MikeButton>
           </RecordStart>
@@ -148,9 +154,11 @@ const Recorder = () => {
       </RecordContainer>
       <RecordInfo>
         {isRecording || isCompleted ? (
-          <Button buttonType="borderGray" onClick={onRecordReset}>
-            다시 녹음하기
-          </Button>
+          recordCount < (limit ?? Infinity) && (
+            <Button buttonType="borderGray" onClick={onRecordReset}>
+              다시 녹음하기
+            </Button>
+          )
         ) : (
           <Notice>
             <p>
@@ -172,7 +180,7 @@ const Recorder = () => {
       ></audio>
     </>
   );
-};
+});
 
 export default Recorder;
 
