@@ -9,13 +9,13 @@ import CloseButton from '~/components/common/CloseButton';
 import { createTailQuestion } from '~/service/question';
 import { SUBMIT_CHECK } from '~/utils/helper/validation';
 
-interface AdditionModalProps {
+interface TailQuestionModalProps {
   title: string;
   id: number;
   onClose: () => void;
 }
 
-const AdditionModal = ({ title, id, onClose }: AdditionModalProps) => {
+const TailQuestionModal = ({ title, id, onClose }: TailQuestionModalProps) => {
   const [text, setText] = useState('');
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -23,8 +23,8 @@ const AdditionModal = ({ title, id, onClose }: AdditionModalProps) => {
     const validText = text.trim();
     setText(validText);
 
-    if (SUBMIT_CHECK.additionalQuestion.isValid(validText)) {
-      alert(SUBMIT_CHECK.additionalQuestion.message);
+    if (SUBMIT_CHECK.tailQuestion.isValid(validText)) {
+      alert(SUBMIT_CHECK.tailQuestion.message);
       return;
     }
 
@@ -52,10 +52,10 @@ const AdditionModal = ({ title, id, onClose }: AdditionModalProps) => {
           <Input name="title" defaultValue={title} disabled />
         </div>
         <div>
-          <Label htmlFor="additional">꼬리 질문</Label>
+          <Label htmlFor="tailQuestion">꼬리 질문</Label>
           <Input
-            name="additional"
-            placeholder="예상되는 꼬리질문을 작성해 주세요."
+            name="tailQuestion"
+            placeholder="예상되는 꼬리 질문을 작성해 주세요."
             value={text}
             onChange={(e: ChangeEvent<HTMLInputElement>) => setText(e.target.value)}
           />
@@ -67,7 +67,7 @@ const AdditionModal = ({ title, id, onClose }: AdditionModalProps) => {
   );
 };
 
-export default AdditionModal;
+export default TailQuestionModal;
 
 const Container = styled(Article)`
   margin-top: 0;

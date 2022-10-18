@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PageContainer from '~/components/common/PageContainer';
 import styled from '@emotion/styled';
-import AdditionalQuestions from '~/components/domain/question/AdditionalQuestions';
+import TailQuestions from '~/components/domain/question/TailQuestions';
 import PostHeader from '~/components/domain/question/PostHeader';
 import Comment from '~/components/common/Comment';
 import { getQuestionDetail } from '~/service/question';
@@ -11,7 +11,7 @@ import MoveButtons from '~/components/domain/question/MoveButtons';
 import Recorder from '~/components/domain/question/Recorder';
 import { isMainType, isString, isSubWithAllType } from '~/utils/helper/checkType';
 import Modal from '~/components/common/Modal';
-import AdditionModal from '~/components/domain/question/AdditionModal';
+import TailQuestionModal from '~/components/domain/question/TailQuestionModal';
 
 /*
 
@@ -56,11 +56,11 @@ interface QuestionDetailProps {
 const QuestionDetail = ({ detailData, query }: QuestionDetailProps) => {
   const [isOpenModal, setIsOpenModal] = useState(false);
 
-  const onModalOpen = () => {
+  const onOpenModal = () => {
     setIsOpenModal(true);
   };
 
-  const onModalClose = () => {
+  const onCloseModal = () => {
     setIsOpenModal(false);
   };
 
@@ -73,11 +73,11 @@ const QuestionDetail = ({ detailData, query }: QuestionDetailProps) => {
       />
       <PostContent>
         <Recorder />
-        <AdditionalQuestions questions={detailData.tailQuestions} onModalOpen={onModalOpen} />
+        <TailQuestions questions={detailData.tailQuestions} onOpenModal={onOpenModal} />
         <MoveButtons categoryQuery={query} prevId={detailData.prevId} nextId={detailData.nextId} />
       </PostContent>
-      <Modal visible={isOpenModal} onClose={onModalClose}>
-        <AdditionModal id={detailData.id} title={detailData.title} onClose={onModalClose} />
+      <Modal visible={isOpenModal} onClose={onCloseModal}>
+        <TailQuestionModal id={detailData.id} title={detailData.title} onClose={onCloseModal} />
       </Modal>
       <Comment questionId={detailData.id} />
     </Container>

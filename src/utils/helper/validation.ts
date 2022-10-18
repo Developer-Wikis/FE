@@ -30,7 +30,7 @@ export const checkTitle = (title: string) => {
   return checkLength(title, 2, 30);
 };
 
-export const checkAdditionalQuestion = (text: string) => {
+export const checkTailQuestion = (text: string) => {
   return checkLength(text, 2, 30);
 };
 
@@ -51,8 +51,8 @@ export const SUBMIT_CHECK = {
     isValid: checkTitle,
     message: '질문 제목은 2~30자로 입력해 주세요.',
   },
-  additionalQuestion: {
-    isValid: checkAdditionalQuestion,
+  tailQuestion: {
+    isValid: checkTailQuestion,
     message: '꼬리 질문은 2~30자로 입력해 주세요.',
   },
 };

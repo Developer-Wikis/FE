@@ -1,12 +1,12 @@
 import styled from '@emotion/styled';
 import Icon from '~/components/base/Icon';
 
-interface AdditionalListProps {
+interface TailQuestionListProps {
   list: string[];
   onRemove: (index: number) => void;
 }
 
-const AdditionalList = ({ list, onRemove }: AdditionalListProps) => {
+const TailQuestionList = ({ list, onRemove }: TailQuestionListProps) => {
   return (
     <StyledUl>
       {list.map((question, index) => (
@@ -21,7 +21,7 @@ const AdditionalList = ({ list, onRemove }: AdditionalListProps) => {
   );
 };
 
-export default AdditionalList;
+export default TailQuestionList;
 
 const StyledUl = styled.ul`
   li {

@@ -23,7 +23,7 @@ type QuestionListResponse = {
 };
 
 export type QuestionDetailResponse = IQuestionItem & {
-  additionQuestions: string[];
+  tailQuestions: string[];
 };
 
 export const createQuestion = (question: IQuestion) => {
