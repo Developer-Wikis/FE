@@ -12,6 +12,8 @@ import { isValidRandomType } from '~/utils/helper/validation';
 import { isString } from '~/utils/helper/checkType';
 
 const STORAGE_KEY = 'random';
+const DUMMY = 1;
+const DUMMY_QUESTION = {} as IQuestionDetail;
 
 type CurQuestion = IQuestionDetail & {
   idx: number;
@@ -44,24 +46,26 @@ const RandomVoice = () => {
       return;
     }
 
-    setCurQuestion({ idx: curQuestion.idx - 1, ...questions[curQuestion.idx - 2] });
-    router.push(`/random/voice/${curQuestion.idx - 1}`);
+    const nextIdx = curQuestion.idx - 1;
+    setCurQuestion({ idx: nextIdx, ...questions[nextIdx] });
+    router.push(`/random/voice/${nextIdx}`);
 
     speechSynthesis.cancel();
-    speak(questions[curQuestion.idx - 2].title, speechSynthesis, handleSpeechEnd);
+    speak(questions[nextIdx].title, speechSynthesis, handleSpeechEnd);
   };
 
   const handleNext = () => {
-    if (!curQuestion || !questions || curQuestion.idx === questions.length) {
+    if (!curQuestion || !questions || curQuestion.idx === questions.length - 1) {
       handleQuestionEnd();
       return;
     }
 
-    setCurQuestion({ idx: curQuestion.idx + 1, ...questions[curQuestion.idx] });
-    router.push(`/random/voice/${curQuestion.idx + 1}`);
+    const nextIdx = curQuestion.idx + 1;
+    setCurQuestion({ idx: nextIdx, ...questions[nextIdx] });
+    router.push(`/random/voice/${nextIdx}`);
 
     speechSynthesis.cancel();
-    speak(questions[curQuestion.idx].title, speechSynthesis, handleSpeechEnd);
+    speak(questions[nextIdx].title, speechSynthesis, handleSpeechEnd);
   };
 
   useEffect(() => {
@@ -70,21 +74,21 @@ const RandomVoice = () => {
     const { idx: idxString } = router.query;
     const idx = Number(idxString);
 
-    const random = local.getItem<{ type: string; questions: IQuestionDetail[] }>(STORAGE_KEY, {
-      type: 'voice',
-      questions: [],
-    });
+    const random = local.getItem<{ type: string; questions: IQuestionDetail[] } | null>(
+      STORAGE_KEY,
+      null,
+    );
 
-    if (!isValidStoredValue(random)) {
+    if (!random || !isValidStoredValue(random) || !isValidIdx(idx, random.questions.length)) {
       alert('잘못된 접근입니다.');
       router.push('/');
       return;
     }
 
-    setQuestions(random.questions);
-    setCurQuestion({ idx, ...random.questions[idx - 1] });
+    setQuestions([DUMMY_QUESTION, ...random.questions]);
+    setCurQuestion({ idx, ...random.questions[idx - DUMMY] });
 
-    speak(random.questions[idx - 1].title, speechSynthesis, handleSpeechEnd);
+    speak(random.questions[idx - DUMMY].title, speechSynthesis, handleSpeechEnd);
   }, [router.isReady]);
 
   return (
@@ -152,6 +156,10 @@ async function speak(textToRead: string, synth: SpeechSynthesis, handleEnd: () =
   }
 }
 
+function isValidIdx(idx: number, length: number) {
+  return 0 + DUMMY <= idx && idx < length;
+}
+
 function isValidStoredValue(value: unknown) {
   if (!value || typeof value !== 'object') return false;
   const objValue = value as { type: string; questions: IQuestionDetail[] };
@@ -160,7 +168,8 @@ function isValidStoredValue(value: unknown) {
     'type' in objValue &&
     isValidType(objValue.type) &&
     'questions' in objValue &&
-    Array.isArray(objValue.questions)
+    Array.isArray(objValue.questions) &&
+    objValue.questions.length > 0
   );
 }
 function isValidType(type: unknown) {
