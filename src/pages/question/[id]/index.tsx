@@ -1,7 +1,7 @@
 import React from 'react';
 import PageContainer from '~/components/common/PageContainer';
 import styled from '@emotion/styled';
-import AdditionalQuestions from '~/components/domain/question/AdditionalQuestions';
+import TailQuestions from '~/components/domain/question/TailQuestions';
 import PostHeader from '~/components/domain/question/PostHeader';
 import Comment from '~/components/common/Comment';
 import { getQuestionDetail } from '~/service/question';
@@ -61,13 +61,14 @@ const QuestionDetail = ({ detailData, query }: QuestionDetailProps) => {
       />
       <PostContent>
         <Recorder />
-        <AdditionalQuestions
+        <TailQuestions
+          questions={detailData.tailQuestions}
           questionId={detailData.id}
           title={detailData.title}
-          questions={detailData.additionQuestions}
         />
         <MoveButtons categoryQuery={query} prevId={detailData.prevId} nextId={detailData.nextId} />
       </PostContent>
+
       <Comment questionId={detailData.id} />
     </Container>
   );
