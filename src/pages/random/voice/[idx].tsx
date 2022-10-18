@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import useStorage from '~/hooks/useStorage';
 import PostHeader from '~/components/domain/question/PostHeader';
 import { IQuestionDetail } from '~/types/question';
@@ -23,14 +23,15 @@ const RandomVoice = () => {
   const local = useStorage('local');
   const router = useRouter();
   const recordRef = useRef<HTMLButtonElement>(null);
+  const recordRefLastId = useRef(0);
 
   const [questions, setQuestions] = useState<IQuestionDetail[]>();
   const [curQuestion, setCurQuestion] = useState<CurQuestion>();
 
-  const handleSpeechEnd = useCallback(() => {
-    if (speechSynthesis.speaking) return;
+  const handleSpeechEnd = (recordRefId: number) => {
+    if (recordRefId !== recordRefLastId.current) return;
     recordRef.current?.click();
-  }, [recordRef.current]);
+  };
 
   const handleQuestionEnd = () => {
     const answer = confirm('마지막 질문입니다. 종료하시겠습니까?');
@@ -51,10 +52,11 @@ const RandomVoice = () => {
     router.push(`/random/voice/${nextIdx}`);
 
     speechSynthesis.cancel();
-    speak(questions[nextIdx].title, speechSynthesis, handleSpeechEnd);
+    const id = ++recordRefLastId.current;
+    speak(questions[nextIdx].title, speechSynthesis, () => handleSpeechEnd(id));
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (!curQuestion || !questions || curQuestion.idx === questions.length - 1) {
       handleQuestionEnd();
       return;
@@ -65,7 +67,8 @@ const RandomVoice = () => {
     router.push(`/random/voice/${nextIdx}`);
 
     speechSynthesis.cancel();
-    speak(questions[nextIdx].title, speechSynthesis, handleSpeechEnd);
+    const id = ++recordRefLastId.current;
+    speak(questions[nextIdx].title, speechSynthesis, () => handleSpeechEnd(id));
   };
 
   useEffect(() => {
@@ -88,7 +91,9 @@ const RandomVoice = () => {
     setQuestions([DUMMY_QUESTION, ...random.questions]);
     setCurQuestion({ idx, ...random.questions[idx - DUMMY] });
 
-    speak(random.questions[idx - DUMMY].title, speechSynthesis, handleSpeechEnd);
+    speak(random.questions[idx - DUMMY].title, speechSynthesis, () =>
+      handleSpeechEnd(recordRefLastId.current),
+    );
   }, [router.isReady]);
 
   return (
@@ -134,11 +139,6 @@ async function populateVoiceList(synth: SpeechSynthesis) {
 async function speak(textToRead: string, synth: SpeechSynthesis, handleEnd: () => void) {
   if (speechSynthesis.onvoiceschanged !== undefined) {
     speechSynthesis.onvoiceschanged = () => populateVoiceList;
-  }
-
-  if (synth.speaking) {
-    console.error('speechSynthesis.speaking');
-    return;
   }
 
   if (textToRead !== '') {
