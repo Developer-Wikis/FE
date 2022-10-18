@@ -5,6 +5,7 @@ import Input from '~/components/base/Input';
 import Label from '~/components/base/Label';
 import PageTitle from '~/components/base/PageTitle';
 import Article from '~/components/common/Article';
+import CloseButton from '~/components/common/CloseButton';
 import { createTailQuestion } from '~/service/question';
 import { SUBMIT_CHECK } from '~/utils/helper/validation';
 
@@ -40,7 +41,11 @@ const AdditionModal = ({ title, id, onClose }: AdditionModalProps) => {
 
   return (
     <Container>
-      <PageTitle>꼬리 질문 등록</PageTitle>
+      <ModalHeader>
+        <PageTitle align="left">꼬리 질문 등록</PageTitle>
+        <StyledCloseButton onClick={onClose} />
+      </ModalHeader>
+
       <Form onSubmit={onSubmit}>
         <div>
           <Label htmlFor="title">제목</Label>
@@ -72,10 +77,20 @@ const Form = styled.form`
   margin-top: 34px;
   display: flex;
   flex-direction: column;
-  gap: 42px;
+  gap: 30px;
 `;
 
 const SubmitButton = styled(Button)`
   width: fit-content;
   margin: 0 auto;
+`;
+
+const StyledCloseButton = styled(CloseButton)`
+  position: absolute;
+  top: 6px;
+  right: 0;
+`;
+
+const ModalHeader = styled.div`
+  position: relative;
 `;
