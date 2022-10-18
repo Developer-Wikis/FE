@@ -34,6 +34,10 @@ export const checkTailQuestion = (text: string) => {
   return checkLength(text, 2, 30);
 };
 
+export const checkSuggestion = (text: string) => {
+  return checkLength(text, 10, 300);
+};
+
 export const SUBMIT_CHECK = {
   nickname: {
     isValid: checkNickname,
@@ -54,6 +58,10 @@ export const SUBMIT_CHECK = {
   tailQuestion: {
     isValid: checkTailQuestion,
     message: '꼬리 질문은 2~30자로 입력해 주세요.',
+  },
+  suggestion: {
+    isValid: checkSuggestion,
+    message: '내용은 10자 이상 300자 이하로 입력해 주세요.',
   },
 };
 

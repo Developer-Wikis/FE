@@ -23,6 +23,7 @@ export default ErrorMessage;
 const Message = styled.p`
   display: flex;
   margin-top: 8px;
+  align-items: center;
 
   span {
     margin-left: 4px;
