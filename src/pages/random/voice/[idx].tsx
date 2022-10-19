@@ -82,7 +82,11 @@ const RandomVoice = () => {
       null,
     );
 
-    if (!random || !isValidStoredValue(random) || !isValidIdx(idx, random.questions.length)) {
+    if (
+      !random ||
+      !isValidStoredValue(random) ||
+      !isValidIdx(idx, random.questions.length + DUMMY)
+    ) {
       alert('잘못된 접근입니다.');
       router.push('/');
       return;
