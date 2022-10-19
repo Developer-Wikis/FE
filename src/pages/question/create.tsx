@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import Button from '~/components/base/Button';
 import Input from '~/components/base/Input';
-import Select from '~/components/base/select';
+import Select from '~/components/base/Select';
 import PageTitle from '~/components/base/PageTitle';
 import AddForm from '~/components/common/AddForm';
 import ErrorMessage from '~/components/common/ErrorMessage';
