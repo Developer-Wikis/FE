@@ -60,7 +60,7 @@ const QuestionDetail = ({ detailData, query }: QuestionDetailProps) => {
         writer={detailData.nickname}
       />
       <PostContent>
-        <Recorder />
+        <Recorder key={detailData.id} />
         <TailQuestions
           questions={detailData.tailQuestions}
           questionId={detailData.id}
