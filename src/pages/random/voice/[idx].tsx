@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import useStorage from '~/hooks/useStorage';
 import PostHeader from '~/components/domain/question/PostHeader';
 import { IQuestionDetail } from '~/types/question';
@@ -10,8 +10,8 @@ import PageContainer from '~/components/common/PageContainer';
 import Icon from '~/components/base/Icon';
 import { isValidRandomType } from '~/utils/helper/validation';
 import { isString } from '~/utils/helper/checkType';
+import { RANDOM_LOCAL_KEY } from '~/utils/constant/random';
 
-const STORAGE_KEY = 'random';
 const DUMMY = 1;
 const DUMMY_QUESTION = {} as IQuestionDetail;
 
@@ -28,17 +28,13 @@ const RandomVoice = () => {
   const [questions, setQuestions] = useState<IQuestionDetail[]>();
   const [curQuestion, setCurQuestion] = useState<CurQuestion>();
 
+  const clearLocal = useCallback(() => {
+    Object.values(RANDOM_LOCAL_KEY).forEach(local.removeItem);
+  }, [local]);
+
   const handleSpeechEnd = (recordRefId: number) => {
     if (recordRefId !== recordRefLastId.current) return;
     recordRef.current?.click();
-  };
-
-  const handleQuestionEnd = () => {
-    const answer = confirm('마지막 질문입니다. 종료하시겠습니까?');
-    if (!answer) return;
-
-    local.removeItem(STORAGE_KEY);
-    router.push('/');
   };
 
   const handlePrev = () => {
@@ -47,13 +43,7 @@ const RandomVoice = () => {
       return;
     }
 
-    const nextIdx = curQuestion.idx - 1;
-    setCurQuestion({ idx: nextIdx, ...questions[nextIdx] });
-    router.push(`/random/voice/${nextIdx}`);
-
-    speechSynthesis.cancel();
-    const id = ++recordRefLastId.current;
-    speak(questions[nextIdx].title, speechSynthesis, () => handleSpeechEnd(id));
+    move(curQuestion.idx - 1);
   };
 
   const handleNext = async () => {
@@ -62,8 +52,22 @@ const RandomVoice = () => {
       return;
     }
 
-    const nextIdx = curQuestion.idx + 1;
+    move(curQuestion.idx + 1);
+  };
+
+  const handleQuestionEnd = () => {
+    const answer = confirm('마지막 질문입니다. 종료하시겠습니까?');
+    if (!answer) return;
+
+    clearLocal();
+    router.push('/');
+  };
+
+  const move = (nextIdx: number) => {
+    if (!questions) return;
+
     setCurQuestion({ idx: nextIdx, ...questions[nextIdx] });
+    local.setItem(RANDOM_LOCAL_KEY.latest, nextIdx);
     router.push(`/random/voice/${nextIdx}`);
 
     speechSynthesis.cancel();
@@ -78,11 +82,15 @@ const RandomVoice = () => {
     const idx = Number(idxString);
 
     const random = local.getItem<{ type: string; questions: IQuestionDetail[] } | null>(
-      STORAGE_KEY,
+      RANDOM_LOCAL_KEY.random,
       null,
     );
 
-    if (!random || !isValidStoredValue(random) || !isValidIdx(idx, random.questions.length)) {
+    if (
+      !random ||
+      !isValidStoredValue(random) ||
+      !isValidIdx(idx, random.questions.length + DUMMY)
+    ) {
       alert('잘못된 접근입니다.');
       router.push('/');
       return;
@@ -90,6 +98,7 @@ const RandomVoice = () => {
 
     setQuestions([DUMMY_QUESTION, ...random.questions]);
     setCurQuestion({ idx, ...random.questions[idx - DUMMY] });
+    local.setItem(RANDOM_LOCAL_KEY.latest, idx);
 
     speak(random.questions[idx - DUMMY].title, speechSynthesis, () =>
       handleSpeechEnd(recordRefLastId.current),

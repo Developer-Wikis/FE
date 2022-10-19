@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { ChangeEvent } from 'react';
+import InputField from '~/components/common/InputField';
 import { MainType, SubWithAllType, SUB_CATEGORIES } from '~/utils/constant/category';
 
 import SubCategoryCheckbox from './SubCategoryCheckbox';
@@ -27,7 +28,7 @@ const SubCategoryField = ({ mainCategory, subCategories, handleChange }: SubCate
   };
 
   return (
-    <div>
+    <InputField>
       <Label htmlFor="subCategories">분류 선택</Label>
 
       {mainCategory === 'none' && <Notice>직무를 선택해주세요</Notice>}
@@ -49,7 +50,7 @@ const SubCategoryField = ({ mainCategory, subCategories, handleChange }: SubCate
           ))}
         </Container>
       )}
-    </div>
+    </InputField>
   );
 };
 

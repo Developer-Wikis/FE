@@ -1,7 +1,6 @@
 import { unauth } from './base';
 import { IQuestion, IQuestionItem, ISort } from '~/types/question';
 import { MainType, SubWithAllType } from '~/utils/constant/category';
-import axios from 'axios';
 
 type QuestionListResponse = {
   content: IQuestionItem[];
@@ -57,9 +56,8 @@ export const getQuestionList = (params: {
   return unauth.get<QuestionListResponse>('/questions', { params });
 };
 
-export const getRandomQuestions = (params: { mainCategory: MainType; subCategories: string }) => {
-  // 실제 API 연결 시 unauth로 변경
-  return axios.get('/random', { params });
+export const getRandomQuestions = (params: { mainCategory: MainType; subCategory: string }) => {
+  return unauth.get('/questions/random', { params });
 };
 
 export const createTailQuestion = (questionId: number, text: string) => {

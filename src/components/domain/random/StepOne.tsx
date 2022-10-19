@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { FormEvent } from 'react';
+import { FormEvent, MutableRefObject, useEffect } from 'react';
 import Button from '~/components/base/Button';
 import { InputValues, Step } from '~/pages/random/create';
 import { SubWithAllType } from '~/utils/constant/category';
@@ -12,18 +12,24 @@ interface StepOneProps {
   inputValues: InputValues;
   handleSubmit: (e: FormEvent<HTMLFormElement>) => void;
   handleChange: (type: string, value: string | SubWithAllType[]) => void;
+  mounted: MutableRefObject<boolean>;
 }
 
-const StepOne = ({ step, inputValues, handleChange, handleSubmit }: StepOneProps) => {
+const StepOne = ({ step, inputValues, handleChange, handleSubmit, mounted }: StepOneProps) => {
+  useEffect(() => {
+    mounted.current = true;
+  }, []);
+
   return (
     <>
       <Title>랜덤 질문</Title>
 
-      <Form action="submit" onSubmit={handleSubmit}>
+      <form action="submit" onSubmit={handleSubmit}>
         <TypeField
           type={inputValues.type}
           handleChange={({ target }) => handleChange(target.name, target.id)}
         />
+
         <MainCategoryField
           handleChange={({ target }) => handleChange(target.name, target.value)}
           selected={inputValues.mainCategory}
@@ -44,7 +50,7 @@ const StepOne = ({ step, inputValues, handleChange, handleSubmit }: StepOneProps
         >
           면접 연습 시작
         </StyledButton>
-      </Form>
+      </form>
     </>
   );
 };
@@ -57,14 +63,8 @@ const Title = styled.h2`
   margin-bottom: 34px;
 `;
 
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 42px;
-`;
-
 const StyledButton = styled(Button)<{ step: number }>`
   display: block;
-  margin: calc(64px - 42px) auto 0;
+  margin: 0 auto;
   width: fit-content;
 `;
