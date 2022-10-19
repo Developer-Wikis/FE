@@ -6,6 +6,7 @@ import { ThemeProvider } from '@emotion/react';
 import { theme } from '~/types/theme';
 import Header from '~/components/common/Header';
 import MainContainer from '~/components/common/MainContainer';
+import Footer from '~/components/common/Footer';
 
 if (process.env.NEXT_PUBLIC_API_MOCKING === 'enabled') {
   import('../mocks');
@@ -18,6 +19,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <MainContainer>
         <Component {...pageProps} />
       </MainContainer>
+      <Footer />
     </ThemeProvider>
   );
 }
