@@ -11,13 +11,13 @@ import { isValidCategoryPair } from '~/utils/helper/validation';
 import StepTwo from '~/components/domain/random/StepTwo';
 import StepOne from '~/components/domain/random/StepOne';
 import { IQuestionDetail } from '~/types/question';
-import { isValidRandomType } from '../../utils/helper/validation';
+import { isValidRandomType } from '~/utils/helper/validation';
+import { RANDOM_LOCAL_KEY } from '~/utils/constant/random';
 
-const STORAGE_KEY = {
+const SESSION_KEY = {
   step: 'step',
   stepOneValues: 'stepOneValues',
   stepTwoValues: 'stepTwoValues',
-  random: 'random',
 };
 
 export type Step = 1 | 2;
@@ -38,7 +38,11 @@ const CreateRandom = () => {
   const local = useStorage('local');
   const session = useStorage('session');
   const clearSession = useCallback(
-    () => Object.values(STORAGE_KEY).forEach(session.removeItem),
+    () => Object.values(SESSION_KEY).forEach(session.removeItem),
+    [session],
+  );
+  const clearLocal = useCallback(
+    () => Object.values(RANDOM_LOCAL_KEY).forEach(local.removeItem),
     [session],
   );
 
@@ -63,7 +67,10 @@ const CreateRandom = () => {
     });
 
     if (!response) return;
-    local.setItem(STORAGE_KEY.random, { type: inputValues.type, questions: response.data.content });
+    local.setItem(RANDOM_LOCAL_KEY.random, {
+      type: inputValues.type,
+      questions: response.data.content,
+    });
   };
 
   const handleChange = (name: string, value: string | SubWithAllType[]) => {
@@ -72,14 +79,14 @@ const CreateRandom = () => {
       nextInputValues.subCategories = [];
     }
 
-    session.setItem(STORAGE_KEY.stepOneValues, nextInputValues);
+    session.setItem(SESSION_KEY.stepOneValues, nextInputValues);
     setInputValues(nextInputValues);
   };
 
   const handlePermissionChange = (name: string, value: boolean) => {
     const nextPermission = { ...permission, [name]: value };
 
-    session.setItem(STORAGE_KEY.stepTwoValues, nextPermission);
+    session.setItem(SESSION_KEY.stepTwoValues, nextPermission);
     setPermission(nextPermission);
   };
 
@@ -87,8 +94,8 @@ const CreateRandom = () => {
     e.preventDefault();
 
     if (step === 1 && inputValues.type === 'voice') {
-      session.setItem(STORAGE_KEY.step, 2);
-      session.setItem(STORAGE_KEY.stepTwoValues, initialPermission);
+      session.setItem(SESSION_KEY.step, 2);
+      session.setItem(SESSION_KEY.stepTwoValues, initialPermission);
 
       setStep(2);
       scrollTo(0, 0);
@@ -102,8 +109,8 @@ const CreateRandom = () => {
   };
 
   const handleBack = () => {
-    session.setItem(STORAGE_KEY.step, 1);
-    session.removeItem(STORAGE_KEY.stepTwoValues);
+    session.setItem(SESSION_KEY.step, 1);
+    session.removeItem(SESSION_KEY.stepTwoValues);
 
     setStep(1);
     setPermission(initialPermission);
@@ -111,25 +118,26 @@ const CreateRandom = () => {
 
   const handleExistHistory = () => {
     const history = local.getItem<{ type: string; questions: IQuestionDetail[] } | null>(
-      STORAGE_KEY.random,
+      RANDOM_LOCAL_KEY.random,
       null,
     );
+    const latest = local.getItem<number | null>('randomLatest', null);
     if (!history || !isValidRandomType(history.type)) {
-      local.removeItem(STORAGE_KEY.random);
+      clearLocal();
       return;
     }
 
     const answer = confirm('이전에 생성한 랜덤 질문이 있습니다. 이어서 연습하시겠습니까?');
     if (!answer) {
-      local.removeItem(STORAGE_KEY.random);
+      clearLocal();
     } else {
       clearSession();
-      router.push(`/random/${history.type}/1`);
+      router.push(`/random/${history.type}/${latest}`);
     }
   };
 
   useEffect(() => {
-    const [storedStep, stepOneValues, stepTwoValues] = Object.values(STORAGE_KEY).map((key) =>
+    const [storedStep, stepOneValues, stepTwoValues] = Object.values(SESSION_KEY).map((key) =>
       session.getItem(key, null),
     );
     const queryStep = Number(router.query.step);
@@ -140,7 +148,7 @@ const CreateRandom = () => {
 
     const isInit = queryStep === 0 || storedStep === null;
     if (isInit) {
-      session.setItem(STORAGE_KEY.step, 1);
+      session.setItem(SESSION_KEY.step, 1);
       setStep(1);
       return;
     }

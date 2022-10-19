@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Button from '~/components/base/Button';
 import Icon from '~/components/base/Icon';
 import PageContainer from '~/components/common/PageContainer';
@@ -9,10 +9,10 @@ import Recorder from '~/components/domain/question/Recorder';
 import TailQuestions from '~/components/domain/question/TailQuestions';
 import useStorage from '~/hooks/useStorage';
 import { IQuestionDetail } from '~/types/question';
+import { RANDOM_LOCAL_KEY } from '~/utils/constant/random';
 import { isString } from '~/utils/helper/checkType';
 import { isValidRandomType } from '~/utils/helper/validation';
 
-const STORAGE_KEY = 'random';
 const DUMMY = 1;
 const DUMMY_QUESTION = {} as IQuestionDetail;
 
@@ -28,13 +28,9 @@ const RandomText = () => {
   const [questions, setQuestions] = useState<IQuestionDetail[]>();
   const [curQuestion, setCurQuestion] = useState<CurQuestion>();
 
-  const handleQuestionEnd = () => {
-    const answer = confirm('마지막 질문입니다. 종료하시겠습니까?');
-    if (!answer) return;
-
-    local.removeItem(STORAGE_KEY);
-    router.push('/');
-  };
+  const clearLocal = useCallback(() => {
+    Object.values(RANDOM_LOCAL_KEY).forEach(local.removeItem);
+  }, [local]);
 
   const handlePrev = () => {
     if (!curQuestion || !questions || curQuestion.idx === 1) {
@@ -42,9 +38,7 @@ const RandomText = () => {
       return;
     }
 
-    const nextIdx = curQuestion.idx - 1;
-    setCurQuestion({ idx: nextIdx, ...questions[nextIdx] });
-    router.push(`/random/text/${nextIdx}`);
+    move(curQuestion.idx - 1);
   };
 
   const handleNext = () => {
@@ -53,8 +47,22 @@ const RandomText = () => {
       return;
     }
 
-    const nextIdx = curQuestion.idx + 1;
+    move(curQuestion.idx + 1);
+  };
+
+  const handleQuestionEnd = () => {
+    const answer = confirm('마지막 질문입니다. 종료하시겠습니까?');
+    if (!answer) return;
+
+    clearLocal();
+    router.push('/');
+  };
+
+  const move = (nextIdx: number) => {
+    if (!questions) return;
+
     setCurQuestion({ idx: nextIdx, ...questions[nextIdx] });
+    local.setItem(RANDOM_LOCAL_KEY.latest, nextIdx);
     router.push(`/random/text/${nextIdx}`);
   };
 
@@ -65,7 +73,7 @@ const RandomText = () => {
     const idx = Number(idxString);
 
     const random = local.getItem<{ type: string; questions: IQuestionDetail[] } | null>(
-      STORAGE_KEY,
+      RANDOM_LOCAL_KEY.random,
       null,
     );
 
@@ -81,6 +89,7 @@ const RandomText = () => {
 
     setQuestions([DUMMY_QUESTION, ...random.questions]);
     setCurQuestion({ idx, ...random.questions[idx - DUMMY] });
+    local.setItem(RANDOM_LOCAL_KEY.latest, idx);
   }, [router.isReady]);
 
   return (
