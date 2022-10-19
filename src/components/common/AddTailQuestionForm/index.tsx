@@ -33,11 +33,12 @@ const AddForm = ({ buttonText, onSubmit, ...props }: AddFormProps) => {
   return (
     <Container onSubmit={handleSubmit}>
       <Input
-        {...props}
         onChange={(e: ChangeEvent<HTMLInputElement>) => {
           setText(e.target.value);
         }}
         value={text}
+        placeholder="예상되는 꼬리 질문을 작성해 주세요."
+        {...props}
       />
       <Button size="sm" onClick={handleSubmit}>
         {buttonText}
