@@ -4,7 +4,10 @@ import { ReactNode } from 'react';
 import { buttonSizes, buttonStyle } from './Button/types';
 
 type LinkTypes = { linkType?: keyof typeof buttonStyle; size?: keyof typeof buttonSizes };
-type LinkProps = Omit<NextLinkProps, 'passHref'> & { children: ReactNode } & LinkTypes;
+type LinkProps = Omit<NextLinkProps, 'passHref'> & {
+  children: ReactNode;
+  className?: string;
+} & LinkTypes;
 
 const Link = ({
   linkType,
@@ -17,6 +20,7 @@ const Link = ({
   locale,
   children,
   onClick,
+  className,
   ...props
 }: LinkProps) => {
   return (
@@ -30,7 +34,7 @@ const Link = ({
       passHref
       {...props}
     >
-      <StyledA linkType={linkType} size={size} onClick={onClick}>
+      <StyledA linkType={linkType} size={size} onClick={onClick} className={className}>
         {children}
       </StyledA>
     </NextLink>

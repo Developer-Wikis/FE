@@ -3,12 +3,12 @@ import { theme } from '~/types/theme';
 export const buttonStyle = {
   black: `
     background-color: ${theme.colors.gray700};
-    color: white;
+    color: ${theme.colors.white};
     border-radius: 4px;
   `,
   borderGray: `
     border: 1px solid ${theme.colors.gray300};
-    background-color: white;
+    background-color: ${theme.colors.white};
     color: ${theme.colors.gray600};
     border-radius: 4px;
 
@@ -16,14 +16,28 @@ export const buttonStyle = {
       background-color: ${theme.colors.gray100};
     }
   `,
+  gray: `
+    background-color: ${theme.colors.gray500};
+    color: ${theme.colors.white};
+    border-radius: 4px;
+
+    &:hover {
+      background-color: ${theme.colors.gray600};
+    }
+  `,
   red: `
     background-color: ${theme.colors.red};
-    color: white;
+    color: ${theme.colors.white};
     border-radius: 4px;
   `,
 };
 
 export const buttonSizes = {
+  xs: `
+    font-size: 12px;
+    padding: 4px 10px;
+    line-height: 20px;
+  `,
   sm: `
     ${theme.fontStyle.body2}
     padding: 8px 12px;
