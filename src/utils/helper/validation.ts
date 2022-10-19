@@ -32,7 +32,7 @@ export const checkTitle = (title: string) => {
 };
 
 export const checkTailQuestion = (text: string) => {
-  return checkLength(text, 2, 30);
+  return checkLength(text, 2, 50);
 };
 
 export const checkSuggestion = (text: string) => {
@@ -54,11 +54,11 @@ export const SUBMIT_CHECK = {
   },
   title: {
     isValid: checkTitle,
-    message: '질문 제목은 2~30자로 입력해 주세요.',
+    message: '질문 제목은 2~50자로 입력해 주세요.',
   },
   tailQuestion: {
     isValid: checkTailQuestion,
-    message: '꼬리 질문은 2~30자로 입력해 주세요.',
+    message: '꼬리 질문은 2~50자로 입력해 주세요.',
   },
   suggestion: {
     isValid: checkSuggestion,
