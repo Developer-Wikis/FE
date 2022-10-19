@@ -24,11 +24,12 @@ const StepOne = ({ step, inputValues, handleChange, handleSubmit, mounted }: Ste
     <>
       <Title>랜덤 질문</Title>
 
-      <Form action="submit" onSubmit={handleSubmit}>
+      <form action="submit" onSubmit={handleSubmit}>
         <TypeField
           type={inputValues.type}
           handleChange={({ target }) => handleChange(target.name, target.id)}
         />
+
         <MainCategoryField
           handleChange={({ target }) => handleChange(target.name, target.value)}
           selected={inputValues.mainCategory}
@@ -49,7 +50,7 @@ const StepOne = ({ step, inputValues, handleChange, handleSubmit, mounted }: Ste
         >
           면접 연습 시작
         </StyledButton>
-      </Form>
+      </form>
     </>
   );
 };
@@ -62,14 +63,8 @@ const Title = styled.h2`
   margin-bottom: 34px;
 `;
 
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 42px;
-`;
-
 const StyledButton = styled(Button)<{ step: number }>`
   display: block;
-  margin: calc(64px - 42px) auto 0;
+  margin: 0 auto;
   width: fit-content;
 `;

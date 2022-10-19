@@ -8,7 +8,7 @@ interface TypeFieldProps {
 
 const TypeField = ({ type, handleChange }: TypeFieldProps) => {
   return (
-    <fieldset>
+    <FieldSet>
       <Legend>질문 유형</Legend>
 
       <Radio
@@ -28,11 +28,15 @@ const TypeField = ({ type, handleChange }: TypeFieldProps) => {
       <Notice>
         질문이 <strong>텍스트</strong>로 나타나며 자유롭게 답변하실 수 있습니다.
       </Notice>
-    </fieldset>
+    </FieldSet>
   );
 };
 
 export default TypeField;
+
+const FieldSet = styled.fieldset`
+  margin-bottom: 42px;
+`;
 
 const Legend = styled.legend`
   margin-bottom: 19px;
