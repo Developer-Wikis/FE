@@ -23,6 +23,8 @@ const Select = ({ list, name, onChange, selected, ...props }: SelectProps) => {
 export default Select;
 
 const StyledSelect = styled.select`
+  width: 100%;
+
   padding: 8px 10px;
   border-radius: 4px;
   border: 1px solid ${({ theme }) => theme.colors.gray300};

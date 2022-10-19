@@ -12,8 +12,6 @@ export interface IQuestionItem {
 }
 
 export interface IQuestion {
-  nickname: string;
-  password: string;
   title: string;
   mainCategory: string;
   subCategory: string;
