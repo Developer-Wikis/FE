@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { FormEvent } from 'react';
+import { FormEvent, MutableRefObject, useEffect } from 'react';
 import Button from '~/components/base/Button';
 import { InputValues, Step } from '~/pages/random/create';
 import { SubWithAllType } from '~/utils/constant/category';
@@ -12,9 +12,14 @@ interface StepOneProps {
   inputValues: InputValues;
   handleSubmit: (e: FormEvent<HTMLFormElement>) => void;
   handleChange: (type: string, value: string | SubWithAllType[]) => void;
+  mounted: MutableRefObject<boolean>;
 }
 
-const StepOne = ({ step, inputValues, handleChange, handleSubmit }: StepOneProps) => {
+const StepOne = ({ step, inputValues, handleChange, handleSubmit, mounted }: StepOneProps) => {
+  useEffect(() => {
+    mounted.current = true;
+  }, []);
+
   return (
     <>
       <Title>랜덤 질문</Title>

@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { FormEvent, useCallback, useEffect, useState } from 'react';
+import { FormEvent, useCallback, useEffect, useRef, useState } from 'react';
 import PageContainer from '~/components/common/PageContainer';
 import { MainType, SubWithAllType } from '~/utils/constant/category';
 import { useRouter } from 'next/router';
@@ -10,6 +10,8 @@ import { isBoolean, isMainType, isString } from '~/utils/helper/checkType';
 import { isValidCategoryPair } from '~/utils/helper/validation';
 import StepTwo from '~/components/domain/random/StepTwo';
 import StepOne from '~/components/domain/random/StepOne';
+import { IQuestionDetail } from '~/types/question';
+import { isValidRandomType } from '../../utils/helper/validation';
 
 const STORAGE_KEY = {
   step: 'step',
@@ -41,17 +43,18 @@ const CreateRandom = () => {
   );
 
   const router = useRouter();
+  const stepOneMounted = useRef(false);
 
   const [step, setStep] = useState<Step>();
-  const [inputValues, setInputValues] = useState<InputValues>();
-  const [permission, setPermission] = useState<typeof initialPermission>();
+  const [inputValues, setInputValues] = useState<InputValues>(initialInputValues);
+  const [permission, setPermission] = useState<typeof initialPermission>(initialPermission);
 
   const { request } = useAxios(getRandomQuestions, [
-    inputValues?.mainCategory,
-    inputValues?.subCategories,
+    inputValues.mainCategory,
+    inputValues.subCategories,
   ]);
   const getQuestions = async () => {
-    if (!inputValues || inputValues?.mainCategory === 'none') return;
+    if (inputValues.mainCategory === 'none') return;
 
     const { mainCategory, subCategories } = inputValues;
     const response = await request({
@@ -64,8 +67,6 @@ const CreateRandom = () => {
   };
 
   const handleChange = (name: string, value: string | SubWithAllType[]) => {
-    if (!inputValues) return;
-
     const nextInputValues = { ...inputValues, [name]: value };
     if (name === 'mainCategory') {
       nextInputValues.subCategories = [];
@@ -76,8 +77,6 @@ const CreateRandom = () => {
   };
 
   const handlePermissionChange = (name: string, value: boolean) => {
-    if (!permission) return;
-
     const nextPermission = { ...permission, [name]: value };
 
     session.setItem(STORAGE_KEY.stepTwoValues, nextPermission);
@@ -86,7 +85,6 @@ const CreateRandom = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!inputValues) return;
 
     if (step === 1 && inputValues.type === 'voice') {
       session.setItem(STORAGE_KEY.step, 2);
@@ -100,14 +98,7 @@ const CreateRandom = () => {
     clearSession();
     await getQuestions();
 
-    const { type, mainCategory, subCategories } = inputValues;
-    router.push(
-      {
-        pathname: `/random/${type}/1`,
-        query: { mainCategory, subCategories },
-      },
-      `/random/${type}/1`,
-    );
+    router.push(`/random/${inputValues.type}/1`);
   };
 
   const handleBack = () => {
@@ -116,6 +107,25 @@ const CreateRandom = () => {
 
     setStep(1);
     setPermission(initialPermission);
+  };
+
+  const handleExistHistory = () => {
+    const history = local.getItem<{ type: string; questions: IQuestionDetail[] } | null>(
+      STORAGE_KEY.random,
+      null,
+    );
+    if (!history || !isValidRandomType(history.type)) {
+      local.removeItem(STORAGE_KEY.random);
+      return;
+    }
+
+    const answer = confirm('이전에 생성한 랜덤 질문이 있습니다. 이어서 연습하시겠습니까?');
+    if (!answer) {
+      local.removeItem(STORAGE_KEY.random);
+    } else {
+      clearSession();
+      router.push(`/random/${history.type}/1`);
+    }
   };
 
   useEffect(() => {
@@ -131,10 +141,7 @@ const CreateRandom = () => {
     const isInit = queryStep === 0 || storedStep === null;
     if (isInit) {
       session.setItem(STORAGE_KEY.step, 1);
-
       setStep(1);
-      setInputValues(initialInputValues);
-      setPermission(initialPermission);
       return;
     }
 
@@ -146,19 +153,24 @@ const CreateRandom = () => {
     setPermission(validStepTwoValues);
   }, [router.query.step]);
 
+  useEffect(() => {
+    stepOneMounted.current && handleExistHistory();
+  }, [stepOneMounted.current]);
+
   return (
     <MainContent>
       <Article>
-        {step === 1 && inputValues && (
+        {step === 1 && (
           <StepOne
             step={step}
             inputValues={inputValues}
             handleChange={handleChange}
             handleSubmit={handleSubmit}
+            mounted={stepOneMounted}
           />
         )}
 
-        {step === 2 && permission && (
+        {step === 2 && (
           <StepTwo
             step={step}
             permission={permission}
