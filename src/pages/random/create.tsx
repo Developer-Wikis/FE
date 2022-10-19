@@ -56,7 +56,7 @@ const CreateRandom = () => {
     const { mainCategory, subCategories } = inputValues;
     const response = await request({
       mainCategory,
-      subCategories: subCategories.join(' '),
+      subCategory: subCategories.join(','),
     });
 
     if (!response) return;
