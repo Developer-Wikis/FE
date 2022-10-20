@@ -11,6 +11,7 @@ import Icon from '~/components/base/Icon';
 import { isValidRandomType } from '~/utils/helper/validation';
 import { isString } from '~/utils/helper/checkType';
 import { RANDOM_LOCAL_KEY } from '~/utils/constant/random';
+import Article from '~/components/common/Article';
 
 const DUMMY = 1;
 const DUMMY_QUESTION = {} as IQuestionDetail;
@@ -108,28 +109,30 @@ const RandomVoice = () => {
   return (
     <>
       {curQuestion && (
-        <Container>
-          <PostHeader
-            subCategory={curQuestion.subCategory}
-            title={isString(curQuestion.title) ? curQuestion.title : ''}
-            writer={curQuestion.nickname}
-          />
+        <PageContainer>
+          <StyledArticle>
+            <PostHeader
+              subCategory={curQuestion.subCategory}
+              title={isString(curQuestion.title) ? curQuestion.title : ''}
+              writer={curQuestion.nickname}
+            />
 
-          <PostContent>
-            <Recorder ref={recordRef} limit={1} key={curQuestion.idx} />
+            <PostContent>
+              <Recorder ref={recordRef} limit={1} key={curQuestion.idx} />
 
-            <Buttons>
-              <PrevButton buttonType="borderGray" onClick={handlePrev}>
-                <Icon name="ArrowLeft" size="20" color="gray600" />
-                <span>이전 질문</span>
-              </PrevButton>
-              <NextButton buttonType="borderGray" onClick={handleNext}>
-                <span> 다음 질문</span>
-                <Icon name="ArrowRight" size="20" color="gray600" />
-              </NextButton>
-            </Buttons>
-          </PostContent>
-        </Container>
+              <Buttons>
+                <PrevButton buttonType="borderGray" onClick={handlePrev}>
+                  <Icon name="ArrowLeft" size="20" color="gray600" />
+                  <span>이전 질문</span>
+                </PrevButton>
+                <NextButton buttonType="borderGray" onClick={handleNext}>
+                  <span> 다음 질문</span>
+                  <Icon name="ArrowRight" size="20" color="gray600" />
+                </NextButton>
+              </Buttons>
+            </PostContent>
+          </StyledArticle>
+        </PageContainer>
       )}
     </>
   );
@@ -185,12 +188,9 @@ function isValidType(type: unknown) {
   return isValidRandomType(type) && type === 'voice';
 }
 
-const Container = styled(PageContainer)`
-  margin-top: 32px;
-  border: 1px solid ${({ theme }) => theme.colors.gray300};
-  border-radius: 4px;
-  padding: 20px 0 50px;
-  background-color: ${({ theme }) => theme.colors.white};
+const StyledArticle = styled(Article)`
+  width: 100%;
+  padding: 30px 0 50px;
 `;
 
 const PostContent = styled.div`
@@ -199,16 +199,15 @@ const PostContent = styled.div`
   justify-content: center;
   flex-direction: column;
   align-items: center;
-
   margin-top: 36px;
+  padding: 0 36px 0;
 `;
 
 const Buttons = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
-  margin-top: 60px;
-  padding: 0 36px;
+  margin-top: 56px;
 `;
 
 const PrevButton = styled(Button)`

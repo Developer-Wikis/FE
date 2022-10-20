@@ -1,7 +1,5 @@
-import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import Button from '~/components/base/Button';
 import Icon from '~/components/base/Icon';
 import PageContainer from '~/components/common/PageContainer';
 import PostHeader from '~/components/domain/question/PostHeader';
@@ -12,6 +10,9 @@ import { IQuestionDetail } from '~/types/question';
 import { RANDOM_LOCAL_KEY } from '~/utils/constant/random';
 import { isString } from '~/utils/helper/checkType';
 import { isValidRandomType } from '~/utils/helper/validation';
+import styled from '@emotion/styled';
+import Article from '~/components/common/Article';
+import Button from '~/components/base/Button';
 
 const DUMMY = 1;
 const DUMMY_QUESTION = {} as IQuestionDetail;
@@ -95,35 +96,37 @@ const RandomText = () => {
   return (
     <>
       {curQuestion && (
-        <Container>
-          <PostHeader
-            subCategory={curQuestion.subCategory}
-            title={isString(curQuestion.title) ? curQuestion.title : ''}
-            writer={curQuestion.nickname}
-          />
-
-          <PostContent>
-            <Recorder ref={recordRef} key={curQuestion.idx} />
-
-            <TailQuestions
-              questions={curQuestion.tailQuestions}
-              questionId={curQuestion.id}
-              title={curQuestion.title}
-              key={curQuestion.id + curQuestion.idx}
+        <PageContainer>
+          <StyledArticle>
+            <PostHeader
+              subCategory={curQuestion.subCategory}
+              title={isString(curQuestion.title) ? curQuestion.title : ''}
+              writer={curQuestion.nickname}
             />
 
-            <Buttons>
-              <PrevButton buttonType="borderGray" onClick={handlePrev}>
-                <Icon name="ArrowLeft" size="20" color="gray600" />
-                <span>이전 질문</span>
-              </PrevButton>
-              <NextButton buttonType="borderGray" onClick={handleNext}>
-                <span> 다음 질문</span>
-                <Icon name="ArrowRight" size="20" color="gray600" />
-              </NextButton>
-            </Buttons>
-          </PostContent>
-        </Container>
+            <PostContent>
+              <Recorder ref={recordRef} key={curQuestion.idx} />
+
+              <TailQuestions
+                questions={curQuestion.tailQuestions}
+                questionId={curQuestion.id}
+                title={curQuestion.title}
+                key={curQuestion.id + curQuestion.idx}
+              />
+
+              <Buttons>
+                <PrevButton buttonType="borderGray" onClick={handlePrev}>
+                  <Icon name="ArrowLeft" size="20" color="gray600" />
+                  <span>이전 질문</span>
+                </PrevButton>
+                <NextButton buttonType="borderGray" onClick={handleNext}>
+                  <span> 다음 질문</span>
+                  <Icon name="ArrowRight" size="20" color="gray600" />
+                </NextButton>
+              </Buttons>
+            </PostContent>
+          </StyledArticle>
+        </PageContainer>
       )}
     </>
   );
@@ -149,12 +152,9 @@ function isValidType(type: unknown) {
   return isValidRandomType(type) && type === 'text';
 }
 
-const Container = styled(PageContainer)`
-  margin-top: 32px;
-  border: 1px solid ${({ theme }) => theme.colors.gray300};
-  border-radius: 4px;
-  padding: 20px 0 50px;
-  background-color: ${({ theme }) => theme.colors.white};
+const StyledArticle = styled(Article)`
+  width: 100%;
+  padding: 30px 0 50px;
 `;
 
 const PostContent = styled.div`
@@ -163,16 +163,15 @@ const PostContent = styled.div`
   justify-content: center;
   flex-direction: column;
   align-items: center;
-
   margin-top: 36px;
+  padding: 0 36px 0;
 `;
 
 const Buttons = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
-  margin-top: 60px;
-  padding: 0 36px;
+  margin-top: 56px;
 `;
 
 const PrevButton = styled(Button)`
