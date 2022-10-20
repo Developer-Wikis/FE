@@ -6,17 +6,18 @@ export interface IconProps {
   size?: string;
   color?: ThemeColors;
   stroke?: ThemeColors;
+  block?: boolean;
 }
 
-const Icon = ({ name, size = '20', color = 'white', stroke = 'white', ...props }: IconProps) => {
+const Icon = ({ name, size = '20', color = 'white', block = true, ...props }: IconProps) => {
   const SvgIcon = icons[name];
   return (
     <SvgIcon
       width={size}
       height={size}
       color={theme.colors[color]}
-      stroke={theme.colors[stroke]}
       {...props}
+      style={{ display: block ? 'block' : null }}
     />
   );
 };

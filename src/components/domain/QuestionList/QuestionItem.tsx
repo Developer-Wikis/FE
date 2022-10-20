@@ -1,56 +1,69 @@
 import styled from '@emotion/styled';
 import Icon from '~/components/base/Icon';
 import Link from '~/components/base/Link';
-import { IQuestionItem } from '~/types/question';
-import { formatNumber } from '../../../utils/helper/formatting';
+import { IQuestionItem, QuestionCategoryQuery } from '~/types/question';
+import { formatNumber } from '~/utils/helper/formatting';
 import { forwardRef, Ref } from 'react';
+import { convertSubCategory } from '~/utils/helper/converter';
 
 interface QuestionItemProps {
   question: IQuestionItem;
+  currentCategory: QuestionCategoryQuery;
 }
 
-const QuestionItem = forwardRef(({ question }: QuestionItemProps, ref?: Ref<HTMLLIElement>) => {
-  return (
-    <StyledItem ref={ref}>
-      <Link href={`/question/${question.id}`}>
-        <CategoryName title={question.category}>
-          <span>{question.category}</span>
-        </CategoryName>
-        <QuestionTitle title={question.title}>
-          <span>{question.title}</span>
-        </QuestionTitle>
-        <QuestionInfo>
-          <QuestionInfoItem title={String(question.commentCount)}>
-            <Icon name="Comment" color="darkGray" size="15" />
-            {formatNumber(question.commentCount)}
-          </QuestionInfoItem>
-          <QuestionInfoItem title={String(question.viewCount)}>
-            <Icon name="Comment" color="darkGray" size="15" />
-            {formatNumber(question.viewCount)}
-          </QuestionInfoItem>
-        </QuestionInfo>
-      </Link>
-    </StyledItem>
-  );
-});
+const QuestionItem = forwardRef(
+  ({ question, currentCategory }: QuestionItemProps, ref?: Ref<HTMLLIElement>) => {
+    return (
+      <StyledItem ref={ref}>
+        <Link
+          href={{
+            pathname: `/question/${question.id}`,
+            query: { ...currentCategory },
+          }}
+        >
+          <CategoryName title={convertSubCategory(question.subCategory)}>
+            <span>{convertSubCategory(question.subCategory)}</span>
+          </CategoryName>
+          <QuestionTitle title={question.title}>
+            <span>{question.title}</span>
+          </QuestionTitle>
+          <QuestionInfo>
+            <QuestionInfoItem title={String(question.viewCount)}>
+              <Icon name="Eye" color="gray600" size="15" />
+              {formatNumber(question.viewCount)}
+            </QuestionInfoItem>
+            <QuestionInfoItem title={String(question.commentCount)}>
+              <Icon name="Comment" color="gray600" size="15" />
+              {formatNumber(question.commentCount)}
+            </QuestionInfoItem>
+          </QuestionInfo>
+        </Link>
+      </StyledItem>
+    );
+  },
+);
 
 export default QuestionItem;
 
 const StyledItem = styled.li`
   a {
     display: flex;
+    align-items: center;
     padding: 20px 0;
-    border-bottom: 1px solid ${({ theme }) => theme.colors.lightGray};
+    border-bottom: 1px solid ${({ theme }) => theme.colors.gray300};
   }
 `;
 
 const CategoryName = styled.div`
   padding: 0 20px;
-  width: 120px;
+  width: 140px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   flex-shrink: 0;
+  ${({ theme }) => theme.fontStyle.body2};
+  font-weight: 500;
+  color: ${({ theme }) => theme.colors.gray600};
 `;
 
 const QuestionTitle = styled.div`
@@ -58,17 +71,20 @@ const QuestionTitle = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
 `;
+
 const QuestionInfo = styled.div`
   flex-grow: 1;
   text-align: right;
   padding: 0 20px;
   flex-shrink: 0;
+  ${({ theme }) => theme.fontStyle.body2};
+  color: ${({ theme }) => theme.colors.gray600};
 `;
 const QuestionInfoItem = styled.span`
   display: inline-flex;
   flex-direction: row;
   align-items: center;
-  gap: 8.5px;
+  gap: 7px;
 
   ~ span {
     margin-left: 17.5px;

@@ -1,20 +1,21 @@
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
-import { ReactNode } from 'react';
 import Button from '~/components/base/Button';
 import Icon from '~/components/base/Icon';
+import { QuestionCategoryQuery } from '~/types/question';
 
 interface MoveButtonProps {
+  categoryQuery: QuestionCategoryQuery;
   prevId: number;
   nextId: number;
 }
 
-const MoveButtons = ({ nextId, prevId }: MoveButtonProps) => {
+const MoveButtons = ({ categoryQuery, nextId, prevId }: MoveButtonProps) => {
   const router = useRouter();
 
   const onMovePrev = () => {
     if (prevId) {
-      router.push(`/question/${prevId}`);
+      router.push({ pathname: `/question/${prevId}`, query: { ...categoryQuery } });
     } else {
       alert('첫 번째 페이지 입니다.');
     }
@@ -22,7 +23,7 @@ const MoveButtons = ({ nextId, prevId }: MoveButtonProps) => {
 
   const onMoveNext = () => {
     if (nextId) {
-      router.push(`/question/${nextId}`);
+      router.push({ pathname: `/question/${nextId}`, query: { ...categoryQuery } });
     } else {
       alert('마지막 페이지 입니다.');
     }
@@ -31,12 +32,12 @@ const MoveButtons = ({ nextId, prevId }: MoveButtonProps) => {
   return (
     <Buttons>
       <PrevButton buttonType="borderGray" onClick={onMovePrev}>
-        <Icon name="ArrowLeft" size="24" stroke="darkGray" />
+        <Icon name="ArrowLeft" size="20" color="gray600" />
         <span>이전 질문</span>
       </PrevButton>
       <NextButton buttonType="borderGray" onClick={onMoveNext}>
         <span> 다음 질문</span>
-        <Icon name="ArrowRight" size="24" stroke="darkGray" />
+        <Icon name="ArrowRight" size="20" color="gray600" />
       </NextButton>
     </Buttons>
   );

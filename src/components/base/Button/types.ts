@@ -2,23 +2,52 @@ import { theme } from '~/types/theme';
 
 export const buttonStyle = {
   black: `
-    background-color: ${theme.colors.blackGray};
-    color: white;
+    background-color: ${theme.colors.gray700};
+    color: ${theme.colors.white};
+    border-radius: 4px;
   `,
   borderGray: `
-    border: 1px solid ${theme.colors.lightGray};
-    background-color: white;
-    color: ${theme.colors.darkGray};
+    border: 1px solid ${theme.colors.gray300};
+    background-color: ${theme.colors.white};
+    color: ${theme.colors.gray600};
+    border-radius: 4px;
+
+    &:hover {
+      background-color: ${theme.colors.gray100};
+    }
+  `,
+  gray: `
+    background-color: ${theme.colors.gray500};
+    color: ${theme.colors.white};
+    border-radius: 4px;
+
+    &:hover {
+      background-color: ${theme.colors.gray600};
+    }
+  `,
+  red: `
+    background-color: ${theme.colors.red};
+    color: ${theme.colors.white};
+    border-radius: 4px;
   `,
 };
 
 export const buttonSizes = {
+  xs: `
+    font-size: 12px;
+    padding: 4px 10px;
+    line-height: 20px;
+  `,
   sm: `
-    font-size: 14px;
-    padding: 8px 10px;
+    ${theme.fontStyle.body2}
+    padding: 8px 12px;
   `,
   md: `
-    font-size: 14px;
+    ${theme.fontStyle.body2}
     padding: 12px 26px;
+  `,
+  lg: `
+    ${theme.fontStyle.body1}
+    padding: 12px 16px;
   `,
 };

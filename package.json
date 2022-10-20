@@ -12,6 +12,7 @@
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
     "axios": "^0.27.2",
+    "emailjs-com": "^3.2.0",
     "next": "12.3.1",
     "react": "18.2.0",
     "react-dom": "18.2.0"
@@ -23,6 +24,10 @@
     "@types/react-dom": "18.0.6",
     "eslint": "^8.24.0",
     "eslint-config-next": "12.3.1",
+    "msw": "0.29.0",
     "typescript": "4.8.3"
+  },
+  "msw": {
+    "workerDirectory": "public"
   }
 }

@@ -1,22 +1,27 @@
 import styled from '@emotion/styled';
+import { CSSProperties } from 'react';
 import Icon, { IconProps } from '.';
 
 interface IconButtonProps extends IconProps {
   onClick?: () => void;
+  type?: 'submit' | 'reset' | 'button' | undefined;
+  style?: CSSProperties;
 }
 
-const IconButton = ({ name, size = '20', color = 'white', onClick }: IconButtonProps) => {
+const IconButton = ({
+  name,
+  size = '20',
+  color = 'white',
+  onClick,
+  type = 'button',
+  style,
+  ...props
+}: IconButtonProps) => {
   return (
-    <StyledButton onClick={onClick}>
+    <button onClick={onClick} type={type} style={style} {...props}>
       <Icon name={name} size={size} color={color} />
-    </StyledButton>
+    </button>
   );
 };
 
 export default IconButton;
-
-const StyledButton = styled.button`
-  svg {
-    display: block;
-  }
-`;

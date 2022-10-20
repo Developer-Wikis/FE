@@ -1,20 +1,19 @@
 import styled from '@emotion/styled';
-import Title from '~/components/base/Title';
+import PageTitle from '~/components/base/PageTitle';
+import { SubType } from '~/utils/constant/category';
+import { convertSubCategory } from '~/utils/helper/converter';
 
 interface PostHeaderProps {
-  category: string;
+  subCategory: SubType;
   title: string;
   writer: string;
 }
 
-const PostHeader = ({ category, title, writer }: PostHeaderProps) => {
+const PostHeader = ({ subCategory, title, writer }: PostHeaderProps) => {
   return (
     <Container>
-      <CategoryName>{category}</CategoryName>
+      <CategoryName>{convertSubCategory(subCategory)}</CategoryName>
       <PostTitle>{title}</PostTitle>
-      <Writer>
-        <span>작성자: {writer}</span>
-      </Writer>
     </Container>
   );
 };
@@ -23,21 +22,14 @@ export default PostHeader;
 
 const Container = styled.div`
   text-align: center;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.mediumGray};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.gray500};
   padding-bottom: 22px;
 `;
 const CategoryName = styled.div`
-  font-size: 14px;
-  color: ${({ theme }) => theme.colors.mediumGray};
+  ${({ theme }) => theme.fontStyle.body2};
+  color: ${({ theme }) => theme.colors.gray500};
 `;
 
-const PostTitle = styled(Title)`
+const PostTitle = styled(PageTitle)`
   margin-top: 18px;
-`;
-
-const Writer = styled.div`
-  font-size: 14px;
-  color: ${({ theme }) => theme.colors.mediumGray};
-  text-align: right;
-  margin-top: 12px;
 `;

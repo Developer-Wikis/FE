@@ -1,5 +1,4 @@
 import { unauth } from './base';
-import { ICommentItem } from '~/types/comment';
 
 export const getCommentList = (questionId: number) => {
   return unauth.get(`/questions/${questionId}/comments`);
@@ -12,8 +11,8 @@ export const createComment = (
   return unauth.post(`/questions/${questionId}/comments`, payload);
 };
 
-export const matchCommentPassword = (questionId: number, commentId: number, password: string) => {
-  return unauth.post(`/questions/${questionId}/comments/${commentId}`, {
+export const checkCommentPassword = (questionId: number, commentId: number, password: string) => {
+  return unauth.post(`/questions/${questionId}/comments/${commentId}/check`, {
     password,
   });
 };

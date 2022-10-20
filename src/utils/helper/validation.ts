@@ -1,3 +1,6 @@
+import { MainType, SubType, SubWithAllType, SUB_CATEGORIES } from '../constant/category';
+import { isString } from './checkType';
+
 export const checkLength = (str: string, min: number, max: number) => {
   return str.length < min || str.length > max ? true : false;
 };
@@ -25,7 +28,15 @@ export const checkComment = (comment: string) => {
 };
 
 export const checkTitle = (title: string) => {
-  return checkLength(title, 2, 30);
+  return checkLength(title, 2, 50);
+};
+
+export const checkTailQuestion = (text: string) => {
+  return checkLength(text, 2, 50);
+};
+
+export const checkSuggestion = (text: string) => {
+  return checkLength(text, 10, 300);
 };
 
 export const SUBMIT_CHECK = {
@@ -43,6 +54,22 @@ export const SUBMIT_CHECK = {
   },
   title: {
     isValid: checkTitle,
-    message: '질문 제목은 2~30자로 입력해 주세요.',
+    message: '질문 제목은 2~50자로 입력해 주세요.',
   },
+  tailQuestion: {
+    isValid: checkTailQuestion,
+    message: '꼬리 질문은 2~50자로 입력해 주세요.',
+  },
+  suggestion: {
+    isValid: checkSuggestion,
+    message: '내용은 10자 이상 300자 이하로 입력해 주세요.',
+  },
+};
+
+export const isValidCategoryPair = (main: MainType, sub: SubWithAllType) => {
+  return sub === 'all' || (SUB_CATEGORIES[main] as ReadonlyArray<SubType>).includes(sub);
+};
+
+export const isValidRandomType = (type: unknown) => {
+  return isString(type) && ['voice', 'text'].includes(type);
 };

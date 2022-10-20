@@ -1,9 +1,17 @@
+import styled from '@emotion/styled';
 import NextLink, { LinkProps as NextLinkProps } from 'next/link';
 import { ReactNode } from 'react';
+import { buttonSizes, buttonStyle } from './Button/types';
 
-type LinkProps = Omit<NextLinkProps, 'as' | 'passHref'> & { children: ReactNode };
+type LinkTypes = { linkType?: keyof typeof buttonStyle; size?: keyof typeof buttonSizes };
+type LinkProps = Omit<NextLinkProps, 'passHref'> & {
+  children: ReactNode;
+  className?: string;
+} & LinkTypes;
 
 const Link = ({
+  linkType,
+  size,
   href,
   prefetch,
   replace,
@@ -12,6 +20,7 @@ const Link = ({
   locale,
   children,
   onClick,
+  className,
   ...props
 }: LinkProps) => {
   return (
@@ -25,9 +34,17 @@ const Link = ({
       passHref
       {...props}
     >
-      <a onClick={onClick}>{children}</a>
+      <StyledA linkType={linkType} size={size} onClick={onClick} className={className}>
+        {children}
+      </StyledA>
     </NextLink>
   );
 };
 
 export default Link;
+
+const StyledA = styled.a<LinkTypes>`
+  ${({ linkType }) => linkType && buttonStyle[linkType]};
+  ${({ linkType }) => linkType && `display: inline-block;`};
+  ${({ size }) => size && buttonSizes[size]};
+`;

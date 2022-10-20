@@ -1,22 +1,56 @@
 import styled from '@emotion/styled';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 import Link from '~/components/base/Link';
 import PageContainer from '~/components/common/PageContainer';
 import CategoryListItem from './CategoryListItem';
 
 const Header = () => {
+  const router = useRouter();
+  const [selectedCategory, setSelectedCategory] = useState('');
+
+  useEffect(() => {
+    if (!router.isReady) {
+      return;
+    }
+
+    if (router.pathname === '/') {
+      setSelectedCategory(router.query.mainCategory === 'be' ? 'be' : 'fe');
+    } else {
+      setSelectedCategory('');
+    }
+  }, [router.isReady, router.query]);
+
   return (
     <StyledHeader>
       <HeaderContent>
         <LeftArea>
-          <h1>
+          <Logo>
             <Link href="/">developerwiki</Link>
-          </h1>
+          </Logo>
           <CategoryList>
-            <CategoryListItem href="/?dev=fe" name="프론트엔드" />
-            <CategoryListItem href="/?dev=be" name="백엔드" />
+            <CategoryListItem
+              href="/?mainCategory=fe"
+              select={selectedCategory === 'fe'}
+              name="프론트엔드"
+              shallow
+            />
+            <CategoryListItem
+              href="/?mainCategory=be"
+              select={selectedCategory === 'be'}
+              name="백엔드"
+              shallow
+            />
           </CategoryList>
         </LeftArea>
-        <Link href="/question/create">질문 등록</Link>
+        <RightArea>
+          <Link size="sm" linkType="red" href="/random/create?step=0" as="/random/create">
+            랜덤 질문
+          </Link>
+          <Link size="sm" linkType="black" href="/question/create">
+            질문 등록
+          </Link>
+        </RightArea>
       </HeaderContent>
     </StyledHeader>
   );
@@ -25,7 +59,7 @@ const Header = () => {
 export default Header;
 
 const StyledHeader = styled.div`
-  border-bottom: 1px solid ${({ theme }) => theme.colors.lightGray};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.gray300};
 `;
 
 const HeaderContent = styled(PageContainer)`
@@ -37,9 +71,19 @@ const HeaderContent = styled(PageContainer)`
 
 const LeftArea = styled.div`
   display: flex;
+  align-items: center;
 `;
 
 const CategoryList = styled.ul`
   display: flex;
   margin-left: 40px;
+`;
+
+const Logo = styled.h1`
+  font-size: 20px;
+`;
+
+const RightArea = styled.div`
+  display: flex;
+  gap: 15px;
 `;
