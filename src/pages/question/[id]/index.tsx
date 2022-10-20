@@ -78,6 +78,7 @@ export default QuestionDetail;
 
 const Container = styled(PageContainer)`
   margin-top: 32px;
+  margin-bottom: 80px;
 `;
 
 const PostContent = styled.div`

@@ -12,5 +12,5 @@ const MainContainer = ({ children }: MainContainerProps) => {
 export default MainContainer;
 
 const Main = styled.main`
-  margin-bottom: 80px;
+  margin-bottom: 50px;
 `;

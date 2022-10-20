@@ -22,11 +22,11 @@ const Footer = () => {
 export default Footer;
 
 const FooterContainer = styled.footer`
-  background-color: ${({ theme }) => theme.colors.gray100};
+  border-top: 1px solid ${({ theme }) => theme.colors.gray300};
 `;
 
 const Inner = styled(PageContainer)`
-  padding: 45px 0 45px;
+  padding: 55px 0 65px;
 `;
 
 const SuggestionButton = styled(Link)`
