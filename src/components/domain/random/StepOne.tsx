@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { FormEvent, MutableRefObject, useEffect } from 'react';
 import Button from '~/components/base/Button';
+import PageTitle from '~/components/base/PageTitle';
 import { InputValues, Step } from '~/pages/random/create';
 import { SubWithAllType } from '~/utils/constant/category';
 import MainCategoryField from './MainCategoryField';
@@ -15,14 +16,14 @@ interface StepOneProps {
   mounted: MutableRefObject<boolean>;
 }
 
-const StepOne = ({ step, inputValues, handleChange, handleSubmit, mounted }: StepOneProps) => {
+const StepOne = ({ inputValues, handleChange, handleSubmit, mounted }: StepOneProps) => {
   useEffect(() => {
     mounted.current = true;
   }, []);
 
   return (
     <>
-      <Title>랜덤 질문</Title>
+      <StyledPageTitle>랜덤 질문</StyledPageTitle>
 
       <form action="submit" onSubmit={handleSubmit}>
         <TypeField
@@ -46,7 +47,6 @@ const StepOne = ({ step, inputValues, handleChange, handleSubmit, mounted }: Ste
           buttonType="red"
           size="lg"
           disabled={inputValues.subCategories.length === 0}
-          step={step}
         >
           면접 연습 시작
         </StyledButton>
@@ -57,13 +57,11 @@ const StepOne = ({ step, inputValues, handleChange, handleSubmit, mounted }: Ste
 
 export default StepOne;
 
-const Title = styled.h2`
-  font-size: 24px;
-  text-align: center;
-  margin-bottom: 34px;
+const StyledPageTitle = styled(PageTitle)`
+  margin-bottom: 38px;
 `;
 
-const StyledButton = styled(Button)<{ step: number }>`
+const StyledButton = styled(Button)`
   display: block;
   margin: 0 auto;
   width: fit-content;
