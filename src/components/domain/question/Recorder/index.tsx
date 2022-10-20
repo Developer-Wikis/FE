@@ -59,7 +59,7 @@ const Recorder = forwardRef(({ limit }: RecorderProps, ref?: Ref<HTMLButtonEleme
   };
 
   const onMediaRecordStop = () => {
-    if (mediaRecorder.current) {
+    if (mediaRecorder.current && mediaRecorder.current.state !== 'inactive') {
       mediaRecorder.current.stop();
       mediaRecorder.current.stream.getTracks().forEach((track) => {
         track.stop();
