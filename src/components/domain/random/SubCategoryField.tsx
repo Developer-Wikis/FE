@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { ChangeEvent } from 'react';
+import Label from '~/components/base/Label';
 import InputField from '~/components/common/InputField';
 import { MainType, SubWithAllType, SUB_CATEGORIES } from '~/utils/constant/category';
 
@@ -56,16 +57,8 @@ const SubCategoryField = ({ mainCategory, subCategories, handleChange }: SubCate
 
 export default SubCategoryField;
 
-const Label = styled.label`
-  display: block;
-  font-size: 16px;
-  font-weight: 700;
-  color: ${({ theme }) => theme.colors.gray800};
-  margin-bottom: 12px;
-`;
-
 const Notice = styled.div`
-  font-size: 13px;
+  ${({ theme }) => theme.fontStyle.body2}
   color: ${({ theme }) => theme.colors.gray600};
 `;
 

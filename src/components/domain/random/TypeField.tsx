@@ -18,13 +18,13 @@ const TypeField = ({ type, handleChange }: TypeFieldProps) => {
         checked={type === 'voice'}
         onChange={handleChange}
       />
-      <RadioLabel htmlFor="voice"> 음성 면접 연습</RadioLabel>
+      <RadioLabel htmlFor="voice">음성 면접 연습</RadioLabel>
       <FirstNotice>
         질문이 <strong>음성</strong>으로 나타나며 1분의 답변 시간이 주어집니다.
       </FirstNotice>
 
       <Radio type="radio" name="type" id="text" checked={type === 'text'} onChange={handleChange} />
-      <RadioLabel htmlFor="text"> 자유 면접 연습</RadioLabel>
+      <RadioLabel htmlFor="text">자유 면접 연습</RadioLabel>
       <Notice>
         질문이 <strong>텍스트</strong>로 나타나며 자유롭게 답변하실 수 있습니다.
       </Notice>
@@ -55,15 +55,16 @@ const Radio = styled.input`
 `;
 
 const RadioLabel = styled.label`
-  font-size: 14px;
+  margin-left: 6px;
+  ${({ theme }) => theme.fontStyle.body2}
   color: ${({ theme }) => theme.colors.gray800};
   vertical-align: bottom;
   cursor: pointer;
 `;
 
 const Notice = styled.div`
-  margin-top: 6px;
-  font-size: 13px;
+  margin-top: 5px;
+  ${({ theme }) => theme.fontStyle.body2}
   color: ${({ theme }) => theme.colors.gray600};
 
   strong {
@@ -73,5 +74,5 @@ const Notice = styled.div`
 `;
 
 const FirstNotice = styled(Notice)`
-  margin-bottom: 18px;
+  margin-bottom: 16px;
 `;
