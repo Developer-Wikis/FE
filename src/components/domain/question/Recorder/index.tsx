@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { forwardRef, Ref, useRef, useState } from 'react';
+import { forwardRef, Ref, useEffect, useRef, useState } from 'react';
 import Button from '~/components/base/Button';
 import Icon from '~/components/base/Icon';
 import useTimer from '~/hooks/useTimer';
@@ -15,14 +15,11 @@ const Recorder = forwardRef(({ limit }: RecorderProps, ref?: Ref<HTMLButtonEleme
   const [isCompleted, setIsCompleted] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [audioSrc, setAudioSrc] = useState('');
-  const audioRef = useRef<null | HTMLAudioElement>(null);
-
   const [duration, setDuration] = useState({ minutes: 0, seconds: 0 });
 
-  let timeoutId = useRef<null | NodeJS.Timeout>(null);
-  // 그냥 일반 변수or state 로 저장 시에 timeout을 삭제하려는 시점에 값이 null이기 때문에 초기화가 안됨.
-
-  let mediaRecorder = useRef<null | MediaRecorder>(null);
+  const audioRef = useRef<null | HTMLAudioElement>(null);
+  const timeoutId = useRef<null | NodeJS.Timeout>(null);
+  const mediaRecorder = useRef<null | MediaRecorder>(null);
 
   const { onStart, onFinish, onStop, minutes, seconds } = useTimer();
 
@@ -35,8 +32,6 @@ const Recorder = forwardRef(({ limit }: RecorderProps, ref?: Ref<HTMLButtonEleme
     let blobChunk: Blob[] = [];
 
     mediaRecorder.current.ondataavailable = (e) => {
-      // MediaRecorder가 미디어 데이터를 사용하도록 애플리케이션에 전달할 때 이벤트가 시작
-      // ondatavailable 이후 onstop 실행
       if (e.data && e.data.size > 0) {
         blobChunk.push(e.data);
       }
@@ -63,18 +58,22 @@ const Recorder = forwardRef(({ limit }: RecorderProps, ref?: Ref<HTMLButtonEleme
     }, 61000);
   };
 
-  const onRecordStop = (time: { minutes: number; seconds: number }) => {
-    if (mediaRecorder.current) {
-      onFinish();
+  const onMediaRecordStop = () => {
+    if (mediaRecorder.current && mediaRecorder.current.state !== 'inactive') {
       mediaRecorder.current.stop();
       mediaRecorder.current.stream.getTracks().forEach((track) => {
         track.stop();
       });
-
-      setDuration(time);
-      setIsRecording(false);
-      setIsCompleted(true);
     }
+  };
+
+  const onRecordStop = (time: { minutes: number; seconds: number }) => {
+    onFinish();
+    onMediaRecordStop();
+
+    setDuration(time);
+    setIsRecording(false);
+    setIsCompleted(true);
   };
 
   const onRecordReset = () => {
@@ -116,6 +115,12 @@ const Recorder = forwardRef(({ limit }: RecorderProps, ref?: Ref<HTMLButtonEleme
     setIsPlaying(false);
     onFinish();
   };
+
+  useEffect(() => {
+    return () => {
+      onMediaRecordStop();
+    };
+  }, []);
 
   return (
     <>
