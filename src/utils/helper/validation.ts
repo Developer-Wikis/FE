@@ -28,7 +28,7 @@ export const checkComment = (comment: string) => {
 };
 
 export const checkTitle = (title: string) => {
-  return checkLength(title, 2, 30);
+  return checkLength(title, 2, 50);
 };
 
 export const checkTailQuestion = (text: string) => {
