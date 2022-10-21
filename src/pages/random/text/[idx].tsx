@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import Icon from '~/components/base/Icon';
 import PageContainer from '~/components/common/PageContainer';
 import PostHeader from '~/components/domain/question/PostHeader';
 import Recorder from '~/components/domain/question/Recorder';
@@ -10,9 +9,9 @@ import { IQuestionDetail } from '~/types/question';
 import { RANDOM_LOCAL_KEY } from '~/utils/constant/random';
 import { isString } from '~/utils/helper/checkType';
 import { isValidRandomType } from '~/utils/helper/validation';
-import styled from '@emotion/styled';
 import Article from '~/components/common/Article';
-import Button from '~/components/base/Button';
+import MoveButtons from '~/components/common/MoveButtons';
+import RandomContent from '~/components/domain/random/RandomContent';
 
 const DUMMY = 1;
 const DUMMY_QUESTION = {} as IQuestionDetail;
@@ -32,15 +31,6 @@ const RandomText = () => {
   const clearLocal = useCallback(() => {
     Object.values(RANDOM_LOCAL_KEY).forEach(local.removeItem);
   }, [local]);
-
-  const handlePrev = () => {
-    if (!curQuestion || !questions || curQuestion.idx === 1) {
-      alert('첫 번째 질문입니다.');
-      return;
-    }
-
-    move(curQuestion.idx - 1);
-  };
 
   const handleNext = () => {
     if (!curQuestion || !questions || curQuestion.idx === questions.length - 1) {
@@ -104,7 +94,7 @@ const RandomText = () => {
               writer={curQuestion.nickname}
             />
 
-            <PostContent>
+            <RandomContent>
               <Recorder ref={recordRef} key={curQuestion.idx} />
 
               <TailQuestions
@@ -114,17 +104,12 @@ const RandomText = () => {
                 key={curQuestion.id + curQuestion.idx}
               />
 
-              <Buttons>
-                <PrevButton buttonType="borderGray" onClick={handlePrev}>
-                  <Icon name="ArrowLeft" size="20" color="gray600" />
-                  <span>이전 질문</span>
-                </PrevButton>
-                <NextButton buttonType="borderGray" onClick={handleNext}>
-                  <span> 다음 질문</span>
-                  <Icon name="ArrowRight" size="20" color="gray600" />
-                </NextButton>
-              </Buttons>
-            </PostContent>
+              <MoveButtons
+                disabledPrev={!curQuestion || !questions || curQuestion.idx === 1}
+                onPrev={() => move(curQuestion.idx - 1)}
+                onNext={handleNext}
+              />
+            </RandomContent>
           </Article>
         </PageContainer>
       )}
@@ -151,32 +136,3 @@ function isValidStoredValue(value: unknown) {
 function isValidType(type: unknown) {
   return isValidRandomType(type) && type === 'text';
 }
-
-const PostContent = styled.div`
-  position: relative;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 36px;
-  padding: 0 36px 0;
-`;
-
-const Buttons = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  margin-top: 56px;
-`;
-
-const PrevButton = styled(Button)`
-  display: flex;
-  align-items: center;
-  padding-left: 16px;
-`;
-
-const NextButton = styled(Button)`
-  display: flex;
-  align-items: center;
-  padding-right: 16px;
-`;

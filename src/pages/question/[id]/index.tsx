@@ -7,7 +7,7 @@ import Comment from '~/components/common/Comment';
 import { getQuestionDetail } from '~/service/question';
 import { NextPageContext } from 'next';
 import { IQuestionDetail, QuestionCategoryQuery } from '~/types/question';
-import MoveButtons from '~/components/domain/question/MoveButtons';
+import QuestionMoveButtons from '~/components/domain/question/QuestionMoveButtons';
 import Recorder from '~/components/domain/question/Recorder';
 import { isMainType, isString, isSubWithAllType } from '~/utils/helper/checkType';
 
@@ -66,7 +66,11 @@ const QuestionDetail = ({ detailData, query }: QuestionDetailProps) => {
           questionId={detailData.id}
           title={detailData.title}
         />
-        <MoveButtons categoryQuery={query} prevId={detailData.prevId} nextId={detailData.nextId} />
+        <QuestionMoveButtons
+          categoryQuery={query}
+          prevId={detailData.prevId}
+          nextId={detailData.nextId}
+        />
       </PostContent>
 
       <Comment questionId={detailData.id} />
