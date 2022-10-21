@@ -28,7 +28,7 @@ const StepTwo = ({ step, permission, handleSubmit, handleChange, handleBack }: S
 
   return (
     <>
-      <div>
+      <TitleContainer>
         <Icon.Button
           name="ArrowLeft"
           color="gray800"
@@ -36,11 +36,11 @@ const StepTwo = ({ step, permission, handleSubmit, handleChange, handleBack }: S
           size="36px"
           onClick={handleBack}
         />
-        <StyledPageTitle>안내 사항</StyledPageTitle>
-      </div>
+        <PageTitle>안내 사항</PageTitle>
+      </TitleContainer>
 
       <form onSubmit={handleSubmit}>
-        <Subtitle>알림음이 잘 들리는지 확인해주세요.</Subtitle>
+        <Notice>알림음이 잘 들리는지 확인해주세요.</Notice>
 
         <AudioButton type="button" onClick={() => audioRef.current?.play()}>
           <Icon name="Play" color="gray800" />
@@ -86,11 +86,11 @@ const StepTwo = ({ step, permission, handleSubmit, handleChange, handleBack }: S
 
 export default StepTwo;
 
-const StyledPageTitle = styled(PageTitle)`
+const TitleContainer = styled.div`
   margin-bottom: 38px;
 `;
 
-const Subtitle = styled.h3`
+const Notice = styled.strong`
   display: block;
   text-align: center;
   margin-bottom: 21px;
