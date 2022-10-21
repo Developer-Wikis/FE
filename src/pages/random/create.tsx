@@ -13,6 +13,7 @@ import StepOne from '~/components/domain/random/StepOne';
 import { IQuestionDetail } from '~/types/question';
 import { isValidRandomType } from '~/utils/helper/validation';
 import { RANDOM_LOCAL_KEY } from '~/utils/constant/random';
+import Article from '~/components/common/Article';
 
 const SESSION_KEY = {
   step: 'step',
@@ -250,12 +251,4 @@ function getValidStepTwoValues(value: unknown): typeof initialPermission {
 
 const MainContent = styled(PageContainer)`
   margin-top: 50px;
-`;
-
-const Article = styled.article`
-  width: 440px;
-  margin: 0 auto;
-  padding: 42px 28px;
-  border: 1px solid ${({ theme }) => theme.colors.gray300};
-  border-radius: 4px;
 `;

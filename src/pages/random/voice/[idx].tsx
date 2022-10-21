@@ -110,7 +110,7 @@ const RandomVoice = () => {
     <>
       {curQuestion && (
         <PageContainer>
-          <StyledArticle>
+          <Article full>
             <PostHeader
               subCategory={curQuestion.subCategory}
               title={isString(curQuestion.title) ? curQuestion.title : ''}
@@ -131,7 +131,7 @@ const RandomVoice = () => {
                 </NextButton>
               </Buttons>
             </PostContent>
-          </StyledArticle>
+          </Article>
         </PageContainer>
       )}
     </>
@@ -187,11 +187,6 @@ function isValidStoredValue(value: unknown) {
 function isValidType(type: unknown) {
   return isValidRandomType(type) && type === 'voice';
 }
-
-const StyledArticle = styled(Article)`
-  width: 100%;
-  padding: 30px 0 50px;
-`;
 
 const PostContent = styled.div`
   position: relative;
