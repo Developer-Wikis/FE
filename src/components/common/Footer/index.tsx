@@ -1,8 +1,6 @@
 import styled from '@emotion/styled';
-import Button from '~/components/base/Button';
 import Link from '~/components/base/Link';
 import PageContainer from '../PageContainer';
-import LogoText from '~/assets/images/logo-text.svg';
 import Logo from '../Logo';
 
 const Footer = () => {
@@ -33,6 +31,13 @@ const Inner = styled(PageContainer)`
 
 const SuggestionButton = styled(Link)`
   margin-left: 12px;
+
+  &::before {
+    content: '💌 ';
+  }
+  &:hover::before {
+    content: '🙇‍♀️ ';
+  }
 `;
 
 const Copyright = styled.p`
