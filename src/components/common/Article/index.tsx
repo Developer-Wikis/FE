@@ -21,7 +21,7 @@ const StyledArticle = styled.article<{ full: boolean }>`
   border-radius: 4px;
   background-color: ${({ theme }) => theme.colors.white};
 
-  ${mediaQuery('440px')} {
+  ${mediaQuery(440)} {
     border: 0;
     width: 100%;
     margin-top: 0;

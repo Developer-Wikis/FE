@@ -1,7 +1,9 @@
+import { isString } from './checkType';
+
 const sizes: Record<string, string> = {
-  md: '620px',
+  sm: '620px',
 };
 
-export const mediaQuery = (size: 'md' | string) => {
-  return `@media screen and (max-width: ${size.includes('px') ? size : sizes[size]})`;
+export const mediaQuery = (size: 'sm' | number) => {
+  return `@media screen and (max-width: ${isString(size) ? sizes[size] : `${size}px`})`;
 };

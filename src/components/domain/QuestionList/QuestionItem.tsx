@@ -52,11 +52,6 @@ const StyledItem = styled.li`
     align-items: center;
     padding: 20px 0;
     border-bottom: 1px solid ${({ theme }) => theme.colors.gray300};
-
-    ${mediaQuery('md')} {
-      margin-left: -16px;
-      margin-right: -16px;
-    }
   }
 `;
 
@@ -71,7 +66,7 @@ const CategoryName = styled.div`
   font-weight: 500;
   color: ${({ theme }) => theme.colors.gray600};
 
-  ${mediaQuery('md')} {
+  ${mediaQuery('sm')} {
     width: 100px;
   }
 `;
@@ -104,7 +99,7 @@ const QuestionInfoItem = styled.span<{ isViewCount?: boolean }>`
     margin-left: 17.5px;
   }
 
-  ${mediaQuery('md')} {
+  ${mediaQuery('sm')} {
     ${({ isViewCount }) => (isViewCount ? 'display: none' : '')}
   }
 `;

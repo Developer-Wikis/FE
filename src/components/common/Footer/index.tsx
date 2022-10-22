@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import Button from '~/components/base/Button';
 import Link from '~/components/base/Link';
 import PageContainer from '../PageContainer';
 
@@ -26,7 +25,8 @@ const FooterContainer = styled.footer`
 `;
 
 const Inner = styled(PageContainer)`
-  padding: 55px 0 65px;
+  padding-top: 55px;
+  padding-bottom: 65px;
 `;
 
 const SuggestionButton = styled(Link)`

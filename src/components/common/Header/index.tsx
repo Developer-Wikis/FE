@@ -83,7 +83,7 @@ const HeaderContent = styled(PageContainer)`
   height: 70px;
   align-items: center;
 
-  ${mediaQuery('md')} {
+  ${mediaQuery('sm')} {
     display: block;
     height: 128px;
   }
@@ -93,13 +93,13 @@ const LeftArea = styled.div`
   display: flex;
   align-items: center;
 
-  ${mediaQuery('md')} {
+  ${mediaQuery('sm')} {
     display: block;
   }
 `;
 
 const FirstRow = styled.div`
-  ${mediaQuery('md')} {
+  ${mediaQuery('sm')} {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -113,7 +113,7 @@ const FirstRow = styled.div`
 const Nav = styled.nav`
   margin-left: 40px;
 
-  ${mediaQuery('md')} {
+  ${mediaQuery('sm')} {
     display: flex;
     align-items: center;
     margin-left: 0;
@@ -132,7 +132,7 @@ const Logo = styled.h1`
 const Hambuger = styled(Icon.Button)`
   display: none;
 
-  ${mediaQuery('md')} {
+  ${mediaQuery('sm')} {
     display: block;
   }
 `;
@@ -141,7 +141,7 @@ const RightArea = styled.div`
   display: flex;
   gap: 15px;
 
-  ${mediaQuery('md')} {
+  ${mediaQuery('sm')} {
     display: none;
   }
 `;
