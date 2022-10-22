@@ -28,20 +28,22 @@ const Header = () => {
           <Logo>
             <Link href="/">developerwiki</Link>
           </Logo>
-          <CategoryList>
-            <CategoryListItem
-              href="/?mainCategory=fe"
-              select={selectedCategory === 'fe'}
-              name="프론트엔드"
-              shallow
-            />
-            <CategoryListItem
-              href="/?mainCategory=be"
-              select={selectedCategory === 'be'}
-              name="백엔드"
-              shallow
-            />
-          </CategoryList>
+          <nav>
+            <CategoryList>
+              <CategoryListItem
+                href="/?mainCategory=fe"
+                select={selectedCategory === 'fe'}
+                name="프론트엔드"
+                shallow
+              />
+              <CategoryListItem
+                href="/?mainCategory=be"
+                select={selectedCategory === 'be'}
+                name="백엔드"
+                shallow
+              />
+            </CategoryList>
+          </nav>
         </LeftArea>
         <RightArea>
           <Link size="sm" linkType="red" href="/random/create?step=0" as="/random/create">
