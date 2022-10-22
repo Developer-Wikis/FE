@@ -1,3 +1,4 @@
+import styled from '@emotion/styled';
 import { theme, ThemeColors } from '~/types/theme';
 import IconButton from './IconButton';
 import * as icons from './svg';
@@ -11,15 +12,11 @@ export interface IconProps {
 
 const Icon = ({ name, size = '20', color = 'white', block = true, ...props }: IconProps) => {
   const SvgIcon = icons[name];
-  return (
-    <SvgIcon
-      width={size}
-      height={size}
-      color={theme.colors[color]}
-      {...props}
-      style={{ display: block ? 'block' : null }}
-    />
-  );
+  const StyledSvgIcon = styled(SvgIcon)<{ block: boolean }>`
+    display: ${({ block }) => (block ? 'block' : '')};
+  `;
+
+  return <StyledSvgIcon width={size} height={size} color={theme.colors[color]} {...props} />;
 };
 
 Icon.Button = IconButton;
