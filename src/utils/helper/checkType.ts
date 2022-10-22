@@ -24,3 +24,7 @@ export function isSubWithAllType(value: unknown): value is SubWithAllType {
 export function isBrowser() {
   return typeof window !== 'undefined';
 }
+
+export function isProduction() {
+  return process.env.NODE_ENV === 'production';
+}

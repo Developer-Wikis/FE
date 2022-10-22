@@ -1,5 +1,5 @@
-import styled from '@emotion/styled';
 import { ChangeEvent } from 'react';
+import Label from '~/components/base/Label';
 import Select from '~/components/base/Select';
 import ErrorMessage from '~/components/common/ErrorMessage';
 import InputField from '~/components/common/InputField';
@@ -22,7 +22,6 @@ const MainCategoryField = ({ handleChange, selected, message }: MainCategoryFiel
           text: convertMainCategory(mainCode),
         }))}
         name="mainCategory"
-        style={{ width: '383px' }}
         onChange={handleChange}
         selected={selected}
       />
@@ -32,11 +31,3 @@ const MainCategoryField = ({ handleChange, selected, message }: MainCategoryFiel
 };
 
 export default MainCategoryField;
-
-const Label = styled.label`
-  display: block;
-  font-size: 16px;
-  font-weight: 700;
-  color: ${({ theme }) => theme.colors.gray800};
-  margin-bottom: 12px;
-`;
