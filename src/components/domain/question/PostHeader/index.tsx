@@ -22,7 +22,7 @@ export default PostHeader;
 
 const Container = styled.div`
   text-align: center;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.gray500};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.gray300};
   padding-bottom: 22px;
 `;
 const CategoryName = styled.div`

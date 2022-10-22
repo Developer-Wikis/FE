@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { FormEvent, useEffect, useRef } from 'react';
 import Button from '~/components/base/Button';
 import Icon from '~/components/base/Icon';
+import PageTitle from '~/components/base/PageTitle';
 import { Step } from '~/pages/random/create';
 import { initialPermission } from '~/pages/random/create';
 
@@ -27,7 +28,7 @@ const StepTwo = ({ step, permission, handleSubmit, handleChange, handleBack }: S
 
   return (
     <>
-      <div>
+      <TitleContainer>
         <Icon.Button
           name="ArrowLeft"
           color="gray800"
@@ -35,11 +36,11 @@ const StepTwo = ({ step, permission, handleSubmit, handleChange, handleBack }: S
           size="36px"
           onClick={handleBack}
         />
-        <Title>안내 사항</Title>
-      </div>
+        <PageTitle>안내 사항</PageTitle>
+      </TitleContainer>
 
       <form onSubmit={handleSubmit}>
-        <Subtitle>알림음이 잘 들리는지 확인해주세요.</Subtitle>
+        <Notice>알림음이 잘 들리는지 확인해주세요.</Notice>
 
         <AudioButton type="button" onClick={() => audioRef.current?.play()}>
           <Icon name="Play" color="gray800" />
@@ -85,17 +86,15 @@ const StepTwo = ({ step, permission, handleSubmit, handleChange, handleBack }: S
 
 export default StepTwo;
 
-const Title = styled.h2`
-  font-size: 24px;
-  text-align: center;
-  margin-bottom: 34px;
+const TitleContainer = styled.div`
+  margin-bottom: 38px;
 `;
 
-const Subtitle = styled.h3`
+const Notice = styled.strong`
   display: block;
   text-align: center;
   margin-bottom: 21px;
-  font-size: 16px;
+  ${({ theme }) => theme.fontStyle.body1}
   font-weight: 600;
   color: ${({ theme }) => theme.colors.gray800};
 `;
@@ -121,14 +120,15 @@ const AudioCheckbox = styled.div`
   margin-bottom: 28px;
 
   input {
-    margin: 0 6px 0 0;
+    margin: 0;
     width: 16px;
     height: 16px;
     accent-color: ${({ theme }) => theme.colors.red};
   }
 
   label {
-    font-size: 14px;
+    margin-left: 6px;
+    ${({ theme }) => theme.fontStyle.body2}
     color: ${({ theme }) => theme.colors.gray600};
   }
 `;
@@ -136,13 +136,13 @@ const AudioCheckbox = styled.div`
 const UL = styled.ul`
   border-radius: 4px;
   margin-bottom: 30px;
-  padding: 26px 23px 26px;
+  padding: 26px 23px;
   background-color: ${({ theme }) => theme.colors.gray200};
 `;
 
 const LI = styled.li`
   margin-left: 16px;
-  font-size: 13px;
+  ${({ theme }) => theme.fontStyle.body2}
   color: ${({ theme }) => theme.colors.gray600};
   list-style: outside;
   word-break: keep-all;
@@ -153,7 +153,7 @@ const LI = styled.li`
   }
 
   ~ li {
-    margin-top: 7px;
+    margin-top: 5px;
   }
 `;
 
