@@ -21,7 +21,9 @@ const CategoryListItem = ({ href, name, select, shallow = false }: CategoryListI
 export default CategoryListItem;
 
 const Li = styled.li`
-  margin-right: 22px;
+  & ~ li {
+    margin-left: 22px;
+  }
 
   a {
     ${({ theme }) => theme.fontStyle.subtitle1};
