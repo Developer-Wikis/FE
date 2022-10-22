@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { useContext, useRef } from 'react';
+import { useContext, useRef, useState } from 'react';
 import Button from '~/components/base/Button';
 import useForm from '~/hooks/useForm';
 import { SUBMIT_CHECK } from '~/utils/helper/validation';
@@ -21,6 +21,7 @@ const AddCommentForm = () => {
     initialValues,
     onSubmit,
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   const { onAddComment } = useContext(CommentContext);
 
@@ -29,6 +30,7 @@ const AddCommentForm = () => {
   const contentRef = useRef<null | HTMLTextAreaElement>(null);
 
   async function onSubmit() {
+    setIsLoading(true);
     if (SUBMIT_CHECK.nickname.isValid(values.nickname)) {
       alert(SUBMIT_CHECK.nickname.message);
       nicknameRef.current?.focus();
@@ -48,6 +50,7 @@ const AddCommentForm = () => {
 
     await onAddComment(values);
     handleReset({ ...values, content: '' });
+    setIsLoading(false);
   }
 
   return (
@@ -72,7 +75,7 @@ const AddCommentForm = () => {
         </Writer>
         <CommentTextArea value={values.content} ref={contentRef} onChange={handleChange} />
       </Content>
-      <AddButton size="sm" onClick={handleSubmit}>
+      <AddButton size="sm" onClick={handleSubmit} loading={isLoading}>
         등록
       </AddButton>
     </Container>
