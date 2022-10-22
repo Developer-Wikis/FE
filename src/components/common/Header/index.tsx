@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Link from '~/components/base/Link';
 import PageContainer from '~/components/common/PageContainer';
+import Logo from '../Logo';
 import CategoryListItem from './CategoryListItem';
 
 const Header = () => {
@@ -25,9 +26,9 @@ const Header = () => {
     <StyledHeader>
       <HeaderContent>
         <LeftArea>
-          <Logo>
-            <Link href="/">developerwiki</Link>
-          </Logo>
+          <Link href="/">
+            <Logo />
+          </Link>
           <nav>
             <CategoryList>
               <CategoryListItem
@@ -79,10 +80,6 @@ const LeftArea = styled.div`
 const CategoryList = styled.ul`
   display: flex;
   margin-left: 40px;
-`;
-
-const Logo = styled.h1`
-  font-size: 20px;
 `;
 
 const RightArea = styled.div`
