@@ -5,6 +5,7 @@ import { IQuestionItem, QuestionCategoryQuery } from '~/types/question';
 import { formatNumber } from '~/utils/helper/formatting';
 import { forwardRef, Ref } from 'react';
 import { convertSubCategory } from '~/utils/helper/converter';
+import { mediaQuery } from '~/utils/helper/mediaQuery';
 
 interface QuestionItemProps {
   question: IQuestionItem;
@@ -28,7 +29,7 @@ const QuestionItem = forwardRef(
             <span>{question.title}</span>
           </QuestionTitle>
           <QuestionInfo>
-            <QuestionInfoItem title={String(question.viewCount)}>
+            <QuestionInfoItem title={String(question.viewCount)} isViewCount>
               <Icon name="Eye" color="gray600" size="15" />
               {formatNumber(question.viewCount)}
             </QuestionInfoItem>
@@ -61,12 +62,19 @@ const CategoryName = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   flex-shrink: 0;
-  ${({ theme }) => theme.fontStyle.body2};
+  ${({ theme }) => theme.fontStyle.body2}
   font-weight: 500;
   color: ${({ theme }) => theme.colors.gray600};
+
+  ${mediaQuery('sm')} {
+    width: 100px;
+  }
 `;
 
-const QuestionTitle = styled.div`
+const QuestionTitle = styled.strong`
+  font-weight: 400;
+  ${({ theme }) => theme.fontStyle.body1}
+  color: ${({ theme }) => theme.colors.gray800};
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -77,10 +85,11 @@ const QuestionInfo = styled.div`
   text-align: right;
   padding: 0 20px;
   flex-shrink: 0;
-  ${({ theme }) => theme.fontStyle.body2};
+  ${({ theme }) => theme.fontStyle.body2}
   color: ${({ theme }) => theme.colors.gray600};
 `;
-const QuestionInfoItem = styled.span`
+
+const QuestionInfoItem = styled.span<{ isViewCount?: boolean }>`
   display: inline-flex;
   flex-direction: row;
   align-items: center;
@@ -88,5 +97,9 @@ const QuestionInfoItem = styled.span`
 
   ~ span {
     margin-left: 17.5px;
+  }
+
+  ${mediaQuery('sm')} {
+    ${({ isViewCount }) => (isViewCount ? 'display: none' : '')}
   }
 `;
