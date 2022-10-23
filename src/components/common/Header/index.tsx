@@ -47,13 +47,11 @@ const Header = () => {
                 href="/?mainCategory=fe"
                 select={selectedCategory === 'fe'}
                 name="프론트엔드"
-                shallow
               />
               <CategoryListItem
                 href="/?mainCategory=be"
                 select={selectedCategory === 'be'}
                 name="백엔드"
-                shallow
               />
             </CategoryList>
           </Nav>
