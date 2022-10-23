@@ -4,10 +4,14 @@ import { useEffect, useState } from 'react';
 import Link from '~/components/base/Link';
 import PageContainer from '~/components/common/PageContainer';
 import CategoryListItem from './CategoryListItem';
+import Icon from '~/components/base/Icon/index';
+import { mediaQuery } from '~/utils/helper/mediaQuery';
+import Slide from './Slide';
 
 const Header = () => {
   const router = useRouter();
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     if (!router.isReady) {
@@ -25,24 +29,33 @@ const Header = () => {
     <StyledHeader>
       <HeaderContent>
         <LeftArea>
-          <Logo>
-            <Link href="/">developerwiki</Link>
-          </Logo>
-          <CategoryList>
-            <CategoryListItem
-              href="/?mainCategory=fe"
-              select={selectedCategory === 'fe'}
-              name="프론트엔드"
-              shallow
-            />
-            <CategoryListItem
-              href="/?mainCategory=be"
-              select={selectedCategory === 'be'}
-              name="백엔드"
-              shallow
-            />
-          </CategoryList>
+          <FirstRow>
+            <Logo>
+              <Link href="/">developerwiki</Link>
+            </Logo>
+
+            {/* 햄버거가 될 예정*/}
+            <Hambuger name="Comment" color="gray800" size="30" onClick={() => setIsOpen(true)} />
+          </FirstRow>
+
+          <Nav>
+            <CategoryList>
+              <CategoryListItem
+                href="/?mainCategory=fe"
+                select={selectedCategory === 'fe'}
+                name="프론트엔드"
+                shallow
+              />
+              <CategoryListItem
+                href="/?mainCategory=be"
+                select={selectedCategory === 'be'}
+                name="백엔드"
+                shallow
+              />
+            </CategoryList>
+          </Nav>
         </LeftArea>
+
         <RightArea>
           <Link size="sm" linkType="red" href="/random/create?step=0" as="/random/create">
             랜덤 질문
@@ -52,13 +65,15 @@ const Header = () => {
           </Link>
         </RightArea>
       </HeaderContent>
+
+      <Slide isOpen={isOpen} onClose={() => setIsOpen(false)} />
     </StyledHeader>
   );
 };
 
 export default Header;
 
-const StyledHeader = styled.div`
+const StyledHeader = styled.header`
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray300};
 `;
 
@@ -67,23 +82,66 @@ const HeaderContent = styled(PageContainer)`
   justify-content: space-between;
   height: 70px;
   align-items: center;
+
+  ${mediaQuery('sm')} {
+    display: block;
+    height: 128px;
+  }
 `;
 
 const LeftArea = styled.div`
   display: flex;
   align-items: center;
+
+  ${mediaQuery('sm')} {
+    display: block;
+  }
+`;
+
+const FirstRow = styled.div`
+  ${mediaQuery('sm')} {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 64px;
+    margin: 0 -16px;
+    border-bottom: 1px solid ${({ theme }) => theme.colors.gray300};
+    padding: 0 16px;
+  }
+`;
+
+const Nav = styled.nav`
+  margin-left: 40px;
+
+  ${mediaQuery('sm')} {
+    display: flex;
+    align-items: center;
+    margin-left: 0;
+    height: 64px;
+  }
 `;
 
 const CategoryList = styled.ul`
   display: flex;
-  margin-left: 40px;
 `;
 
 const Logo = styled.h1`
   font-size: 20px;
 `;
 
+const Hambuger = styled(Icon.Button)`
+  display: none;
+
+  ${mediaQuery('sm')} {
+    display: block;
+  }
+`;
+
 const RightArea = styled.div`
   display: flex;
   gap: 15px;
+
+  ${mediaQuery('sm')} {
+    display: none;
+  }
 `;
