@@ -90,6 +90,7 @@ const AccordionContent = styled.ul`
 
   li {
     list-style: disc;
+    list-style-position: inside;
     padding: 8px 0;
   }
 `;

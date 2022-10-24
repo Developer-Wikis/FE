@@ -32,7 +32,9 @@ const Header = () => {
         <LeftArea>
           <FirstRow>
             <Link href="/">
-              <Logo />
+              <h1>
+                <Logo />
+              </h1>
             </Link>
 
             {/* 햄버거가 될 예정*/}

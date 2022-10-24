@@ -18,6 +18,6 @@ export default Logo;
 
 const LogoWrapper = styled.div`
   & > svg {
-    display: block !important;
+    display: block;
   }
 `;
