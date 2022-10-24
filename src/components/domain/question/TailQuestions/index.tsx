@@ -69,8 +69,8 @@ export default TailQuestions;
 
 const Container = styled.div`
   margin-top: 42px;
-  width: 420px;
-  padding: 0 14px;
+  max-width: 420px;
+  width: 100%;
 `;
 
 const AccordionTitle = styled.div`
