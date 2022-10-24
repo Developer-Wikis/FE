@@ -17,11 +17,10 @@ export type commentValuesType = {
 };
 
 const AddCommentForm = () => {
-  const { values, handleChange, handleSubmit, handleReset } = useForm({
+  const { values, handleChange, handleSubmit, handleReset, isLoading } = useForm({
     initialValues,
     onSubmit,
   });
-  const [isLoading, setIsLoading] = useState(false);
 
   const { onAddComment } = useContext(CommentContext);
 
@@ -30,7 +29,6 @@ const AddCommentForm = () => {
   const contentRef = useRef<null | HTMLTextAreaElement>(null);
 
   async function onSubmit() {
-    setIsLoading(true);
     if (SUBMIT_CHECK.nickname.isValid(values.nickname)) {
       alert(SUBMIT_CHECK.nickname.message);
       nicknameRef.current?.focus();
@@ -50,7 +48,6 @@ const AddCommentForm = () => {
 
     await onAddComment(values);
     handleReset({ ...values, content: '' });
-    setIsLoading(false);
   }
 
   return (
