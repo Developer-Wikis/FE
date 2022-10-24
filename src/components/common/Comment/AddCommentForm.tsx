@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { useContext, useRef } from 'react';
+import { useContext, useRef, useState } from 'react';
 import Button from '~/components/base/Button';
 import useForm from '~/hooks/useForm';
 import { SUBMIT_CHECK } from '~/utils/helper/validation';
@@ -17,7 +17,7 @@ export type commentValuesType = {
 };
 
 const AddCommentForm = () => {
-  const { values, handleChange, handleSubmit, handleReset } = useForm({
+  const { values, handleChange, handleSubmit, handleReset, isLoading } = useForm({
     initialValues,
     onSubmit,
   });
@@ -72,7 +72,7 @@ const AddCommentForm = () => {
         </Writer>
         <CommentTextArea value={values.content} ref={contentRef} onChange={handleChange} />
       </Content>
-      <AddButton size="sm" onClick={handleSubmit}>
+      <AddButton size="sm" onClick={handleSubmit} loading={isLoading}>
         등록
       </AddButton>
     </Container>

@@ -12,14 +12,17 @@ interface PasswordConfirmProps {
 const PasswordConfirm = ({ commentId }: PasswordConfirmProps) => {
   const [password, setPassword] = useState('');
   const { onOpenPassword, onSubmitPassword } = useContext(CommentContext);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    onSubmitPassword(commentId, password);
+    setIsLoading(true);
+    await onSubmitPassword(commentId, password);
+    setIsLoading(false);
   };
 
   const handleClose = () => {
@@ -35,7 +38,9 @@ const PasswordConfirm = ({ commentId }: PasswordConfirmProps) => {
           value={password}
           onChange={handleChange}
         />
-        <Button size="sm">확인</Button>
+        <Button size="sm" loading={isLoading}>
+          확인
+        </Button>
         <Icon.Button name="Close" color="gray500" size="12" onClick={handleClose} />
       </PasswordForm>
     </Container>

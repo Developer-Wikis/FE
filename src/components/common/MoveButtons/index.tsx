@@ -39,13 +39,15 @@ const Buttons = styled.div`
 `;
 
 const PrevButton = styled(Button)`
-  display: flex;
-  align-items: center;
   padding-left: 16px;
+  span {
+    display: flex;
+  }
 `;
 
 const NextButton = styled(Button)`
-  display: flex;
-  align-items: center;
   padding-right: 16px;
+  span {
+    display: flex;
+  }
 `;

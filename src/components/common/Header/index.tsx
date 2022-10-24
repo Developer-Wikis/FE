@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Link from '~/components/base/Link';
 import PageContainer from '~/components/common/PageContainer';
+import Logo from '../Logo';
 import CategoryListItem from './CategoryListItem';
 import Icon from '~/components/base/Icon/index';
 import { mediaQuery } from '~/utils/helper/mediaQuery';
@@ -30,9 +31,11 @@ const Header = () => {
       <HeaderContent>
         <LeftArea>
           <FirstRow>
-            <Logo>
-              <Link href="/">developerwiki</Link>
-            </Logo>
+            <Link href="/">
+              <h1>
+                <Logo />
+              </h1>
+            </Link>
 
             {/* 햄버거가 될 예정*/}
             <Hambuger name="Comment" color="gray800" size="30" onClick={() => setIsOpen(true)} />
@@ -123,10 +126,6 @@ const Nav = styled.nav`
 
 const CategoryList = styled.ul`
   display: flex;
-`;
-
-const Logo = styled.h1`
-  font-size: 20px;
 `;
 
 const Hambuger = styled(Icon.Button)`

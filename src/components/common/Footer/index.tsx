@@ -1,13 +1,14 @@
 import styled from '@emotion/styled';
 import Link from '~/components/base/Link';
 import PageContainer from '../PageContainer';
+import Logo from '../Logo';
 
 const Footer = () => {
   return (
     <FooterContainer>
       <Inner>
         <LogoArea>
-          <Logo>developerwiki</Logo>
+          <Logo type="text" />
           <SuggestionButton href="/suggestion" size="xs" linkType="gray">
             건의하기
           </SuggestionButton>
@@ -31,10 +32,13 @@ const Inner = styled(PageContainer)`
 
 const SuggestionButton = styled(Link)`
   margin-left: 12px;
-`;
 
-const Logo = styled.h4`
-  font-size: 20px;
+  &::before {
+    content: '💌 ';
+  }
+  &:hover::before {
+    content: '🙇‍♀️ ';
+  }
 `;
 
 const Copyright = styled.p`
