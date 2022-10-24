@@ -103,7 +103,6 @@ const AudioButton = styled.button`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
   margin: 0 auto 21px;
   border: 1px solid ${({ theme }) => theme.colors.gray300};
   border-radius: 4px;
@@ -111,6 +110,10 @@ const AudioButton = styled.button`
   text-align: center;
   color: ${({ theme }) => theme.colors.gray600};
   background-color: ${({ theme }) => theme.colors.white};
+
+  svg {
+    margin-bottom: 4px;
+  }
 `;
 
 const AudioCheckbox = styled.div`

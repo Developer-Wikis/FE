@@ -93,7 +93,10 @@ const QuestionInfoItem = styled.span<{ isViewCount?: boolean }>`
   display: inline-flex;
   flex-direction: row;
   align-items: center;
-  gap: 7px;
+
+  svg {
+    margin-right: 7px;
+  }
 
   ~ span {
     margin-left: 17.5px;

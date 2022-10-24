@@ -136,8 +136,9 @@ const Hambuger = styled(Icon.Button)`
 `;
 
 const RightArea = styled.div`
-  display: flex;
-  gap: 15px;
+  a ~ a {
+    margin-left: 15px;
+  }
 
   ${mediaQuery('sm')} {
     display: none;
