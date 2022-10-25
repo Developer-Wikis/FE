@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { useContext } from 'react';
 import Icon from '~/components/base/Icon';
 import { formatDate } from '~/utils/helper/formatting';
+import { mediaQuery } from '~/utils/helper/mediaQuery';
 import { CommentContext } from './context';
 
 interface CommentContentProps {
@@ -27,8 +28,10 @@ const CommentContent = ({ commentId, content, createdAt }: CommentContentProps) 
       </Content>
       <Info>
         <CreatedAt>{formatDate(createdAt)}</CreatedAt>
-        <Icon.Button name="Pencil" color="gray500" size="25" onClick={handleEditStart} />
-        <Icon.Button name="Close" color="gray500" size="12" onClick={handleDelete} />
+        <Buttons>
+          <Icon.Button name="Pencil" color="gray500" size="25" onClick={handleEditStart} />
+          <Icon.Button name="Close" color="gray500" size="12" onClick={handleDelete} />
+        </Buttons>
       </Info>
     </>
   );
@@ -60,4 +63,23 @@ const Info = styled.div`
 
 const CreatedAt = styled.span`
   ${({ theme }) => theme.fontStyle.body2};
+
+  ${mediaQuery('sm')} {
+    margin-top: 6px;
+  }
+`;
+
+const Buttons = styled.div`
+  display: flex;
+  align-items: center;
+
+  ${mediaQuery('sm')} {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+  }
+
+  button {
+    margin-right: 4px;
+  }
 `;
