@@ -9,12 +9,22 @@ import MainContainer from '~/components/common/MainContainer';
 import Footer from '~/components/common/Footer';
 import Script from 'next/script';
 import { isProduction } from '../utils/helper/checkType';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import { pageview } from '../lib/gtm';
 
 if (process.env.NEXT_PUBLIC_API_MOCKING === 'enabled') {
   import('../mocks');
 }
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const router = useRouter();
+  useEffect(() => {
+    if (!isProduction()) return;
+    router.events.on('routeChangeComplete', pageview);
+    return () => router.events.off('routeChangeComplete', pageview);
+  }, [router.events]);
+
   return (
     <>
       {isProduction() && (
