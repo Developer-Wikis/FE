@@ -56,13 +56,13 @@ const Info = styled.div`
   margin-left: 16px;
   margin-right: 16px;
   flex-shrink: 0;
-  gap: 4px;
   color: ${({ theme }) => theme.colors.gray500};
   align-self: flex-start;
 `;
 
 const CreatedAt = styled.span`
   ${({ theme }) => theme.fontStyle.body2};
+  margin-right: 4px;
 
   ${mediaQuery('sm')} {
     margin-top: 6px;
