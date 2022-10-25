@@ -127,7 +127,7 @@ const Recorder = forwardRef(({ limit }: RecorderProps, ref?: Ref<HTMLButtonEleme
       <RecordContainer>
         {!isRecording && !isPlaying && !isCompleted ? (
           <RecordStart>
-            <MikeButton onClick={onRecordAudio} ref={ref}>
+            <MikeButton onClick={onRecordAudio} ref={ref} id="record">
               <Icon name="Microphone" size="30" />
             </MikeButton>
           </RecordStart>
@@ -160,7 +160,7 @@ const Recorder = forwardRef(({ limit }: RecorderProps, ref?: Ref<HTMLButtonEleme
       <RecordInfo>
         {isRecording || isCompleted ? (
           recordCount < (limit ?? Infinity) && (
-            <Button buttonType="borderGray" onClick={onRecordReset}>
+            <Button buttonType="borderGray" onClick={onRecordReset} id="re-record">
               다시 녹음하기
             </Button>
           )
