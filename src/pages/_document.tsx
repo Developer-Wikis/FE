@@ -12,20 +12,19 @@ class MainDocument extends Document {
       <Html lang="ko">
         <Head />
         <body>
+          {isProduction() && (
+            <noscript>
+              <iframe
+                src={`https://www.googletagmanager.com/ns.html?id=GTM-KB7DZRJ`}
+                height="0"
+                width="0"
+                style={{ display: 'none', visibility: 'hidden' }}
+              />
+            </noscript>
+          )}
+
           <Main />
           <NextScript />
-
-          {isProduction() && (
-            <script
-              dangerouslySetInnerHTML={{
-                __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-            `,
-              }}
-            />
-          )}
 
           {/*modal container*/}
           <div id="portal"></div>
