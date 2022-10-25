@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { SubWithAllType } from '~/utils/constant/category';
 import { convertSubCategory } from '~/utils/helper/converter';
+import { mediaQuery } from '~/utils/helper/mediaQuery';
 
 interface MiddleCategoryProps {
   subCategories: SubWithAllType[];
@@ -47,6 +48,17 @@ const CategoryList = styled.ul`
       color: ${({ theme }) => theme.colors.gray800};
       font-weight: 500;
       background-color: ${({ theme }) => theme.colors.gray200};
+    }
+  }
+
+  ${mediaQuery('sm')} {
+    flex-wrap: nowrap;
+    justify-content: start;
+    overflow-x: scroll;
+
+    li {
+      flex-shrink: 0;
+      margin-top: 0;
     }
   }
 `;
