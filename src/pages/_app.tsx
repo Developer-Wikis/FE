@@ -7,8 +7,6 @@ import { theme } from '~/types/theme';
 import Header from '~/components/common/Header';
 import MainContainer from '~/components/common/MainContainer';
 import Footer from '~/components/common/Footer';
-import { useRouter } from 'next/router';
-import { useEffect } from 'react';
 import * as gtag from '../lib/gtag';
 import Script from 'next/script';
 import { isProduction } from '../utils/helper/checkType';
@@ -18,18 +16,6 @@ if (process.env.NEXT_PUBLIC_API_MOCKING === 'enabled') {
 }
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const router = useRouter();
-  useEffect(() => {
-    const handleRouteChange = (url: URL) => {
-      if (isProduction()) {
-        gtag.pageview(url);
-      }
-
-      router.events.on('routeChangeComplete', handleRouteChange);
-      return () => router.events.off('routeChangeComplete', handleRouteChange);
-    };
-  }, [router.events]);
-
   return (
     <>
       {isProduction() && (
