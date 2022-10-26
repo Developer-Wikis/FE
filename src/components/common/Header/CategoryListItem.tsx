@@ -26,7 +26,8 @@ const StyledLi = styled.li`
   }
 
   a {
-    ${({ theme }) => theme.fontStyle.subtitle1};
+    ${({ theme }) => theme.fontStyle.subtitle1}
+    color: ${({ theme }) => theme.colors.gray800};
   }
 
   &.selected a {
