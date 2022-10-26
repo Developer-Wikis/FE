@@ -13,7 +13,7 @@ export interface IconProps {
 const Icon = ({ name, size = '20', color = 'white', block = true, ...props }: IconProps) => {
   const SvgIcon = icons[name];
   const StyledSvgIcon = styled(SvgIcon)<{ block: boolean }>`
-    display: ${({ block }) => (block ? 'block' : '')};
+    display: ${block ? 'block' : ''};
   `;
 
   return <StyledSvgIcon width={size} height={size} color={theme.colors[color]} {...props} />;
