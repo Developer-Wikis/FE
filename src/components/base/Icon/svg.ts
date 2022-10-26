@@ -12,3 +12,4 @@ export { default as ArrowLeft } from '~/assets/icons/arrow-left.svg';
 export { default as ArrowRight } from '~/assets/icons/arrow-right.svg';
 export { default as Eye } from '~/assets/icons/eye.svg';
 export { default as Pencil } from '~/assets/icons/pencil.svg';
+export { default as Menu } from '~/assets/icons/menu.svg';
