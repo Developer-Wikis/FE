@@ -26,6 +26,12 @@ export function convertMainCategory(code: MainType) {
   return mainCategories[code];
 }
 
+export const objectToQuery = (payload: object) => {
+  return Object.entries(payload)
+    .map((e) => e.join('='))
+    .join('&');
+};
+
 export function convertSubCategory(code: SubWithAllType) {
   return subCategories[code];
 }
