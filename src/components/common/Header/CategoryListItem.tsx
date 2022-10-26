@@ -10,17 +10,17 @@ interface CategoryListItemProps {
 
 const CategoryListItem = ({ href, name, select, shallow = false }: CategoryListItemProps) => {
   return (
-    <Li className={select ? 'selected' : ''}>
+    <StyledLi className={select ? 'selected' : ''}>
       <Link href={href} shallow={shallow}>
         {name}
       </Link>
-    </Li>
+    </StyledLi>
   );
 };
 
 export default CategoryListItem;
 
-const Li = styled.li`
+const StyledLi = styled.li`
   & ~ li {
     margin-left: 22px;
   }
