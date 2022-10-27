@@ -107,7 +107,7 @@ const CreateQuestion = () => {
             list={tailQuestions}
             onRemove={onRemoveQuestion}
           />
-          <SubmitButton onClick={handleSubmit} disabled={isLoading}>
+          <SubmitButton onClick={handleSubmit} loading={isLoading}>
             등록
           </SubmitButton>
         </FormContainer>

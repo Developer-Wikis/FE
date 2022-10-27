@@ -12,6 +12,8 @@ const PageContainer = ({ children, ...props }: PageContainerProps) => {
 export default PageContainer;
 
 const StyledContainer = styled.div`
-  width: 840px;
+  max-width: 872px;
   margin: 0 auto;
+  padding-left: 16px;
+  padding-right: 16px;
 `;

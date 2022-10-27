@@ -10,21 +10,24 @@ interface CategoryListItemProps {
 
 const CategoryListItem = ({ href, name, select, shallow = false }: CategoryListItemProps) => {
   return (
-    <Li className={select ? 'selected' : ''}>
+    <StyledLi className={select ? 'selected' : ''}>
       <Link href={href} shallow={shallow}>
         {name}
       </Link>
-    </Li>
+    </StyledLi>
   );
 };
 
 export default CategoryListItem;
 
-const Li = styled.li`
-  margin-right: 22px;
+const StyledLi = styled.li`
+  & ~ li {
+    margin-left: 22px;
+  }
 
   a {
-    ${({ theme }) => theme.fontStyle.subtitle1};
+    ${({ theme }) => theme.fontStyle.subtitle1}
+    color: ${({ theme }) => theme.colors.gray800};
   }
 
   &.selected a {

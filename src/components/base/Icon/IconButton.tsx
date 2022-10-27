@@ -1,4 +1,3 @@
-import styled from '@emotion/styled';
 import { CSSProperties } from 'react';
 import Icon, { IconProps } from '.';
 

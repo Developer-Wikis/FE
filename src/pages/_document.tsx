@@ -1,5 +1,6 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 import { isProduction } from '../utils/helper/checkType';
+import { GTM_ID } from '../lib/gtm';
 
 class MainDocument extends Document {
   static async getInitialProps(ctx: any) {
@@ -12,20 +13,19 @@ class MainDocument extends Document {
       <Html lang="ko">
         <Head />
         <body>
+          {isProduction() && (
+            <noscript>
+              <iframe
+                src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
+                height="0"
+                width="0"
+                style={{ display: 'none', visibility: 'hidden' }}
+              />
+            </noscript>
+          )}
+
           <Main />
           <NextScript />
-
-          {isProduction() && (
-            <script
-              dangerouslySetInnerHTML={{
-                __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-            `,
-              }}
-            />
-          )}
 
           {/*modal container*/}
           <div id="portal"></div>

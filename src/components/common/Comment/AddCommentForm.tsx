@@ -1,7 +1,8 @@
 import styled from '@emotion/styled';
-import { useContext, useRef } from 'react';
+import { useContext, useRef, useState } from 'react';
 import Button from '~/components/base/Button';
 import useForm from '~/hooks/useForm';
+import { mediaQuery } from '~/utils/helper/mediaQuery';
 import { SUBMIT_CHECK } from '~/utils/helper/validation';
 import CommentTextArea from './CommentTextArea';
 import { CommentContext } from './context';
@@ -17,7 +18,7 @@ export type commentValuesType = {
 };
 
 const AddCommentForm = () => {
-  const { values, handleChange, handleSubmit, handleReset } = useForm({
+  const { values, handleChange, handleSubmit, handleReset, isLoading } = useForm({
     initialValues,
     onSubmit,
   });
@@ -72,7 +73,7 @@ const AddCommentForm = () => {
         </Writer>
         <CommentTextArea value={values.content} ref={contentRef} onChange={handleChange} />
       </Content>
-      <AddButton size="sm" onClick={handleSubmit}>
+      <AddButton size="sm" onClick={handleSubmit} loading={isLoading}>
         등록
       </AddButton>
     </Container>
@@ -94,6 +95,12 @@ const Writer = styled.div`
   flex-direction: column;
   width: 132px;
   margin-right: 10px;
+
+  ${mediaQuery('sm')} {
+    flex-direction: row;
+    max-width: 320px;
+    width: 100%;
+  }
 `;
 
 const Input = styled.input`
@@ -105,14 +112,30 @@ const Input = styled.input`
   height: 32px;
   padding-left: 8px;
   box-sizing: border-box;
-  margin-bottom: 10px;
+
+  &:first-of-type {
+    margin-bottom: 10px;
+  }
+
+  ${mediaQuery('sm')} {
+    width: 50%;
+
+    &:first-of-type {
+      margin-right: 10px;
+    }
+  }
 `;
 
 const Content = styled.div`
   display: flex;
+
+  ${mediaQuery('sm')} {
+    flex-direction: column;
+  }
 `;
 
 const AddButton = styled(Button)`
   align-self: flex-end;
   width: 80px;
+  margin-top: 10px;
 `;

@@ -42,7 +42,7 @@ const validate = (values: valuesType) => {
 };
 
 const Suggestion = () => {
-  const { values, errors, handleChange, handleSubmit } = useForm({
+  const { values, errors, handleChange, handleSubmit, isLoading } = useForm({
     initialValues,
     onSubmit,
     validate,
@@ -88,7 +88,7 @@ const Suggestion = () => {
           />
           {errors.content && <ErrorMessage message={errors.content} />}
         </InputField>
-        <SubmitButton>건의 메일 보내기</SubmitButton>
+        <SubmitButton loading={isLoading}>건의 메일 보내기</SubmitButton>
       </Form>
     </Article>
   );

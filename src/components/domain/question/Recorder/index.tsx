@@ -190,7 +190,8 @@ const Recorder = forwardRef(({ limit }: RecorderProps, ref?: Ref<HTMLButtonEleme
 export default Recorder;
 
 const RecordContainer = styled.div`
-  width: 352px;
+  max-width: 352px;
+  width: 100%;
   height: 95px;
   display: flex;
   background: ${({ theme }) => theme.colors.gray200};

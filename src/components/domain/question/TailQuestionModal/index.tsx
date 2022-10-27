@@ -6,6 +6,7 @@ import Label from '~/components/base/Label';
 import PageTitle from '~/components/base/PageTitle';
 import Article from '~/components/common/Article';
 import CloseButton from '~/components/common/CloseButton';
+import InputField from '~/components/common/InputField';
 import { createTailQuestion } from '~/service/question';
 import { SUBMIT_CHECK } from '~/utils/helper/validation';
 
@@ -18,6 +19,7 @@ interface TailQuestionModalProps {
 
 const TailQuestionModal = ({ title, id, onClose, isOpenModal }: TailQuestionModalProps) => {
   const [text, setText] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -31,13 +33,15 @@ const TailQuestionModal = ({ title, id, onClose, isOpenModal }: TailQuestionModa
     }
 
     try {
+      setIsLoading(true);
       await createTailQuestion(Number(id), text);
       alert('질문이 접수되었습니다. 질문은 관리자 확인 후 등록됩니다.');
       onClose();
     } catch {
       alert('질문 등록에 실패했습니다.');
-      return;
     }
+
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -54,11 +58,11 @@ const TailQuestionModal = ({ title, id, onClose, isOpenModal }: TailQuestionModa
       </ModalHeader>
 
       <Form onSubmit={onSubmit}>
-        <div>
+        <InputField>
           <Label htmlFor="title">제목</Label>
           <Input name="title" defaultValue={title} disabled />
-        </div>
-        <div>
+        </InputField>
+        <InputField>
           <Label htmlFor="tailQuestion">꼬리 질문</Label>
           <Input
             name="tailQuestion"
@@ -66,9 +70,9 @@ const TailQuestionModal = ({ title, id, onClose, isOpenModal }: TailQuestionModa
             value={text}
             onChange={(e: ChangeEvent<HTMLInputElement>) => setText(e.target.value)}
           />
-        </div>
+        </InputField>
 
-        <SubmitButton>등록</SubmitButton>
+        <SubmitButton loading={isLoading}>등록</SubmitButton>
       </Form>
     </Container>
   );
@@ -84,7 +88,6 @@ const Form = styled.form`
   margin-top: 34px;
   display: flex;
   flex-direction: column;
-  gap: 30px;
 `;
 
 const SubmitButton = styled(Button)`

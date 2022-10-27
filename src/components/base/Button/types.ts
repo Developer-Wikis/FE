@@ -35,7 +35,7 @@ export const buttonStyle = {
 export const buttonSizes = {
   xs: `
     font-size: 12px;
-    padding: 4px 10px;
+    padding: 5px 11px;
     line-height: 20px;
   `,
   sm: `

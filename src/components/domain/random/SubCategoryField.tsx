@@ -29,7 +29,7 @@ const SubCategoryField = ({ mainCategory, subCategories, handleChange }: SubCate
   };
 
   return (
-    <InputField>
+    <StyledInputField>
       <Label htmlFor="subCategories">분류 선택</Label>
 
       {mainCategory === 'none' && <Notice>직무를 선택해주세요</Notice>}
@@ -51,11 +51,17 @@ const SubCategoryField = ({ mainCategory, subCategories, handleChange }: SubCate
           ))}
         </Container>
       )}
-    </InputField>
+    </StyledInputField>
   );
 };
 
 export default SubCategoryField;
+
+const MARGIN_BOTTOM = '6px';
+
+const StyledInputField = styled(InputField)`
+  margin-bottom: calc(42px - ${MARGIN_BOTTOM});
+`;
 
 const Notice = styled.div`
   ${({ theme }) => theme.fontStyle.body2}
@@ -65,5 +71,9 @@ const Notice = styled.div`
 const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+
+  label {
+    margin-right: 6px;
+    margin-bottom: ${MARGIN_BOTTOM};
+  }
 `;

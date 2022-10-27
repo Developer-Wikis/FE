@@ -42,7 +42,7 @@ const TailQuestions = ({ questions, questionId, title }: Props) => {
           <>
             <AccordionContent>
               {questions.length > 0 ? (
-                questions.map((question, index) => <li key={index}>⦁ {question}</li>)
+                questions.map((question, index) => <li key={index}>{question}</li>)
               ) : (
                 <p>등록된 꼬리 질문이 없습니다.</p>
               )}
@@ -69,8 +69,8 @@ export default TailQuestions;
 
 const Container = styled.div`
   margin-top: 42px;
-  width: 420px;
-  padding: 0 14px;
+  max-width: 420px;
+  width: 100%;
 `;
 
 const AccordionTitle = styled.div`
@@ -89,6 +89,8 @@ const AccordionContent = styled.ul`
   padding: 16px 0;
 
   li {
+    list-style: disc;
+    list-style-position: inside;
     padding: 8px 0;
   }
 `;
