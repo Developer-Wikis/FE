@@ -12,6 +12,7 @@ import { useEffect } from 'react';
 import { GTM_ID, pageview } from '../lib/gtm';
 import Script from 'next/script';
 import { isProduction } from '../utils/helper/checkType';
+import UserProvider from '~/context/user';
 
 if (process.env.NEXT_PUBLIC_API_MOCKING === 'enabled') {
   import('../mocks');
@@ -46,11 +47,13 @@ function MyApp({ Component, pageProps }: AppProps) {
       )}
 
       <ThemeProvider theme={theme}>
-        <Header />
-        <MainContainer>
-          <Component {...pageProps} />
-        </MainContainer>
-        <Footer />
+        <UserProvider>
+          <Header />
+          <MainContainer>
+            <Component {...pageProps} />
+          </MainContainer>
+          <Footer />
+        </UserProvider>
       </ThemeProvider>
     </>
   );
