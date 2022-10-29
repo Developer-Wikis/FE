@@ -37,8 +37,7 @@ const Header = () => {
               </h1>
             </Link>
 
-            {/* 햄버거가 될 예정*/}
-            <Hambuger name="Menu" color="gray800" size="24" onClick={() => setIsOpen(true)} />
+            <Hamburger name="Hamburger" color="gray800" size="24" onClick={() => setIsOpen(true)} />
           </FirstRow>
 
           <Nav>
@@ -126,7 +125,7 @@ const CategoryList = styled.ul`
   display: flex;
 `;
 
-const Hambuger = styled(Icon.Button)`
+const Hamburger = styled(Icon.Button)`
   display: none;
 
   ${mediaQuery('sm')} {
