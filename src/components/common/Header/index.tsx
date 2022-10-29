@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Link from '~/components/base/Link';
 import PageContainer from '~/components/common/PageContainer';
 import Logo from '../Logo';
@@ -8,11 +8,16 @@ import CategoryListItem from './CategoryListItem';
 import Icon from '~/components/base/Icon/index';
 import { mediaQuery } from '~/utils/helper/mediaQuery';
 import Slide from './Slide';
+import useStorage from '~/hooks/useStorage';
+import { LOCAL_KEY } from '~/utils/constant/user';
+import { UserContext } from '~/context/user';
 
 const Header = () => {
   const router = useRouter();
   const [selectedCategory, setSelectedCategory] = useState('');
   const [isOpen, setIsOpen] = useState(false);
+  const storage = useStorage('local');
+  const { currentUser } = useContext(UserContext);
 
   useEffect(() => {
     if (!router.isReady) {
@@ -25,6 +30,13 @@ const Header = () => {
       setSelectedCategory('');
     }
   }, [router.isReady, router.query]);
+
+  useEffect(() => {
+    const token = storage.getItem(LOCAL_KEY.token, '');
+    if (token && token !== currentUser.token) {
+      /* 토큰으로 유저 정보 재발급 코드 작성 */
+    }
+  }, []);
 
   return (
     <StyledHeader>
@@ -58,6 +70,13 @@ const Header = () => {
         </LeftArea>
 
         <RightArea>
+          {/* id로 비교할 예정 */}
+          {!currentUser.token && (
+            <Link size="sm" linkType="borderGray" href="/login">
+              로그인
+            </Link>
+          )}
+
           <Link size="sm" linkType="red" href="/random/create?step=0" as="/random/create">
             랜덤 질문
           </Link>
