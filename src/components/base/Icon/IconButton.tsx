@@ -1,7 +1,7 @@
-import { CSSProperties } from 'react';
+import { CSSProperties, HTMLAttributes } from 'react';
 import Icon, { IconProps } from '.';
 
-interface IconButtonProps extends IconProps {
+interface IconButtonProps extends IconProps, Omit<HTMLAttributes<HTMLButtonElement>, 'color'> {
   onClick?: () => void;
   type?: 'submit' | 'reset' | 'button' | undefined;
   style?: CSSProperties;
