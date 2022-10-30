@@ -64,7 +64,7 @@ const Login = () => {
   return (
     <Article>
       <PageTitle>로그인</PageTitle>
-      <PageDescription type="bold">developerwiki에 오신 것을 환영합니다!</PageDescription>
+      <PageDescription textType="bold">developerwiki에 오신 것을 환영합니다!</PageDescription>
       <LogoArea>
         <Icon name="LogoIcon" size="110" />
       </LogoArea>

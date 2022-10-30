@@ -4,10 +4,10 @@ import { theme } from '~/types/theme';
 
 interface PageDescriptionProps {
   children: ReactNode;
-  type?: 'normal' | 'bold';
+  textType?: 'normal' | 'bold';
 }
-const PageDescription = ({ children, type = 'normal' }: PageDescriptionProps) => {
-  return <StyledP type={type}>{children}</StyledP>;
+const PageDescription = ({ children, textType = 'normal' }: PageDescriptionProps) => {
+  return <StyledP textType={textType}>{children}</StyledP>;
 };
 
 const fontStyle = {
@@ -23,7 +23,7 @@ const fontStyle = {
 };
 
 const StyledP = styled.p<PageDescriptionProps>`
-  ${({ type }) => type && fontStyle[type]}
+  ${({ textType }) => textType && fontStyle[textType]}
   text-align: center;
   margin-top: 14px;
 `;
