@@ -1,5 +1,5 @@
 import { objectToQuery } from '~/utils/helper/converter';
-import { useContext, useEffect, useRef } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import Link from '~/components/base/Link';
 import { useRouter } from 'next/router';
 import { googleLogin } from '~/service/oauth';
@@ -19,7 +19,7 @@ const SCOPE =
 
 const Login = () => {
   const router = useRouter();
-  const googleUrl = useRef('');
+  const [googleUrl, setGoogleUrl] = useState('');
   const storage = useStorage('local');
   const { updateUser } = useContext(UserContext);
 
@@ -50,8 +50,7 @@ const Login = () => {
       response_type: 'code',
       scope: SCOPE,
     });
-
-    googleUrl.current = AUTHORIZE_URI + '?' + queryStr;
+    setGoogleUrl(AUTHORIZE_URI + '?' + queryStr);
   }, []);
 
   useEffect(() => {
@@ -70,7 +69,7 @@ const Login = () => {
         <Icon name="LogoIcon" size="110" />
       </LogoArea>
       <SocialButtons>
-        <SocialLink linkType="borderGray" size="lg" href={googleUrl.current}>
+        <SocialLink linkType="borderGray" size="lg" href={googleUrl}>
           <Icon name="Google" />
           <span>구글 계정으로 계속하기</span>
         </SocialLink>
