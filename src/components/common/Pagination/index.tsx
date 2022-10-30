@@ -2,9 +2,10 @@ import styled from '@emotion/styled';
 import { useState } from 'react';
 import Icon from '~/components/base/Icon';
 
-const WINDOW_SIZE = 5;
+const VIEW_PAGE_SIZE = 5;
 const PAGE_SIZE = 20;
 const ZERO_INDEX = 1;
+
 interface PaginationProps {
   totalItem: number;
   current?: number;
@@ -28,26 +29,26 @@ const Pagination = ({
     onChange(page);
   };
 
-  const isVisiblePrevButton = () => totalPage > WINDOW_SIZE && currentPage > 0;
-  const isVisibleNextButton = () => totalPage > WINDOW_SIZE && currentPage < totalPage - 1;
-
   return (
     <Container>
-      <MoveButton onClick={() => handleChange(currentPage - 1)} isVisible={isVisiblePrevButton()}>
-        <Icon name="ArrowLeft" size="14" color="gray800" />
-      </MoveButton>
+      {totalPage > VIEW_PAGE_SIZE && (
+        <MoveButton onClick={() => handleChange(currentPage - 1)} disabled={currentPage <= 0}>
+          <span className="screen-out">이전 페이지로 이동</span>
+          <Icon name="ArrowLeft" size="14" color="gray800" />
+        </MoveButton>
+      )}
 
       {Array.from(new Array(totalPage), (_, index) => index)
         .filter((index) => {
-          const windowCenter = Math.ceil(WINDOW_SIZE / 2);
-          const windowHalf = Math.floor(WINDOW_SIZE / 2);
+          const centerOffset = Math.ceil(VIEW_PAGE_SIZE / 2);
+          const halfOffset = Math.floor(VIEW_PAGE_SIZE / 2);
 
-          if (currentPage < windowCenter) {
-            return index < WINDOW_SIZE;
-          } else if (currentPage > totalPage - windowCenter) {
-            return index >= totalPage - WINDOW_SIZE;
+          if (currentPage < centerOffset) {
+            return index < VIEW_PAGE_SIZE;
+          } else if (currentPage > totalPage - centerOffset) {
+            return index >= totalPage - VIEW_PAGE_SIZE;
           }
-          return index >= currentPage - windowHalf && index <= currentPage + windowHalf;
+          return index >= currentPage - halfOffset && index <= currentPage + halfOffset;
         })
         .map((page) => (
           <PageButton
@@ -59,9 +60,15 @@ const Pagination = ({
           </PageButton>
         ))}
 
-      <MoveButton onClick={() => handleChange(currentPage + 1)} isVisible={isVisibleNextButton()}>
-        <Icon name="ArrowRight" size="14" color="gray800" />
-      </MoveButton>
+      {totalPage > VIEW_PAGE_SIZE && (
+        <MoveButton
+          onClick={() => handleChange(currentPage + 1)}
+          disabled={currentPage >= totalPage - 1}
+        >
+          <span className="screen-out">다음 페이지로 이동</span>
+          <Icon name="ArrowRight" size="14" color="gray800" />
+        </MoveButton>
+      )}
     </Container>
   );
 };
@@ -74,13 +81,11 @@ const Container = styled.div`
   align-items: center;
 `;
 
-const MoveButton = styled.button<{ isVisible: boolean }>`
+const MoveButton = styled.button`
   width: 33px;
   height: 33px;
   border: 1px solid ${({ theme }) => theme.colors.gray300};
   border-radius: 4px;
-  opacity: ${({ isVisible }) => (isVisible ? 1 : 0)};
-  visibility: ${({ isVisible }) => (isVisible ? 'visible' : 'hidden')};
 
   svg {
     margin: 0 auto;
@@ -92,6 +97,12 @@ const MoveButton = styled.button<{ isVisible: boolean }>`
 
   &:last-of-type {
     margin-left: 10px;
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    background-color: ${({ theme }) => theme.colors.gray100};
+    cursor: not-allowed;
   }
 `;
 
