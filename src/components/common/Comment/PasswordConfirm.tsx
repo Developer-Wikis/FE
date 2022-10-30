@@ -38,9 +38,9 @@ const PasswordConfirm = ({ commentId }: PasswordConfirmProps) => {
           value={password}
           onChange={handleChange}
         />
-        <Button size="sm" loading={isLoading}>
+        <SubmitButton size="sm" loading={isLoading}>
           확인
-        </Button>
+        </SubmitButton>
         <Icon.Button name="Close" color="gray500" size="12" onClick={handleClose} />
       </PasswordForm>
     </Container>
@@ -64,5 +64,8 @@ const Container = styled.div`
 const PasswordForm = styled.form`
   display: flex;
   align-items: center;
-  gap: 12px;
+`;
+
+const SubmitButton = styled(Button)`
+  margin: 0 12px;
 `;

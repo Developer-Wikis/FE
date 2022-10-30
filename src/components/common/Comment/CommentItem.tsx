@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { useContext } from 'react';
 import { ICommentItem } from '~/types/comment';
+import { mediaQuery } from '~/utils/helper/mediaQuery';
 import CommentContent from './CommentContent';
 import { CommentContext } from './context';
 import EditCommentForm from './EditCommentForm';
@@ -48,6 +49,10 @@ const StyledLi = styled.li`
 
 const CommentContainer = styled.div`
   display: flex;
+
+  ${mediaQuery('sm')} {
+    flex-direction: column;
+  }
 `;
 
 const EditorContainer = styled.div`
@@ -62,4 +67,8 @@ const Writer = styled.div`
   text-overflow: ellipsis;
   color: ${({ theme }) => theme.colors.gray600};
   flex-shrink: 0;
+
+  ${mediaQuery('sm')} {
+    margin-bottom: 6px;
+  }
 `;

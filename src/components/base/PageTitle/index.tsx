@@ -17,6 +17,7 @@ const PageTitle = ({ children, align = 'center', ...props }: PageTitleProps) => 
 export default PageTitle;
 
 const StyleH = styled.h3<PageTitleProps>`
-  ${({ theme }) => theme.fontStyle.headline1};
+  ${({ theme }) => theme.fontStyle.headline1}
   text-align: ${({ align }) => align};
+  color: ${({ theme }) => theme.colors.gray800};
 `;

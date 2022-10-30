@@ -60,16 +60,16 @@ const StepTwo = ({ step, permission, handleSubmit, handleChange, handleBack }: S
           <label htmlFor="soundTest">알림음이 정상적으로 들리신다면 옵션을 체크해주세요.</label>
         </AudioCheckbox>
 
-        <UL>
-          <LI>
+        <StyledUl>
+          <StyledLi>
             면접 연습 시작 버튼을 클릭하면 음성으로 질문이 진행되며{' '}
             <strong>질문이 끝난 뒤 바로 녹음이 시작</strong>됩니다.
-          </LI>
-          <LI>
+          </StyledLi>
+          <StyledLi>
             <strong>마이크 권한이 허용</strong>이 되어있어야 면접 연습을 시작하실 수 있습니다.
-          </LI>
-          <LI>다시 녹음하기는 질문마다 한 번만 사용할 수 있습니다.</LI>
-        </UL>
+          </StyledLi>
+          <StyledLi>다시 녹음하기는 질문마다 한 번만 사용할 수 있습니다.</StyledLi>
+        </StyledUl>
 
         <StyledButton
           type="submit"
@@ -136,14 +136,14 @@ const AudioCheckbox = styled.div`
   }
 `;
 
-const UL = styled.ul`
+const StyledUl = styled.ul`
   border-radius: 4px;
   margin-bottom: 30px;
   padding: 26px 23px;
   background-color: ${({ theme }) => theme.colors.gray200};
 `;
 
-const LI = styled.li`
+const StyledLi = styled.li`
   margin-left: 16px;
   ${({ theme }) => theme.fontStyle.body2}
   color: ${({ theme }) => theme.colors.gray600};

@@ -61,9 +61,9 @@ const Buttons = styled.div`
   margin-top: 10px;
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
 
   button {
     width: 80px;
+    margin-left: 10px;
   }
 `;

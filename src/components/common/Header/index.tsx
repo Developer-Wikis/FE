@@ -50,7 +50,7 @@ const Header = () => {
             </Link>
 
             {/* 햄버거가 될 예정*/}
-            <Hambuger name="Comment" color="gray800" size="30" onClick={() => setIsOpen(true)} />
+            <Hambuger name="Menu" color="gray800" size="24" onClick={() => setIsOpen(true)} />
           </FirstRow>
 
           <Nav>
