@@ -1,9 +1,9 @@
 import styled from '@emotion/styled';
-import { useEffect } from 'react';
+import { MouseEvent, useEffect } from 'react';
 import BackgroundDim from '~/components/base/BackgroundDim';
 import Link from '~/components/base/Link';
-import useClickAway from '~/hooks/useClickAway';
 import { ThemeColors } from '~/types/theme';
+import { mediaQuery } from '~/utils/helper/mediaQuery';
 import CloseButton from '../CloseButton';
 
 interface SlideProps {
@@ -12,7 +12,9 @@ interface SlideProps {
 }
 
 const Slide = ({ isOpen, onClose }: SlideProps) => {
-  const contentRef = useClickAway<HTMLDivElement>(onClose);
+  const handleClose = (e: MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) onClose();
+  };
 
   useEffect(() => {
     if (isOpen) {
@@ -23,8 +25,8 @@ const Slide = ({ isOpen, onClose }: SlideProps) => {
   }, [isOpen]);
 
   return (
-    <StyledBackgroundDim isOpen={isOpen}>
-      <SlideContent isOpen={isOpen} ref={contentRef}>
+    <StyledBackgroundDim isOpen={isOpen} onClick={handleClose}>
+      <SlideContent isOpen={isOpen}>
         <StyledCloseButton onClick={onClose} />
 
         <nav>
@@ -64,7 +66,7 @@ const StyledBackgroundDim = styled(BackgroundDim)<{ isOpen: boolean }>`
 `;
 
 const SlideContent = styled.div<{ isOpen: boolean }>`
-  position: relative;
+  position: absolute;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
