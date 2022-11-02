@@ -5,9 +5,10 @@ import { AvatarSize, AvatarSizes } from './types';
 interface AvatarProps {
   imageUrl?: string;
   size?: AvatarSizes;
+  alt?: string;
 }
 
-const Avatar = ({ imageUrl, size = 'md', ...props }: AvatarProps) => {
+const Avatar = ({ imageUrl, size = 'md', alt = '프로필이미지', ...props }: AvatarProps) => {
   const defaultImage = '/assets/profile-default.jpeg';
   return (
     <Container size={size} {...props}>
@@ -16,6 +17,7 @@ const Avatar = ({ imageUrl, size = 'md', ...props }: AvatarProps) => {
         objectFit="cover"
         objectPosition="center"
         src={imageUrl || defaultImage}
+        alt={alt}
       />
     </Container>
   );

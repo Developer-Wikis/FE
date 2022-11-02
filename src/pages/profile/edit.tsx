@@ -1,17 +1,8 @@
 import styled from '@emotion/styled';
-import { FormEvent, useState } from 'react';
-import Button from '~/components/base/Button';
-import Checkbox from '~/components/base/Checkbox';
-import Input from '~/components/base/Input';
-import Label from '~/components/base/Label';
 import PageTitle from '~/components/base/PageTitle';
-import AddForm from '~/components/common/AddForm';
-import InputField from '~/components/common/InputField';
 import PageContainer from '~/components/common/PageContainer';
 import DeleteAccount from '~/components/domain/profile/DeleteAccount';
-import EditAvatar from '~/components/domain/profile/EditAvatar';
 import EditUserInfo from '~/components/domain/profile/EditUserInfo';
-import { isValidNickname } from '~/utils/helper/validation';
 
 /*
   inputField margin 0 props 추가 해야 할 듯?
@@ -60,5 +51,6 @@ const Line = styled.hr`
   width: 100%;
   height: 1px;
   background-color: ${({ theme }) => theme.colors.gray300};
+  border: 0;
   margin: 33px 0 50px;
 `;

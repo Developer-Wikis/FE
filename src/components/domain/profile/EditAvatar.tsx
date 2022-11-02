@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import Avatar from '~/components/common/Avatar';
 import { AvatarSize, AvatarSizes } from '~/components/common/Avatar/types';
+import { mediaQuery } from '~/utils/helper/mediaQuery';
 
 interface EditAvatarProps {
   imageUrl?: string;
@@ -10,7 +11,7 @@ interface EditAvatarProps {
 
 const EditAvatar = ({ imageUrl, size, onClick }: EditAvatarProps) => {
   return (
-    <Container size={size} onClick={onClick}>
+    <Container size={size} onClick={onClick} id="profileImage">
       <div className="background">
         <span>프로필 수정</span>
       </div>
@@ -40,6 +41,10 @@ const Container = styled.button<EditAvatarProps>`
     ${({ theme }) => theme.fontStyle.body2};
     font-weight: 600;
     z-index: 10;
+
+    ${mediaQuery('sm')} {
+      display: none;
+    }
 
     span {
       position: absolute;

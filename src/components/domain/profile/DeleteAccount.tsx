@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { FormEvent, useState } from 'react';
 import Button from '~/components/base/Button';
 import Checkbox from '~/components/base/Checkbox';
+import { mediaQuery } from '~/utils/helper/mediaQuery';
 
 interface DeleteAccountProps {
   onDeleteAccount: () => void;
@@ -41,7 +42,7 @@ const DeleteAccount = ({ onDeleteAccount }: DeleteAccountProps) => {
         >
           위 내용을 모두 확인하였고 이에 동의합니다.
         </NoticeCheckbox>
-        <DeleteButton buttonType="red" size="lg">
+        <DeleteButton buttonType="red" size="lg" disabled={!check}>
           계정 삭제하기
         </DeleteButton>
       </Confirm>
@@ -62,13 +63,23 @@ const Notice = styled.div`
 const Confirm = styled.form`
   display: flex;
   justify-content: space-between;
+  margin-top: 18px;
+
+  ${mediaQuery('sm')} {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 `;
 
 const DeleteButton = styled(Button)`
-  margin-top: 18px;
+  width: min-content;
+
+  ${mediaQuery('sm')} {
+    margin-top: 30px;
+    flex-direction: column;
+  }
 `;
 
 const NoticeCheckbox = styled(Checkbox)`
-  margin-top: 18px;
   height: min-content;
 `;
