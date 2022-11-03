@@ -70,6 +70,11 @@ const CreateQuestion = () => {
   }
 
   const onAddQuestion = (value: string) => {
+    if (SUBMIT_CHECK.tailQuestion.isValid(value)) {
+      alert(SUBMIT_CHECK.tailQuestion.message);
+      return;
+    }
+
     if (tailQuestions.length >= 5) {
       alert('꼬리 질문은 5개까지 등록 가능합니다.');
       return;
