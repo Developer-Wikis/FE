@@ -11,6 +11,7 @@ import Slide from './Slide';
 import useStorage from '~/hooks/useStorage';
 import { LOCAL_KEY } from '~/utils/constant/user';
 import { UserContext } from '~/context/user';
+import ProfileDropdown from './ProfileDropdown';
 
 const Header = () => {
   const router = useRouter();
@@ -70,17 +71,17 @@ const Header = () => {
 
         <RightArea>
           {/* id로 비교할 예정 */}
-          {!currentUser.token && (
+          {!currentUser.token ? (
             <Link size="sm" linkType="borderGray" href="/login">
               로그인
             </Link>
+          ) : (
+            // currentUser로 변경
+            <ProfileDropdown user={{ name: 'jini', profileUrl: 'https://picsum.photos/200/600' }} />
           )}
 
           <Link size="sm" linkType="red" href="/random/create?step=0" as="/random/create">
             랜덤 질문
-          </Link>
-          <Link size="sm" linkType="black" href="/question/create">
-            질문 등록
           </Link>
         </RightArea>
       </HeaderContent>
@@ -153,8 +154,12 @@ const Hamburger = styled(Icon.Button)`
 `;
 
 const RightArea = styled.div`
-  a ~ a {
-    margin-left: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  a:last-of-type {
+    margin-left: 14px;
   }
 
   ${mediaQuery('sm')} {
