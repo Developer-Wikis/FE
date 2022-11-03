@@ -9,7 +9,6 @@ interface AddFormProps {
   buttonText: string;
   placeholder?: string;
   onSubmit: (value: string) => void;
-  isValid?: (text: string) => boolean;
   defaultValue?: string;
   reset?: boolean;
 }
@@ -18,7 +17,6 @@ const AddForm = ({
   buttonText,
   onSubmit,
   placeholder,
-  isValid,
   defaultValue,
   reset = true,
   ...props
@@ -30,11 +28,6 @@ const AddForm = ({
 
     const validText = text.trim();
     setText(validText);
-
-    if (isValid && !isValid(validText)) {
-      return;
-    }
-
     onSubmit(validText);
 
     if (reset) {
@@ -46,7 +39,7 @@ const AddForm = ({
     <Container onSubmit={handleSubmit}>
       <Input
         type="text"
-        onChange={(e: ChangeEvent<HTMLInputElement>) => {
+        onChange={(e) => {
           setText(e.target.value);
         }}
         value={text}

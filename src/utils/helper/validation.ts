@@ -73,19 +73,3 @@ export const isValidCategoryPair = (main: MainType, sub: SubWithAllType) => {
 export const isValidRandomType = (type: unknown) => {
   return isString(type) && ['voice', 'text'].includes(type);
 };
-
-export const isValidTailQuestion = (text: string) => {
-  if (SUBMIT_CHECK.tailQuestion.isValid(text)) {
-    alert(SUBMIT_CHECK.tailQuestion.message);
-    return false;
-  }
-  return true;
-};
-
-export const isValidNickname = (text: string) => {
-  if (SUBMIT_CHECK.nickname.isValid(text)) {
-    alert(SUBMIT_CHECK.nickname.message);
-    return false;
-  }
-  return true;
-};

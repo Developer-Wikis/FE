@@ -1,6 +1,5 @@
 import Label from '~/components/base/Label';
 import TailQuestionList from '~/components/domain/question/TailQuestionList';
-import { isValidTailQuestion } from '~/utils/helper/validation';
 import InputField from '.';
 import AddForm from '../AddForm';
 
@@ -20,7 +19,6 @@ const TailQuestionField = ({ handleSubmit, list, onRemove }: TailQuestionFieldPr
         id="tailQuestion"
         onSubmit={handleSubmit}
         placeholder="예상되는 꼬리질문을 입력해주세요."
-        isValid={isValidTailQuestion}
       />
       <TailQuestionList list={list} onRemove={onRemove} />
     </InputField>

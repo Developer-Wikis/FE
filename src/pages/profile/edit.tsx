@@ -3,6 +3,7 @@ import PageTitle from '~/components/base/PageTitle';
 import PageContainer from '~/components/common/PageContainer';
 import DeleteAccount from '~/components/domain/profile/DeleteAccount';
 import EditUserInfo from '~/components/domain/profile/EditUserInfo';
+import { SUBMIT_CHECK } from '~/utils/helper/validation';
 
 /*
   inputField margin 0 props 추가 해야 할 듯?
@@ -12,7 +13,12 @@ import EditUserInfo from '~/components/domain/profile/EditUserInfo';
 
 const ProfileEdit = () => {
   const onEditNickname = (value: string) => {
-    alert(value);
+    if (SUBMIT_CHECK.nickname.isValid(value)) {
+      alert(SUBMIT_CHECK.nickname.message);
+      return;
+    }
+
+    alert('닉네임 : ' + value);
     // 닉네임 변경 API 코드 작성
     // Toast 띄우기
   };

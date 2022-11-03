@@ -4,7 +4,6 @@ import Label from '~/components/base/Label';
 import AddForm from '~/components/common/AddForm';
 import InputField from '~/components/common/InputField';
 import { mediaQuery } from '~/utils/helper/mediaQuery';
-import { isValidNickname } from '~/utils/helper/validation';
 import EditAvatar from './EditAvatar';
 
 interface EditUserInfoProps {
@@ -28,7 +27,6 @@ const EditUserInfo = ({ onEditImage, onEditNickname }: EditUserInfoProps) => {
             id="nickname"
             onSubmit={onEditNickname}
             defaultValue="지니짱효니짱"
-            isValid={isValidNickname}
             reset={false}
           />
         </InputField>
