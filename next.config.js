@@ -1,6 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // reactStrictMode: true,
+  async rewrites() {
+    return [
+      {
+        source: '/user',
+        destination: 'https://ak-47.shop/api/v1/user',
+      },
+    ];
+  },
   swcMinify: true,
   webpack(config) {
     config.module.rules.push({
@@ -18,6 +26,11 @@ const nextConfig = {
     EMAILJS_PUBLIC_KEY: process.env.EMAILJS_PUBLIC_KEY,
     GTM_ID: process.env.GTM_ID,
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+  },
+  images: {
+    // google 기본 프로필 이미지 가져올 때 사용
+    domains: ['lh3.googleusercontent.com'],
+    formats: ['image/avif', 'image/webp'],
   },
 };
 
