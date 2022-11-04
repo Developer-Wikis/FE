@@ -12,3 +12,7 @@ interface LoginResponse {
 export const googleLogin = ({ code, redirectUrl }: { code: string; redirectUrl: string }) => {
   return unauth.get(`/oauth/google/userinfo`, { params: { code, redirectUrl } });
 };
+
+export const getGoogleLink = (url: string) => {
+  return unauth.get(`/oauth/google`, { params: { url } });
+};
