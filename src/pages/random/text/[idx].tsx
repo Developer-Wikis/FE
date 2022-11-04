@@ -63,9 +63,8 @@ const RandomText = () => {
     const { idx: idxString } = router.query;
     const idx = Number(idxString);
 
-    const random = local.getItem<{ type: string; questions: IQuestionDetail[] } | null>(
+    const random = local.getItem<{ type: string; questions: IQuestionDetail[] }>(
       RANDOM_LOCAL_KEY.random,
-      null,
     );
 
     if (

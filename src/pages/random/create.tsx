@@ -118,11 +118,10 @@ const CreateRandom = () => {
   };
 
   const handleExistHistory = () => {
-    const history = local.getItem<{ type: string; questions: IQuestionDetail[] } | null>(
+    const history = local.getItem<{ type: string; questions: IQuestionDetail[] }>(
       RANDOM_LOCAL_KEY.random,
-      null,
     );
-    const latest = local.getItem<number | null>('randomLatest', null);
+    const latest = local.getItem<number>('randomLatest');
     if (!history || !isValidRandomType(history.type)) {
       clearLocal();
       return;
@@ -139,7 +138,7 @@ const CreateRandom = () => {
 
   useEffect(() => {
     const [storedStep, stepOneValues, stepTwoValues] = Object.values(SESSION_KEY).map((key) =>
-      session.getItem(key, null),
+      session.getItem(key),
     );
     const queryStep = Number(router.query.step);
     if (queryStep === 0) {

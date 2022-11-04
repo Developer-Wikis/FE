@@ -6,8 +6,10 @@ const getStorage = (type: StorageType) => {
 };
 
 const useStorage = (type: StorageType) => {
-  const getItem = <T>(key: string, defaultValue: T): T => {
-    if (!isBrowser()) return defaultValue;
+  function getItem<T>(key: string): T | null;
+  function getItem<T>(key: string, defaultValue: T): T;
+  function getItem<T>(key: string, defaultValue?: T) {
+    if (!isBrowser()) return defaultValue ?? null;
     const storage = getStorage(type);
 
     try {
@@ -18,8 +20,8 @@ const useStorage = (type: StorageType) => {
     } catch (error) {
       console.error(error);
     }
-    return defaultValue;
-  };
+    return defaultValue ?? null;
+  }
 
   const setItem = <T>(key: string, value: T) => {
     if (!isBrowser()) return;
