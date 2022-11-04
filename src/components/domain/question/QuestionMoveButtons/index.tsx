@@ -1,9 +1,9 @@
 import { useRouter } from 'next/router';
 import MoveButtons from '~/components/common/MoveButtons';
-import { QuestionCategoryQuery } from '~/types/question';
+import { ICategoryQuery } from '~/types/question';
 
 interface QuestionMoveButtonProps {
-  categoryQuery: QuestionCategoryQuery;
+  categoryQuery: ICategoryQuery;
   prevId: number;
   nextId: number;
 }

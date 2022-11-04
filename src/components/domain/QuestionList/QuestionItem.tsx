@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import Icon from '~/components/base/Icon';
 import Link from '~/components/base/Link';
-import { IQuestionItem, QuestionCategoryQuery } from '~/types/question';
+import { IQuestionItem, ICategoryQuery } from '~/types/question';
 import { formatNumber } from '~/utils/helper/formatting';
 import { forwardRef, Ref } from 'react';
 import { convertSubCategory } from '~/utils/helper/converter';
@@ -9,7 +9,7 @@ import { mediaQuery } from '~/utils/helper/mediaQuery';
 
 interface QuestionItemProps {
   question: IQuestionItem;
-  currentCategory: QuestionCategoryQuery;
+  currentCategory: ICategoryQuery;
 }
 
 const QuestionItem = forwardRef(

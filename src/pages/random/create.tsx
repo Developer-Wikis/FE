@@ -4,7 +4,7 @@ import PageContainer from '~/components/common/PageContainer';
 import { MainType, SubWithAllType } from '~/utils/constant/category';
 import { useRouter } from 'next/router';
 import useStorage from '~/hooks/useStorage';
-import { getRandomQuestions } from '~/service/question';
+import questionApi from '~/service/question';
 import useAxios from '~/hooks/useAxios';
 import { isBoolean, isMainType, isString } from '~/utils/helper/checkType';
 import { isValidCategoryPair } from '~/utils/helper/validation';
@@ -54,7 +54,7 @@ const CreateRandom = () => {
   const [inputValues, setInputValues] = useState<InputValues>(initialInputValues);
   const [permission, setPermission] = useState<typeof initialPermission>(initialPermission);
 
-  const { request } = useAxios(getRandomQuestions, [
+  const { request } = useAxios(questionApi.getRandom, [
     inputValues.mainCategory,
     inputValues.subCategories,
   ]);

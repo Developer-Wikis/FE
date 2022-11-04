@@ -1,11 +1,11 @@
 import styled from '@emotion/styled';
 import { forwardRef, Ref } from 'react';
-import { IQuestionItem, QuestionCategoryQuery } from '~/types/question';
+import { IQuestionItem, ICategoryQuery } from '~/types/question';
 import QuestionItem from './QuestionItem';
 
 interface QuestionListProps {
   questions: IQuestionItem[];
-  currentCategory: QuestionCategoryQuery;
+  currentCategory: ICategoryQuery;
 }
 
 const QuestionList = forwardRef(

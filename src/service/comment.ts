@@ -1,30 +1,23 @@
 import { unauth } from './base';
 
-export const getCommentList = (questionId: number) => {
-  return unauth.get(`/questions/${questionId}/comments`);
+const commentApi = {
+  getList(questionId: number) {
+    return unauth.get(`/questions/${questionId}/comments`);
+  },
+  create(questionId: number, payload: { nickname: string; password: string; content: string }) {
+    return unauth.post(`/questions/${questionId}/comments`, payload);
+  },
+  edit(questionId: number, commentId: number, payload: { password: string; content: string }) {
+    return unauth.put(`/questions/${questionId}/comments/${commentId}`, payload);
+  },
+  delete(questionId: number, commentId: number, password: string) {
+    return unauth.delete(`/questions/${questionId}/comments/${commentId}`, { data: { password } });
+  },
+  checkPassword(questionId: number, commentId: number, password: string) {
+    return unauth.post(`/questions/${questionId}/comments/${commentId}/check`, {
+      password,
+    });
+  },
 };
 
-export const createComment = (
-  questionId: number,
-  payload: { nickname: string; password: string; content: string },
-) => {
-  return unauth.post(`/questions/${questionId}/comments`, payload);
-};
-
-export const checkCommentPassword = (questionId: number, commentId: number, password: string) => {
-  return unauth.post(`/questions/${questionId}/comments/${commentId}/check`, {
-    password,
-  });
-};
-
-export const editComment = (
-  questionId: number,
-  commentId: number,
-  payload: { password: string; content: string },
-) => {
-  return unauth.put(`/questions/${questionId}/comments/${commentId}`, payload);
-};
-
-export const deleteComment = (questionId: number, commentId: number, password: string) => {
-  return unauth.delete(`/questions/${questionId}/comments/${commentId}`, { data: { password } });
-};
+export default commentApi;

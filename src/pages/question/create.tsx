@@ -10,7 +10,7 @@ import TitleField from '~/components/common/InputField/TitleField';
 import PageContainer from '~/components/common/PageContainer';
 import MainCategoryField from '~/components/domain/random/MainCategoryField';
 import useForm from '~/hooks/useForm';
-import { createQuestion } from '~/service/question';
+import questionApi from '~/service/question';
 import { IQuestion } from '~/types/question';
 import { MainType, SubType } from '~/utils/constant/category';
 import { SUBMIT_CHECK } from '~/utils/helper/validation';
@@ -61,7 +61,7 @@ const CreateQuestion = () => {
   async function onSubmit() {
     const newQuestion: IQuestion = { ...values, tailQuestions };
     try {
-      await createQuestion(newQuestion);
+      await questionApi.create(newQuestion);
       alert('질문이 접수되었습니다. 질문은 관리자 확인 후 등록됩니다.');
       router.push('/');
     } catch {

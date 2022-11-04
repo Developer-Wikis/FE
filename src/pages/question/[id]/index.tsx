@@ -4,9 +4,9 @@ import styled from '@emotion/styled';
 import TailQuestions from '~/components/domain/question/TailQuestions';
 import PostHeader from '~/components/domain/question/PostHeader';
 import Comment from '~/components/common/Comment';
-import { getQuestionDetail } from '~/service/question';
+import questionApi from '~/service/question';
 import { NextPageContext } from 'next';
-import { IQuestionDetail, QuestionCategoryQuery } from '~/types/question';
+import { IQuestionDetail, ICategoryQuery } from '~/types/question';
 import QuestionMoveButtons from '~/components/domain/question/QuestionMoveButtons';
 import Recorder from '~/components/domain/question/Recorder';
 import { isMainType, isString, isSubWithAllType } from '~/utils/helper/checkType';
@@ -35,7 +35,7 @@ export const getServerSideProps = async (context: NextPageContext) => {
 
   try {
     const query = { mainCategory, subCategory };
-    const response = await getQuestionDetail(questionId, query);
+    const response = await questionApi.getDetail(questionId, query);
     return {
       props: { detailData: response.data || null, query },
     };
@@ -48,7 +48,7 @@ export const getServerSideProps = async (context: NextPageContext) => {
 
 interface QuestionDetailProps {
   detailData: IQuestionDetail;
-  query: QuestionCategoryQuery;
+  query: ICategoryQuery;
 }
 
 const QuestionDetail = ({ detailData, query }: QuestionDetailProps) => {
