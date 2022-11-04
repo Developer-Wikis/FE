@@ -6,7 +6,7 @@ import { mediaQuery } from '~/utils/helper/mediaQuery';
 interface EditAvatarProps {
   imageUrl?: string;
   size?: AvatarSizes;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 const EditAvatar = ({ imageUrl, size, onClick }: EditAvatarProps) => {
@@ -15,7 +15,7 @@ const EditAvatar = ({ imageUrl, size, onClick }: EditAvatarProps) => {
       <div className="background">
         <span>프로필 수정</span>
       </div>
-      <Avatar imageUrl={imageUrl} size={size} />
+      <Avatar src={imageUrl} size={size} />
     </Container>
   );
 };
