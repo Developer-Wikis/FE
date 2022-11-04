@@ -54,11 +54,7 @@ interface QuestionDetailProps {
 const QuestionDetail = ({ detailData, query }: QuestionDetailProps) => {
   return (
     <Container>
-      <PostHeader
-        subCategory={detailData.subCategory}
-        title={detailData.title}
-        writer={detailData.nickname}
-      />
+      <PostHeader subCategory={detailData.subCategory} title={detailData.title} />
       <PostContent>
         <Recorder key={detailData.id} />
         <TailQuestions

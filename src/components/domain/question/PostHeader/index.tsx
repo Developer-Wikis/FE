@@ -6,10 +6,9 @@ import { convertSubCategory } from '~/utils/helper/converter';
 interface PostHeaderProps {
   subCategory: SubType;
   title: string;
-  writer: string;
 }
 
-const PostHeader = ({ subCategory, title, writer }: PostHeaderProps) => {
+const PostHeader = ({ subCategory, title }: PostHeaderProps) => {
   return (
     <Container>
       <CategoryName>{convertSubCategory(subCategory)}</CategoryName>

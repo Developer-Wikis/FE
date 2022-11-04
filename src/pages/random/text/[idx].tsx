@@ -91,7 +91,6 @@ const RandomText = () => {
             <PostHeader
               subCategory={curQuestion.subCategory}
               title={isString(curQuestion.title) ? curQuestion.title : ''}
-              writer={curQuestion.nickname}
             />
 
             <RandomContent>
