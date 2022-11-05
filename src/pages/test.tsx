@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import Button from '~/components/base/Button';
 import Link from '~/components/base/Link';
-import Toast from '~/components/common/Toast';
+import { toast } from '~/components/common/Toast';
 
 const Test = () => {
   const AddBookmarkWithLink = (
@@ -15,8 +15,8 @@ const Test = () => {
 
   return (
     <>
-      <Button onClick={() => Toast.showMessage('hi')}>Toast Message</Button>
-      <Button onClick={() => Toast.showChildren(AddBookmarkWithLink, true)}>Toast Children</Button>
+      <Button onClick={() => toast.showMessage('hi')}>Toast Message</Button>
+      <Button onClick={() => toast.showChildren(AddBookmarkWithLink, true)}>Toast Children</Button>
     </>
   );
 };

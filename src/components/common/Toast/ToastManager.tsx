@@ -51,4 +51,5 @@ const StyledUl = styled.ul`
   left: 50%;
   bottom: 40px;
   transform: translateX(-50%);
+  z-index: 2000;
 `;

@@ -1,35 +1,23 @@
 import { ReactNode } from 'react';
-import ReactDOMClient from 'react-dom/client';
-import { isBrowser } from '~/utils/helper/checkType';
-import { Nullable } from '~/utils/helper/utilityType';
+import { Nullable } from '~/types/utilityType';
+import ClientPortal from '../ClientPortal';
 import ToastManager, { TCreateToast } from './ToastManager';
 
 class Toast {
+  private static PORTAL_ID = 'toast-portal';
   private static LIMIT = 1;
-  private portal: Nullable<HTMLElement> = null;
   private createToast: Nullable<TCreateToast> = null;
 
-  constructor() {
-    if (!isBrowser()) return;
-
-    const PORTAL_ID = 'toast-portal';
-    const portalElement = document.getElementById(PORTAL_ID);
-
-    if (portalElement) {
-      this.portal = portalElement;
-    } else {
-      this.portal = document.createElement('div');
-      document.body.appendChild(this.portal);
-    }
-
-    const root = ReactDOMClient.createRoot(this.portal);
-    root.render(
-      <ToastManager
-        bind={(createToast: TCreateToast) => {
-          this.createToast = createToast;
-        }}
-        limit={Toast.LIMIT}
-      />,
+  render() {
+    return (
+      <ClientPortal elementId={Toast.PORTAL_ID}>
+        <ToastManager
+          bind={(createToast: TCreateToast) => {
+            this.createToast = createToast;
+          }}
+          limit={Toast.LIMIT}
+        />
+      </ClientPortal>
     );
   }
 
@@ -42,4 +30,7 @@ class Toast {
   }
 }
 
-export default new Toast();
+const ToastContainer = new Toast();
+
+export default ToastContainer;
+export const toast = ToastContainer;
