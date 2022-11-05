@@ -51,7 +51,7 @@ const TailQuestionModal = ({ title, id, onClose, isOpenModal }: TailQuestionModa
   }, [isOpenModal]);
 
   return (
-    <Container>
+    <StyledArticle>
       <ModalHeader>
         <PageTitle align="left">꼬리 질문 등록</PageTitle>
         <StyledCloseButton onClick={onClose} />
@@ -74,13 +74,13 @@ const TailQuestionModal = ({ title, id, onClose, isOpenModal }: TailQuestionModa
 
         <SubmitButton loading={isLoading}>등록</SubmitButton>
       </Form>
-    </Container>
+    </StyledArticle>
   );
 };
 
 export default TailQuestionModal;
 
-const Container = styled(Article)`
+const StyledArticle = styled(Article)`
   margin-top: 0;
 `;
 
