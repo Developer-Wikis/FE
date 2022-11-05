@@ -3,6 +3,7 @@ import { ReactNode, useState, useEffect } from 'react';
 import useTimeoutFn from '~/hooks/useTimeoutFn';
 import { theme } from '~/types/theme';
 import useHover from '~/hooks/useHover';
+import { isMobileWeb } from '~/utils/helper/device';
 
 export interface ToastItemProps {
   message?: string;
@@ -33,8 +34,6 @@ const ToastItem = ({
   };
 
   useEffect(() => {
-    if (!keepAlive) return;
-
     if (isHover) {
       clearTimer();
     } else {
@@ -49,12 +48,13 @@ const ToastItem = ({
     handleTimeout();
   }, [isRemoved]);
 
-  useEffect(() => {
-    setTimer();
-  }, []);
-
   return (
-    <Container show={show} isMessage={!!message} ref={ref} isRemoved={isRemoved}>
+    <Container
+      show={show}
+      isMessage={!!message}
+      ref={keepAlive && !isMobileWeb() ? ref : null}
+      isRemoved={isRemoved}
+    >
       {message && <span>{message}</span>}
       {children}
     </Container>
