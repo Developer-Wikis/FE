@@ -26,7 +26,7 @@ interface UserContextTypes {
   currentUser: ICurrentUser;
   logout: () => void;
   updateUser: (token: string) => void;
-  setToken: ({ token, refreshToken }: Token) => void;
+  login: ({ token, refreshToken }: Token) => void;
 }
 
 export const UserContext = createContext<UserContextTypes>({} as UserContextTypes);
@@ -35,9 +35,10 @@ const UserProvider = ({ children }: { children: ReactNode }) => {
   const [currentUser, setCurrentUser] = useState(initialValue);
   const storage = useStorage('local');
 
-  const setToken = useCallback(({ token, refreshToken }: Token) => {
+  const login = useCallback(({ token, refreshToken }: Token) => {
     storage.setItem(LOCAL_KEY.token, token);
     storage.setItem(LOCAL_KEY.refresh, refreshToken);
+    updateUser(token);
   }, []);
 
   const updateUser = useCallback(async (token: string) => {
@@ -69,7 +70,7 @@ const UserProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   return (
-    <UserContext.Provider value={{ currentUser, updateUser, logout, setToken }}>
+    <UserContext.Provider value={{ currentUser, updateUser, logout, login }}>
       {children}
     </UserContext.Provider>
   );

@@ -13,12 +13,12 @@ import { UserContext } from '~/context/user';
 const Login = () => {
   const router = useRouter();
   const [googleUrl, setGoogleUrl] = useState('');
-  const { setToken } = useContext(UserContext);
+  const { login } = useContext(UserContext);
 
   const requestLogin = async (code: string) => {
     try {
       const res = await googleLogin({ code, redirectUrl: `${window.location.origin}/login` });
-      setToken({ token: res.data.jwtToken, refreshToken: res.data.refreshToken });
+      login({ token: res.data.jwtToken, refreshToken: res.data.refreshToken });
       router.push('/');
     } catch (e) {
       alert('로그인에 실패했습니다.');
