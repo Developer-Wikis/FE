@@ -51,6 +51,9 @@ export const theme = {
       line-height: 1.5;
     `,
   },
+  space: {
+    mobileSide: `16px;`,
+  },
 };
 
 export type ThemeColors = keyof typeof theme.colors;
