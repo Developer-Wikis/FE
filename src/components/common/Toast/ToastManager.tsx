@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { useRef, useState, useEffect, useCallback } from 'react';
+import { mediaQuery } from '~/utils/helper/mediaQuery';
 import ToastItem, { ToastItemProps } from './ToastItem';
 
 export type TCreateToast = (props: Omit<ToastItemProps, 'onTimeout'>) => void;
@@ -52,4 +53,9 @@ const StyledUl = styled.ul`
   bottom: 40px;
   transform: translateX(-50%);
   z-index: 2000;
+
+  ${mediaQuery('sm')} {
+    // 16px -> space.mobileSlide 로 변경
+    width: calc(100% - calc(16px * 2));
+  }
 `;

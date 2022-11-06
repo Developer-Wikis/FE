@@ -4,6 +4,7 @@ import useTimeoutFn from '~/hooks/useTimeoutFn';
 import { theme } from '~/types/theme';
 import useHover from '~/hooks/useHover';
 import { isMobileWeb } from '~/utils/helper/device';
+import { mediaQuery } from '~/utils/helper/mediaQuery';
 
 export interface ToastItemProps {
   message?: string;
@@ -37,7 +38,7 @@ const ToastItem = ({
     if (isHover) {
       clearTimer();
     } else {
-      setTimer();
+      // setTimer();
     }
   }, [isHover]);
 
@@ -50,10 +51,10 @@ const ToastItem = ({
 
   return (
     <Container
-      show={show}
+      show={true}
       isMessage={!!message}
       ref={keepAlive && !isMobileWeb() ? ref : null}
-      isRemoved={isRemoved}
+      isRemoved={false}
     >
       {message && <span>{message}</span>}
       {children}
@@ -110,6 +111,10 @@ const Container = styled.li<{ show: boolean; isMessage: boolean; isRemoved: bool
       opacity: 0;
       transform: translateY(-200%);
     }
+  }
+
+  ${mediaQuery('sm')} {
+    width: 100%;
   }
 `;
 
