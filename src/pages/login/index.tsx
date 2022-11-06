@@ -33,6 +33,12 @@ const Login = () => {
     setGoogleUrl(res.data);
   };
 
+  const onClickGoogleLogin = () => {
+    if (googleUrl.length === 0) {
+      alert('로그인 연결에 실패했습니다.');
+    }
+  };
+
   useEffect(() => {
     requestGoogleLink();
   }, []);
@@ -53,7 +59,7 @@ const Login = () => {
         <Icon name="LogoIcon" size="110" />
       </LogoArea>
       <SocialButtons>
-        <SocialLink linkType="borderGray" size="lg" href={googleUrl}>
+        <SocialLink linkType="borderGray" size="lg" href={googleUrl} onClick={onClickGoogleLogin}>
           <Icon name="Google" />
           <span>구글 계정으로 계속하기</span>
         </SocialLink>
