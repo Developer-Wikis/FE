@@ -13,6 +13,7 @@ import { GTM_ID, pageview } from '../lib/gtm';
 import Script from 'next/script';
 import { isProduction } from '../utils/helper/checkType';
 import UserProvider from '~/context/user';
+import ToastContainer from '../components/common/Toast/index';
 
 if (process.env.NEXT_PUBLIC_API_MOCKING === 'enabled') {
   import('../mocks');
@@ -53,6 +54,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             <Component {...pageProps} />
           </MainContainer>
           <Footer />
+          {ToastContainer.render()}
         </UserProvider>
       </ThemeProvider>
     </>
