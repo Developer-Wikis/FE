@@ -17,9 +17,9 @@ const Header = () => {
   const router = useRouter();
   const [selectedCategory, setSelectedCategory] = useState('');
   const [isOpen, setIsOpen] = useState(false);
-  const storage = useStorage('local');
-  const { currentUser, logout, updateUser } = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(true);
+  const { currentUser, logout, updateUser } = useContext(UserContext);
+  const storage = useStorage('local');
 
   const getUserProfile = async () => {
     setIsLoading(true);
@@ -99,7 +99,7 @@ const Header = () => {
         </RightArea>
       </HeaderContent>
 
-      <Slide isOpen={isOpen} onClose={() => setIsOpen(false)} />
+      <Slide user={currentUser.user} isOpen={isOpen} onClose={() => setIsOpen(false)} />
     </StyledHeader>
   );
 };
