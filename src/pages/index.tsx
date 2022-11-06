@@ -6,7 +6,7 @@ import styled from '@emotion/styled';
 import { useEffect, useState } from 'react';
 import MiddleCategory from '~/components/common/MiddleCategory';
 import useAxios from '~/hooks/useAxios';
-import { getQuestionList } from '~/service/question';
+import questionApi from '~/service/question';
 import { IQuestionItem } from '~/types/question';
 import { useRouter } from 'next/router';
 import { isMainType, isSubWithAllType } from '~/utils/helper/checkType';
@@ -32,7 +32,7 @@ const Home: NextPage = () => {
   const [isEndPage, setIsEndPage] = useState(false);
 
   const router = useRouter();
-  const { request } = useAxios(getQuestionList, [queryParams]);
+  const { request } = useAxios(questionApi.getList, [queryParams]);
   const [isLoading, setIsLoading] = useState(false);
 
   const onIntersect: IntersectionObserverCallback = ([{ isIntersecting }]) => {

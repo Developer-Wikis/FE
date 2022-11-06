@@ -1,12 +1,6 @@
 import { createContext, ReactNode, useEffect, useState } from 'react';
 import useAxios from '~/hooks/useAxios';
-import {
-  checkCommentPassword,
-  createComment,
-  deleteComment,
-  editComment,
-  getCommentList,
-} from '~/service/comment';
+import commentApi from '~/service/comment';
 import { ICommentItem } from '~/types/comment';
 import { commentValuesType } from '../AddCommentForm';
 
@@ -37,7 +31,7 @@ interface CommentStoreProps {
 
 const CommentProvider = ({ children, questionId }: CommentStoreProps) => {
   const [comments, setComments] = useState<ICommentItem[]>([]);
-  const { isLoading, error, request } = useAxios(getCommentList, []);
+  const { isLoading, error, request } = useAxios(commentApi.getList, []);
   const [editId, setEditId] = useState<null | number>(null);
   const [passwordState, setPasswordState] = useState<PasswordState>({
     commentId: null,
@@ -59,7 +53,7 @@ const CommentProvider = ({ children, questionId }: CommentStoreProps) => {
   const onSubmitPassword = async (commentId: number, password: string) => {
     try {
       if (passwordState.action === 'delete') {
-        await deleteComment(questionId, commentId, password);
+        await commentApi.delete(questionId, commentId, password);
         await getComments();
         setPasswordState({ commentId: null, action: '', password: '' });
 
@@ -67,7 +61,7 @@ const CommentProvider = ({ children, questionId }: CommentStoreProps) => {
       }
 
       if (passwordState.action === 'edit') {
-        const isCorrectPassword = await checkCommentPassword(questionId, commentId, password);
+        const isCorrectPassword = await commentApi.checkPassword(questionId, commentId, password);
         if (isCorrectPassword.data) {
           setEditId(commentId);
           setPasswordState({ commentId: null, action: 'edit', password: password });
@@ -83,7 +77,7 @@ const CommentProvider = ({ children, questionId }: CommentStoreProps) => {
 
   const onAddComment = async (values: commentValuesType) => {
     try {
-      await createComment(questionId, values);
+      await commentApi.create(questionId, values);
       await getComments();
       setPasswordState({ commentId: null, action: '', password: '' });
     } catch (e) {
@@ -94,7 +88,7 @@ const CommentProvider = ({ children, questionId }: CommentStoreProps) => {
 
   const onEditComment = async (commentId: number, content: string) => {
     try {
-      await editComment(questionId, commentId, { password: passwordState.password, content });
+      await commentApi.edit(questionId, commentId, { password: passwordState.password, content });
       await getComments();
       setPasswordState({ commentId: null, action: '', password: '' });
       setEditId(null);

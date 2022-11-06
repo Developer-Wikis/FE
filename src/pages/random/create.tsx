@@ -4,7 +4,7 @@ import PageContainer from '~/components/common/PageContainer';
 import { MainType, SubWithAllType } from '~/utils/constant/category';
 import { useRouter } from 'next/router';
 import useStorage from '~/hooks/useStorage';
-import { getRandomQuestions } from '~/service/question';
+import questionApi from '~/service/question';
 import useAxios from '~/hooks/useAxios';
 import { isBoolean, isMainType, isString } from '~/utils/helper/checkType';
 import { isValidCategoryPair } from '~/utils/helper/validation';
@@ -54,7 +54,7 @@ const CreateRandom = () => {
   const [inputValues, setInputValues] = useState<InputValues>(initialInputValues);
   const [permission, setPermission] = useState<typeof initialPermission>(initialPermission);
 
-  const { request } = useAxios(getRandomQuestions, [
+  const { request } = useAxios(questionApi.getRandom, [
     inputValues.mainCategory,
     inputValues.subCategories,
   ]);
@@ -118,11 +118,10 @@ const CreateRandom = () => {
   };
 
   const handleExistHistory = () => {
-    const history = local.getItem<{ type: string; questions: IQuestionDetail[] } | null>(
+    const history = local.getItem<{ type: string; questions: IQuestionDetail[] }>(
       RANDOM_LOCAL_KEY.random,
-      null,
     );
-    const latest = local.getItem<number | null>('randomLatest', null);
+    const latest = local.getItem<number>('randomLatest');
     if (!history || !isValidRandomType(history.type)) {
       clearLocal();
       return;
@@ -139,7 +138,7 @@ const CreateRandom = () => {
 
   useEffect(() => {
     const [storedStep, stepOneValues, stepTwoValues] = Object.values(SESSION_KEY).map((key) =>
-      session.getItem(key, null),
+      session.getItem(key),
     );
     const queryStep = Number(router.query.step);
     if (queryStep === 0) {
