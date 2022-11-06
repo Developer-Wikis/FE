@@ -1,17 +1,17 @@
 import styled from '@emotion/styled';
-import { MouseEvent, SyntheticEvent, useState } from 'react';
+import { MouseEvent, useContext, useState } from 'react';
 import Link from '~/components/base/Link';
+import { UserContext } from '~/context/user';
 import useClickAway from '~/hooks/useClickAway';
+import { IUser } from '~/types/user';
+import Avatar from '../Avatar';
 
 interface ProfileDropdownProps {
-  user: {
-    // IUser로 변경
-    name: string;
-    profileUrl: string;
-  };
+  user: IUser;
 }
 
-const ProfileDropdown = ({ user: { name, profileUrl } }: ProfileDropdownProps) => {
+const ProfileDropdown = ({ user: { username, profileUrl } }: ProfileDropdownProps) => {
+  const { logout } = useContext(UserContext);
   const [open, setOpen] = useState(false);
   const ref = useClickAway<HTMLDetailsElement>(() => {
     if (open) handleClick();
@@ -26,12 +26,7 @@ const ProfileDropdown = ({ user: { name, profileUrl } }: ProfileDropdownProps) =
 
   const handleLogout = () => {
     handleClick();
-    // 로그아웃
-  };
-
-  const handleImageError = (e: SyntheticEvent<HTMLImageElement, Event>) => {
-    e.currentTarget.src =
-      'https://user-images.githubusercontent.com/96400112/199486983-984a02a3-3835-40fc-91a2-c1ca7e17e7a2.png';
+    logout();
   };
 
   return (
@@ -39,20 +34,13 @@ const ProfileDropdown = ({ user: { name, profileUrl } }: ProfileDropdownProps) =
       <StyledSummary>
         <ProfileImage>
           <span className="screen-out">프로필 메뉴 열기</span>
-          <img
-            src={profileUrl}
-            alt="프로필 이미지"
-            width={46}
-            height={46}
-            onClick={handleToggle}
-            onError={handleImageError}
-          />
+          <Avatar src={profileUrl} size="md" onClick={handleToggle} />
         </ProfileImage>
       </StyledSummary>
 
       <Content>
         <UsernameContainer>
-          <Username>{name} 님</Username>
+          <Username>{username} 님</Username>
         </UsernameContainer>
 
         <StyledUl>
@@ -94,12 +82,6 @@ const StyledSummary = styled.summary`
 
 const ProfileImage = styled.div`
   height: 46px;
-
-  img {
-    border-radius: 50%;
-    border: 1px solid ${({ theme }) => theme.colors.gray300};
-    object-fit: cover;
-  }
 `;
 
 const Content = styled.div`

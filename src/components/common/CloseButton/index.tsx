@@ -6,7 +6,7 @@ interface CloseButtonProps {
 }
 
 const CloseButton = ({ onClick, ...props }: CloseButtonProps) => {
-  return <StyledButton name="Close" color="gray800" size="14" onClick={onClick} {...props} />;
+  return <StyledButton name="Close" color="gray800" size="20" onClick={onClick} {...props} />;
 };
 
 export default CloseButton;

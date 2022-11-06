@@ -4,21 +4,43 @@ import { useContext, useEffect, useState } from 'react';
 import Link from '~/components/base/Link';
 import PageContainer from '~/components/common/PageContainer';
 import Logo from '../Logo';
-import CategoryListItem from './CategoryListItem';
 import Icon from '~/components/base/Icon/index';
 import { mediaQuery } from '~/utils/helper/mediaQuery';
-import Slide from './Slide';
 import useStorage from '~/hooks/useStorage';
 import { LOCAL_KEY } from '~/utils/constant/user';
 import { UserContext } from '~/context/user';
+import Slide from './Slide';
+import CategoryListItem from './CategoryListItem';
 import ProfileDropdown from './ProfileDropdown';
 
 const Header = () => {
   const router = useRouter();
   const [selectedCategory, setSelectedCategory] = useState('');
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const { currentUser, logout, updateUser } = useContext(UserContext);
   const storage = useStorage('local');
-  const { currentUser } = useContext(UserContext);
+
+  const getUserProfile = async () => {
+    setIsLoading(true);
+    const token = storage.getItem(LOCAL_KEY.token, '');
+
+    // 로컬에서 토큰 변경 및 삭제 시
+    if (currentUser.token && !token && token !== currentUser.token) {
+      logout();
+    }
+
+    // 새로고침하여 userState 초기화 시
+    if (token && token !== currentUser.token) {
+      await updateUser(token);
+    }
+
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    getUserProfile();
+  }, []);
 
   useEffect(() => {
     if (!router.isReady) {
@@ -31,13 +53,6 @@ const Header = () => {
       setSelectedCategory('');
     }
   }, [router.isReady, router.query]);
-
-  useEffect(() => {
-    const token = storage.getItem(LOCAL_KEY.token, '');
-    if (token && token !== currentUser.token) {
-      /* 토큰으로 유저 정보 재발급 코드 작성 */
-    }
-  }, []);
 
   return (
     <StyledHeader>
@@ -70,14 +85,12 @@ const Header = () => {
         </LeftArea>
 
         <RightArea>
-          {/* id로 비교할 예정 */}
-          {!currentUser.token ? (
+          {!currentUser.token && !isLoading ? (
             <Link size="sm" linkType="borderGray" href="/login">
               로그인
             </Link>
           ) : (
-            // currentUser로 변경
-            <ProfileDropdown user={{ name: 'jini', profileUrl: 'https://picsum.photos/200/600' }} />
+            <ProfileDropdown user={currentUser.user} />
           )}
 
           <Link size="sm" linkType="red" href="/random/create?step=0" as="/random/create">
@@ -86,7 +99,7 @@ const Header = () => {
         </RightArea>
       </HeaderContent>
 
-      <Slide isOpen={isOpen} onClose={() => setIsOpen(false)} />
+      <Slide user={currentUser.user} isOpen={isOpen} onClose={() => setIsOpen(false)} />
     </StyledHeader>
   );
 };
@@ -158,7 +171,7 @@ const RightArea = styled.div`
   justify-content: center;
   align-items: center;
 
-  a:last-of-type {
+  & > a:last-of-type {
     margin-left: 14px;
   }
 
