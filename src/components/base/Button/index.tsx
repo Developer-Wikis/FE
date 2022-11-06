@@ -9,6 +9,8 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   style?: CSSProperties;
   size?: keyof typeof buttonSizes;
   loading?: boolean;
+  startIcon?: ReactNode;
+  endIcon?: ReactNode;
 }
 
 const Button = ({
@@ -17,12 +19,16 @@ const Button = ({
   children,
   size = 'md',
   loading,
+  startIcon,
+  endIcon,
   ...props
 }: ButtonProps) => {
   return (
     <StyledButton buttonType={buttonType} disabled={disabled || loading} size={size} {...props}>
+      {startIcon && <StartIcon>{startIcon}</StartIcon>}
       {loading && <Spinner />}
       <Content className={loading ? 'hidden' : ''}>{children}</Content>
+      {endIcon && <EndIcon>{endIcon}</EndIcon>}
     </StyledButton>
   );
 };
@@ -30,6 +36,9 @@ const Button = ({
 export default Button;
 
 const StyledButton = styled.button<ButtonProps>`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
   white-space: nowrap;
 
@@ -43,7 +52,19 @@ const StyledButton = styled.button<ButtonProps>`
 `;
 
 const Content = styled.span`
+  line-height: inherit;
+
   &.hidden {
     visibility: hidden;
   }
+`;
+
+const StartIcon = styled.span`
+  margin-left: -3px;
+  margin-right: 6px;
+`;
+
+const EndIcon = styled.span`
+  margin-right: -3px;
+  margin-left: 6px;
 `;

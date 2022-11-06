@@ -13,7 +13,8 @@ const Article = ({ full = false, ...props }: ArticleProps) => {
 export default Article;
 
 const StyledArticle = styled.article<{ full: boolean }>`
-  width: ${({ full }) => (full ? '100%' : '440px')};
+  width: 100%;
+  max-width: ${({ full }) => (full ? '100%' : '440px')};
   margin: 0 auto;
   margin-top: 50px;
   padding: ${({ full }) => (full ? '30px 0 50px' : '42px 28px 45px')};

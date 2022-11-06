@@ -17,14 +17,22 @@ const MoveButtons = ({
 }: MoveButtonProps) => {
   return (
     <Buttons>
-      <PrevButton buttonType="borderGray" onClick={onPrev} disabled={disabledPrev}>
-        <Icon name="ArrowLeft" size="20" color="gray600" />
-        <span>이전 질문</span>
-      </PrevButton>
-      <NextButton buttonType="borderGray" onClick={onNext} disabled={disabledNext}>
-        <span> 다음 질문</span>
-        <Icon name="ArrowRight" size="20" color="gray600" />
-      </NextButton>
+      <Button
+        buttonType="borderGray"
+        onClick={onPrev}
+        disabled={disabledPrev}
+        startIcon={<Icon name="ArrowLeft" size="16" color="gray600" />}
+      >
+        이전 질문
+      </Button>
+      <Button
+        buttonType="borderGray"
+        onClick={onNext}
+        disabled={disabledNext}
+        endIcon={<Icon name="ArrowRight" size="16" color="gray600" />}
+      >
+        다음 질문
+      </Button>
     </Buttons>
   );
 };
@@ -36,18 +44,4 @@ const Buttons = styled.div`
   display: flex;
   justify-content: space-between;
   margin-top: 56px;
-`;
-
-const PrevButton = styled(Button)`
-  padding-left: 16px;
-  span {
-    display: flex;
-  }
-`;
-
-const NextButton = styled(Button)`
-  padding-right: 16px;
-  span {
-    display: flex;
-  }
 `;
