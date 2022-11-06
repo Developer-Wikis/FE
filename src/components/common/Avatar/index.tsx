@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import Image from 'next/image';
-import { MouseEvent, SyntheticEvent, useState } from 'react';
+import { MouseEvent, SyntheticEvent, useEffect, useState } from 'react';
 import { AvatarSize, AvatarSizes } from './types';
 
 interface AvatarProps {
@@ -13,10 +13,10 @@ interface AvatarProps {
 const defaultImage = '/assets/profile-default.jpeg';
 
 const Avatar = ({ src, size = 'md', alt = '프로필이미지', ...props }: AvatarProps) => {
-  const [imageUrl, setImageUrl] = useState(src || defaultImage);
+  const imageUrl = src || defaultImage;
 
-  const handleImageError = () => {
-    setImageUrl(defaultImage);
+  const handleImageError = (e: SyntheticEvent<HTMLImageElement, Event>) => {
+    e.currentTarget.src = defaultImage;
   };
 
   return (
