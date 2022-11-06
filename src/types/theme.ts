@@ -52,9 +52,10 @@ export const theme = {
     `,
   },
   space: {
-    mobileSide: `16px;`,
+    mobileSide: '16px',
   },
 };
 
 export type ThemeColors = keyof typeof theme.colors;
 export type ThemeFontStyle = keyof typeof theme.fontStyle;
+export type ThemeSpace = keyof typeof theme.space;

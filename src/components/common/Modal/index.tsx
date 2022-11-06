@@ -43,5 +43,5 @@ const ModalContainer = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  padding: 0 16px;
+  padding: 0 ${({ theme }) => theme.space.mobileSide};
 `;
