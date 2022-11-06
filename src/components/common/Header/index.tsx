@@ -19,6 +19,28 @@ const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const storage = useStorage('local');
   const { currentUser, logout, updateUser } = useContext(UserContext);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const getUserProfile = async () => {
+    setIsLoading(true);
+    const token = storage.getItem(LOCAL_KEY.token, '');
+
+    // 로컬에서 토큰 변경 및 삭제 시
+    if (currentUser.token && !token && token !== currentUser.token) {
+      logout();
+    }
+
+    // 새로고침하여 userState 초기화 시
+    if (token && token !== currentUser.token) {
+      await updateUser(token);
+    }
+
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    getUserProfile();
+  }, []);
 
   useEffect(() => {
     if (!router.isReady) {
@@ -31,20 +53,6 @@ const Header = () => {
       setSelectedCategory('');
     }
   }, [router.isReady, router.query]);
-
-  useEffect(() => {
-    const token = storage.getItem(LOCAL_KEY.token, '');
-
-    // 로컬에서 토큰 변경 및 삭제 시
-    if (currentUser.token && !token && token !== currentUser.token) {
-      logout();
-    }
-
-    // 새로고침하여 userState 초기화 시
-    if (token && token !== currentUser.token) {
-      updateUser(token);
-    }
-  }, []);
 
   return (
     <StyledHeader>
@@ -77,7 +85,7 @@ const Header = () => {
         </LeftArea>
 
         <RightArea>
-          {!currentUser.token ? (
+          {!currentUser.token && !isLoading ? (
             <Link size="sm" linkType="borderGray" href="/login">
               로그인
             </Link>
