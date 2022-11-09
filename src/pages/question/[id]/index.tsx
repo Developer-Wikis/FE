@@ -6,16 +6,27 @@ import PostHeader from '~/components/domain/question/PostHeader';
 import Comment from '~/components/common/Comment';
 import questionApi from '~/service/question';
 import { NextPageContext } from 'next';
-import { IQuestionDetail, ICategoryQuery } from '~/types/question';
+import { ICategoryQuery } from '~/types/question';
 import QuestionMoveButtons from '~/components/domain/question/QuestionMoveButtons';
 import Recorder from '~/components/domain/question/Recorder';
 import { isMainType, isString, isSubWithAllType } from '~/utils/helper/checkType';
+import { QueryClient, dehydrate } from '@tanstack/react-query';
+import { useQuestionDetail } from '~/react-query/useQuestion';
+import { QUERY_KEY } from '~/react-query/queryKey';
 
 /*
 
 TODO: progress UI 처리
 
 */
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60,
+    },
+  },
+});
 
 export const getServerSideProps = async (context: NextPageContext) => {
   const { id, mainCategory, subCategory } = context.query;
@@ -35,9 +46,17 @@ export const getServerSideProps = async (context: NextPageContext) => {
 
   try {
     const query = { mainCategory, subCategory };
-    const response = await questionApi.getDetail(questionId, query);
+
+    await queryClient.prefetchQuery([QUERY_KEY.questionDetail, questionId], () => {
+      questionApi.getDetail(questionId, query);
+    });
+
     return {
-      props: { detailData: response.data || null, query },
+      props: {
+        questionId,
+        query,
+        dehydratedState: dehydrate(queryClient),
+      },
     };
   } catch (e) {
     return {
@@ -47,11 +66,17 @@ export const getServerSideProps = async (context: NextPageContext) => {
 };
 
 interface QuestionDetailProps {
-  detailData: IQuestionDetail;
+  questionId: number;
   query: ICategoryQuery;
 }
 
-const QuestionDetail = ({ detailData, query }: QuestionDetailProps) => {
+const QuestionDetail = ({ questionId, query }: QuestionDetailProps) => {
+  const { detailData } = useQuestionDetail(questionId, query);
+
+  if (!detailData) {
+    return;
+  }
+
   return (
     <Container>
       <PostHeader subCategory={detailData.subCategory} title={detailData.title} />
