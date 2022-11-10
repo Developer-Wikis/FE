@@ -18,6 +18,7 @@ import ToastContainer from '../components/common/Toast/index';
 import { Hydrate, QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from '~/react-query/queryClient';
 import type { DehydratedState } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 if (process.env.NEXT_PUBLIC_API_MOCKING === 'enabled') {
   import('../mocks');
@@ -62,6 +63,7 @@ function MyApp({ Component, pageProps }: AppProps<{ dehydratedState: DehydratedS
               {ToastContainer.render()}
             </UserProvider>
           </ThemeProvider>
+          <ReactQueryDevtools initialIsOpen={false} />
         </Hydrate>
       </QueryClientProvider>
     </>
