@@ -13,6 +13,7 @@ import { isMainType, isSubWithAllType } from '~/utils/helper/checkType';
 import useIntersectionObserver from '~/hooks/useIntersectionObserver';
 import { MainType, SubWithAllType, SUB_CATEGORIES } from '~/utils/constant/category';
 import { isValidCategoryPair } from '~/utils/helper/validation';
+import { mediaQuery } from '~/utils/helper/mediaQuery';
 
 type QueryParams = {
   mainCategory: MainType;
@@ -143,4 +144,8 @@ export default Home;
 
 const MainContent = styled(PageContainer)`
   margin-top: 32px;
+
+  ${mediaQuery('sm')} {
+    margin-top: 0;
+  }
 `;

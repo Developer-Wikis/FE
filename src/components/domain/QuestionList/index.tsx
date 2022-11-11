@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { forwardRef, Ref } from 'react';
 import { IQuestionItem, ICategoryQuery } from '~/types/question';
+import { mediaQuery } from '~/utils/helper/mediaQuery';
 import QuestionItem from './QuestionItem';
 
 interface QuestionListProps {
@@ -30,4 +31,9 @@ export default QuestionList;
 const Container = styled.ul`
   margin-top: 32px;
   border-top: 1px solid ${({ theme }) => theme.colors.gray300};
+
+  ${mediaQuery('sm')} {
+    margin-top: 0;
+    border-top: 0;
+  }
 `;

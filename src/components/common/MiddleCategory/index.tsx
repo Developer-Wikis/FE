@@ -55,6 +55,7 @@ const CategoryList = styled.ul`
     flex-wrap: nowrap;
     justify-content: start;
     overflow-x: scroll;
+    padding: 8px 0 4px;
 
     li {
       flex-shrink: 0;
