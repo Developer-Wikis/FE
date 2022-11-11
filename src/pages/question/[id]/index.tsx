@@ -1,18 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PageContainer from '~/components/common/PageContainer';
 import styled from '@emotion/styled';
 import TailQuestions from '~/components/domain/question/TailQuestions';
 import PostHeader from '~/components/domain/question/PostHeader';
 import Comment from '~/components/common/Comment';
 import questionApi from '~/service/question';
-import { NextPageContext } from 'next';
+import { GetServerSideProps, GetServerSidePropsResult, NextPageContext } from 'next';
 import { ICategoryQuery } from '~/types/question';
 import QuestionMoveButtons from '~/components/domain/question/QuestionMoveButtons';
 import Recorder from '~/components/domain/question/Recorder';
 import { isMainType, isString, isSubWithAllType } from '~/utils/helper/checkType';
-import { QueryClient, dehydrate } from '@tanstack/react-query';
+import { QueryClient, dehydrate, useQueryClient } from '@tanstack/react-query';
 import { useQuestionDetail } from '~/react-query/useQuestion';
 import { QUERY_KEY } from '~/react-query/queryKey';
+import { useRouter } from 'next/router';
 
 /*
 
@@ -32,13 +33,12 @@ export const getServerSideProps = async (context: NextPageContext) => {
   const { id, mainCategory, subCategory } = context.query;
   const questionId = Number(id);
 
-  if (!isString(id) || !isMainType(mainCategory) || !isSubWithAllType(subCategory)) {
-    return {
-      notFound: true,
-    };
-  }
-
-  if (Number.isNaN(questionId)) {
+  if (
+    !isString(id) ||
+    !isMainType(mainCategory) ||
+    !isSubWithAllType(subCategory) ||
+    Number.isNaN(questionId)
+  ) {
     return {
       notFound: true,
     };
@@ -47,9 +47,9 @@ export const getServerSideProps = async (context: NextPageContext) => {
   try {
     const query = { mainCategory, subCategory };
 
-    await queryClient.prefetchQuery([QUERY_KEY.questionDetail, questionId], () => {
-      questionApi.getDetail(questionId, query);
-    });
+    await queryClient.prefetchQuery([QUERY_KEY.questionDetail, questionId, query], () =>
+      questionApi.getDetail(questionId, query),
+    );
 
     return {
       props: {
@@ -70,8 +70,30 @@ interface QuestionDetailProps {
   query: ICategoryQuery;
 }
 
-const QuestionDetail = ({ questionId, query }: QuestionDetailProps) => {
+const QuestionDetail = ({ questionId: defaultId, query }: QuestionDetailProps) => {
+  const [questionId, setQuestionId] = useState(defaultId);
   const { detailData } = useQuestionDetail(questionId, query);
+  const router = useRouter();
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    const { id } = router.query;
+    const numberId = Number(id);
+
+    /* CSR 이동 체크 */
+    if (numberId !== questionId) {
+      setQuestionId(numberId);
+    }
+  }, [router.query.id]);
+
+  useEffect(() => {
+    /* 다음 페이지 데이터 미리 받아오기 */
+    if (detailData && detailData.nextId) {
+      queryClient.prefetchQuery([QUERY_KEY.questionDetail, detailData.nextId, query], () =>
+        questionApi.getDetail(detailData.nextId, query),
+      );
+    }
+  }, [detailData?.nextId]);
 
   if (!detailData) {
     return;

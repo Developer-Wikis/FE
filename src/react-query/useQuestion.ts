@@ -8,7 +8,7 @@ export const useQuestionDetail = (questionId: number, query: ICategoryQuery) => 
   const queryFn = () => questionApi.getDetail(questionId, query);
   const router = useRouter();
 
-  const { data: detailData } = useQuery([QUERY_KEY.questionDetail, questionId], {
+  const { data: detailData } = useQuery([QUERY_KEY.questionDetail, questionId, query], {
     queryFn,
     onError: () => {
       alert('서버에 문제가 있습니다.');
