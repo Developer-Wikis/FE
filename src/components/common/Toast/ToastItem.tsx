@@ -38,7 +38,7 @@ const ToastItem = ({
     if (isHover) {
       clearTimer();
     } else {
-      // setTimer();
+      setTimer();
     }
   }, [isHover]);
 
@@ -51,10 +51,10 @@ const ToastItem = ({
 
   return (
     <Container
-      show={true}
+      show={show}
       isMessage={!!message}
       ref={keepAlive && !isMobileWeb() ? ref : null}
-      isRemoved={false}
+      isRemoved={isRemoved}
     >
       {message && <span>{message}</span>}
       {children}
