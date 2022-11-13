@@ -2,7 +2,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import questionApi from '~/service/question';
 import { ICategoryQuery } from '~/types/question';
-import { QUERY_KEY } from './queryKey';
+import { QUERY_KEY } from '../queryKey';
 
 interface QuestionDetailQueryKey {
   queryKey: [string, number, ICategoryQuery];

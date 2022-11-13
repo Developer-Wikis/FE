@@ -1,6 +1,6 @@
 import commentApi from '~/service/comment';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { QUERY_KEY } from './queryKey';
+import { QUERY_KEY } from '../queryKey';
 
 export const useComment = (questionId: number) => {
   const queryClient = useQueryClient();

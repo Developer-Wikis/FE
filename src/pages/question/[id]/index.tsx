@@ -11,7 +11,7 @@ import QuestionMoveButtons from '~/components/domain/question/QuestionMoveButton
 import Recorder from '~/components/domain/question/Recorder';
 import { isMainType, isString, isSubWithAllType } from '~/utils/helper/checkType';
 import { QueryClient, dehydrate, useQueryClient } from '@tanstack/react-query';
-import { useQuestionDetail } from '~/react-query/useQuestion';
+import { useQuestionDetail } from '~/react-query/hooks/useQuestion';
 import { QUERY_KEY } from '~/react-query/queryKey';
 import { useRouter } from 'next/router';
 

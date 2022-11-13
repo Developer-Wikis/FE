@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useState } from 'react';
-import { useComment } from '~/react-query/useComment';
+import { useComment } from '~/react-query/hooks/useComment';
 import commentApi from '~/service/comment';
 import { ICommentItem } from '~/types/comment';
 import { commentValuesType } from '../AddCommentForm';
