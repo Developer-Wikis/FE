@@ -73,3 +73,11 @@ export const isValidCategoryPair = (main: MainType, sub: SubWithAllType) => {
 export const isValidRandomType = (type: unknown) => {
   return isString(type) && ['voice', 'text'].includes(type);
 };
+
+export const isValidImageFileExtension = (file: File) => {
+  return /\.(gif|jpg|jpeg|png|heic)$/i.test(file.name);
+};
+
+export const isValidFileSize = (size: number, maxMB: number) => {
+  return size < 1024 * 1024 * maxMB;
+};
