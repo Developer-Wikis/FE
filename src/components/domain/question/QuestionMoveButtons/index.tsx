@@ -12,11 +12,15 @@ const QuestionMoveButtons = ({ categoryQuery, nextId, prevId }: QuestionMoveButt
   const router = useRouter();
 
   const onMovePrev = () => {
-    router.push({ pathname: `/question/${prevId}`, query: { ...categoryQuery } });
+    router.push({ pathname: `/question/${prevId}`, query: { ...categoryQuery } }, undefined, {
+      shallow: true,
+    });
   };
 
   const onMoveNext = () => {
-    router.push({ pathname: `/question/${nextId}`, query: { ...categoryQuery } });
+    router.push({ pathname: `/question/${nextId}`, query: { ...categoryQuery } }, undefined, {
+      shallow: true,
+    });
   };
 
   return (

@@ -2,7 +2,7 @@ import { unauth } from './base';
 
 const commentApi = {
   getList(questionId: number) {
-    return unauth.get(`/questions/${questionId}/comments`);
+    return unauth.get(`/questions/${questionId}/comments`).then((res) => res.data);
   },
   create(questionId: number, payload: { nickname: string; password: string; content: string }) {
     return unauth.post(`/questions/${questionId}/comments`, payload);

@@ -1,5 +1,5 @@
-import { createContext, ReactNode, useEffect, useState } from 'react';
-import useAxios from '~/hooks/useAxios';
+import { createContext, ReactNode, useState } from 'react';
+import { useComment } from '~/react-query/hooks/useComment';
 import commentApi from '~/service/comment';
 import { ICommentItem } from '~/types/comment';
 import { commentValuesType } from '../AddCommentForm';
@@ -29,22 +29,17 @@ interface CommentStoreProps {
   questionId: number;
 }
 
+/* 캐시를 통해 상세페이지가 렌더되고, comment가 나타나기까지 약간의 시간이 딜레이 되는 상태임 */
+
 const CommentProvider = ({ children, questionId }: CommentStoreProps) => {
-  const [comments, setComments] = useState<ICommentItem[]>([]);
-  const { isLoading, error, request } = useAxios(commentApi.getList, []);
+  const { comments, updateComments } = useComment(questionId);
+
   const [editId, setEditId] = useState<null | number>(null);
   const [passwordState, setPasswordState] = useState<PasswordState>({
     commentId: null,
     action: '',
     password: '',
   });
-
-  const getComments = async () => {
-    const result = await request(questionId);
-    if (result) {
-      setComments(result.data);
-    }
-  };
 
   const onOpenPassword = (commentId: number | null, action: CommentActionType) => {
     setPasswordState({ commentId, action, password: '' });
@@ -54,7 +49,8 @@ const CommentProvider = ({ children, questionId }: CommentStoreProps) => {
     try {
       if (passwordState.action === 'delete') {
         await commentApi.delete(questionId, commentId, password);
-        await getComments();
+
+        await updateComments();
         setPasswordState({ commentId: null, action: '', password: '' });
 
         return;
@@ -78,7 +74,7 @@ const CommentProvider = ({ children, questionId }: CommentStoreProps) => {
   const onAddComment = async (values: commentValuesType) => {
     try {
       await commentApi.create(questionId, values);
-      await getComments();
+      await updateComments();
       setPasswordState({ commentId: null, action: '', password: '' });
     } catch (e) {
       // 상태코드에 따라 다르게 에러 출력하기
@@ -89,7 +85,7 @@ const CommentProvider = ({ children, questionId }: CommentStoreProps) => {
   const onEditComment = async (commentId: number, content: string) => {
     try {
       await commentApi.edit(questionId, commentId, { password: passwordState.password, content });
-      await getComments();
+      await updateComments();
       setPasswordState({ commentId: null, action: '', password: '' });
       setEditId(null);
     } catch (e) {
@@ -101,10 +97,6 @@ const CommentProvider = ({ children, questionId }: CommentStoreProps) => {
   const onCancelEdit = () => {
     setEditId(null);
   };
-
-  useEffect(() => {
-    getComments();
-  }, []);
 
   return (
     <CommentContext.Provider

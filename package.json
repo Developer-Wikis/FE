@@ -11,6 +11,8 @@
   "dependencies": {
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
+    "@tanstack/react-query": "^4.14.5",
+    "@tanstack/react-query-devtools": "^4.14.5",
     "axios": "^0.27.2",
     "emailjs-com": "^3.2.0",
     "next": "12.3.1",
