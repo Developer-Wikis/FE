@@ -72,9 +72,8 @@ interface QuestionDetailProps {
 
 const QuestionDetail = ({ questionId: defaultId, query }: QuestionDetailProps) => {
   const [questionId, setQuestionId] = useState(defaultId);
-  const { detailData } = useQuestionDetail(questionId, query);
+  const { detailData, prefetchDetail } = useQuestionDetail(questionId, query);
   const router = useRouter();
-  const queryClient = useQueryClient();
 
   useEffect(() => {
     const { id } = router.query;
@@ -87,11 +86,15 @@ const QuestionDetail = ({ questionId: defaultId, query }: QuestionDetailProps) =
   }, [router.query.id]);
 
   useEffect(() => {
-    /* 다음 페이지 데이터 미리 받아오기 */
-    if (detailData && detailData.nextId) {
-      queryClient.prefetchQuery([QUERY_KEY.questionDetail, detailData.nextId, query], () =>
-        questionApi.getDetail(detailData.nextId, query),
-      );
+    /* 이전,다음 페이지 데이터 미리 받아오기 */
+    if (detailData) {
+      if (detailData.nextId) {
+        prefetchDetail(detailData.nextId);
+      }
+
+      if (detailData.prevId) {
+        prefetchDetail(detailData.prevId);
+      }
     }
   }, [detailData?.nextId]);
 
