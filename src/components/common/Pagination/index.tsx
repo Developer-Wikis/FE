@@ -7,20 +7,21 @@ const PAGE_SIZE = 20;
 const ZERO_INDEX = 1;
 
 interface PaginationProps {
-  totalItem: number;
+  totalElements: number;
   current?: number;
   pageSize?: number;
   onChange: (page: number) => void;
 }
 
 const Pagination = ({
-  totalItem,
+  totalElements,
   current = 0,
   pageSize = PAGE_SIZE,
   onChange,
+  ...props
 }: PaginationProps) => {
   const [currentPage, setCurrentPage] = useState(current);
-  const totalPage = Math.ceil(totalItem / pageSize);
+  const totalPage = Math.ceil(totalElements / pageSize);
 
   const handleChange = (page: number) => {
     if (page === currentPage) return;
@@ -30,7 +31,7 @@ const Pagination = ({
   };
 
   return (
-    <Container>
+    <Container {...props}>
       {totalPage > VIEW_PAGE_SIZE && (
         <MoveButton onClick={() => handleChange(currentPage - 1)} disabled={currentPage <= 0}>
           <span className="screen-out">이전 페이지로 이동</span>
