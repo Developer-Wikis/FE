@@ -1,16 +1,18 @@
 import styled from '@emotion/styled';
 import { forwardRef, Ref } from 'react';
-import { IQuestionItem, ICategoryQuery } from '~/types/question';
+import { IQuestionItem } from '~/types/question';
 import { mediaQuery } from '~/utils/helper/mediaQuery';
-import QuestionItem from './QuestionItem';
+import QuestionItem, { QuestionItemProps } from './QuestionItem';
 
-interface QuestionListProps {
+interface QuestionListProps extends Omit<QuestionItemProps, 'question'> {
   questions: IQuestionItem[];
-  currentCategory: ICategoryQuery;
 }
 
 const QuestionList = forwardRef(
-  ({ questions, currentCategory }: QuestionListProps, ref?: Ref<HTMLLIElement>) => {
+  (
+    { questions, currentCategory, onBookmarkToggle }: QuestionListProps,
+    ref?: Ref<HTMLLIElement>,
+  ) => {
     return (
       <Container>
         {questions.map((question, index) => (
@@ -19,6 +21,7 @@ const QuestionList = forwardRef(
             key={question.id}
             ref={index === questions.length - 1 ? ref : null}
             currentCategory={currentCategory}
+            onBookmarkToggle={onBookmarkToggle}
           />
         ))}
       </Container>

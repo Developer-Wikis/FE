@@ -43,10 +43,12 @@ const QuestionItem = forwardRef(
           <QuestionInfo>
             <QuestionInfoItem title={String(question.viewCount)}>
               <Icon name="Eye" color="gray600" size="15" />
+              <span className="screen-out">조회수</span>
               {formatNumber(question.viewCount)}
             </QuestionInfoItem>
             <QuestionInfoItem title={String(question.commentCount)}>
               <Icon name="Comment" color="gray600" size="15" />
+              <span className="screen-out">댓글수</span>
               {formatNumber(question.commentCount)}
             </QuestionInfoItem>
           </QuestionInfo>
@@ -60,7 +62,7 @@ export default QuestionItem;
 
 const StyledItem = styled.li`
   display: flex;
-  align-items: center;
+  align-items: stretch;
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray300};
 
   ${mediaQuery('sm')} {
