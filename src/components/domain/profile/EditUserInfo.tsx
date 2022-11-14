@@ -5,12 +5,14 @@ import Label from '~/components/base/Label';
 import AddForm from '~/components/common/AddForm';
 import InputField from '~/components/common/InputField';
 import Modal from '~/components/common/Modal';
+import { IUser } from '~/types/user';
 import { mediaQuery } from '~/utils/helper/mediaQuery';
 import EditAvatar from './EditAvatar';
 import ImageEditModal from './ImageEditModal';
 
 interface EditUserInfoProps {
   // onEditImage: () => void;
+  // user: IUser;
   onEditNickname: (value: string) => void;
 }
 

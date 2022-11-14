@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useCallback, useState } from 'react';
 import useStorage from '~/hooks/useStorage';
-import { getUerInfo } from '~/service/user';
+import { getUserInfo } from '~/service/user';
 import { ICurrentUser } from '~/types/user';
 import { LOCAL_KEY } from '~/utils/constant/user';
 
@@ -44,13 +44,11 @@ const UserProvider = ({ children }: { children: ReactNode }) => {
 
   const updateUser = useCallback(async (token: string) => {
     try {
-      const { data } = await getUerInfo(token);
-
+      const { data } = await getUserInfo(token);
       if (!data) {
         logout();
         return;
       }
-
       setCurrentUser({
         token,
         user: {
