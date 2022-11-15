@@ -16,3 +16,4 @@ export { default as Google } from '~/assets/icons/google.svg';
 export { default as LogoIcon } from '~/assets/icons/logo-icon.svg';
 export { default as Menu } from '~/assets/icons/menu.svg';
 export { default as Hamburger } from '~/assets/icons/hamburger.svg';
+export { default as Upload } from '~/assets/icons/upload.svg';

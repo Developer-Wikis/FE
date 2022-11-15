@@ -18,7 +18,8 @@ const Login = () => {
   const requestLogin = async (code: string) => {
     try {
       const res = await googleLogin({ code, redirectUrl: `${window.location.origin}/login` });
-      login({ token: res.data.jwtToken, refreshToken: res.data.refreshToken });
+
+      login({ token: res.data.accessToken, refreshToken: res.data.refreshToken });
       router.push('/');
     } catch (e) {
       alert('로그인에 실패했습니다.');
