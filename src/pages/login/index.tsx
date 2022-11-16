@@ -1,25 +1,24 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import Link from '~/components/base/Link';
 import { useRouter } from 'next/router';
-import { getGoogleLink, googleLogin } from '~/service/oauth';
+import { getGoogleLink } from '~/service/oauth';
 import { isString } from '~/utils/helper/checkType';
 import Article from '~/components/common/Article';
 import PageTitle from '~/components/base/PageTitle';
 import PageDescription from '~/components/common/PageDescription';
 import styled from '@emotion/styled';
 import Icon from '~/components/base/Icon';
-import { UserContext } from '~/context/user';
+import { useAuth } from '~/react-query/hooks/useAuth';
 
 const Login = () => {
   const router = useRouter();
   const [googleUrl, setGoogleUrl] = useState('');
-  const { login } = useContext(UserContext);
+  const { login } = useAuth();
 
   const requestLogin = async (code: string) => {
     try {
-      const res = await googleLogin({ code, redirectUrl: `${window.location.origin}/login` });
-
-      login({ token: res.data.accessToken, refreshToken: res.data.refreshToken });
+      const redirectUrl = `${window.location.origin}/login`;
+      login(code, redirectUrl);
       router.push('/');
     } catch (e) {
       alert('로그인에 실패했습니다.');
