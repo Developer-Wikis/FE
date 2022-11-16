@@ -14,5 +14,5 @@ const authHeader = (token: string) => {
 };
 
 export const getUserInfo = (token: string) => {
-  return axios.get('/user', authHeader(token));
+  return axios.get('/user', authHeader(token)).then((res) => res.data);
 };
