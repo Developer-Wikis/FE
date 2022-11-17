@@ -12,7 +12,6 @@ import { useEffect } from 'react';
 import { GTM_ID, pageview } from '../lib/gtm';
 import Script from 'next/script';
 import { isProduction } from '../utils/helper/checkType';
-import UserProvider from '~/context/user';
 import ToastContainer from '../components/common/Toast/index';
 
 import { Hydrate, QueryClientProvider } from '@tanstack/react-query';
@@ -54,14 +53,12 @@ function MyApp({ Component, pageProps }: AppProps<{ dehydratedState: DehydratedS
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps.dehydratedState}>
           <ThemeProvider theme={theme}>
-            <UserProvider>
-              <Header />
-              <MainContainer>
-                <Component {...pageProps} />
-              </MainContainer>
-              <Footer />
-              {ToastContainer.render()}
-            </UserProvider>
+            <Header />
+            <MainContainer>
+              <Component {...pageProps} />
+            </MainContainer>
+            <Footer />
+            {ToastContainer.render()}
           </ThemeProvider>
           <ReactQueryDevtools initialIsOpen={false} />
         </Hydrate>
