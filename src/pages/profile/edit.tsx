@@ -1,8 +1,11 @@
 import styled from '@emotion/styled';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import PageTitle from '~/components/base/PageTitle';
 import PageContainer from '~/components/common/PageContainer';
 import DeleteAccount from '~/components/domain/profile/DeleteAccount';
 import EditUserInfo from '~/components/domain/profile/EditUserInfo';
+import { useUser } from '~/react-query/hooks/useUser';
 import { SUBMIT_CHECK } from '~/utils/helper/validation';
 
 /*
@@ -12,6 +15,9 @@ import { SUBMIT_CHECK } from '~/utils/helper/validation';
 */
 
 const ProfileEdit = () => {
+  const { user, fetchUser } = useUser();
+  const router = useRouter();
+
   const onEditNickname = (value: string) => {
     if (SUBMIT_CHECK.nickname.isValid(value)) {
       alert(SUBMIT_CHECK.nickname.message);
@@ -31,10 +37,29 @@ const ProfileEdit = () => {
     }
   };
 
+  const checkUser = async () => {
+    const user = await fetchUser();
+
+    if (!user) {
+      alert('잘못된 접근입니다.');
+      router.push('/');
+    }
+  };
+
+  useEffect(() => {
+    if (!user) {
+      checkUser();
+    }
+  }, []);
+
+  if (!user) {
+    return null;
+  }
+
   return (
     <Container>
       <PageTitle align="left">회원 정보 수정</PageTitle>
-      <EditUserInfo onEditNickname={onEditNickname} />
+      <EditUserInfo user={user} onEditNickname={onEditNickname} />
       <Line />
       <PageTitle align="left">계정 삭제</PageTitle>
       <DeleteAccount onDeleteAccount={onDeleteAccount} />

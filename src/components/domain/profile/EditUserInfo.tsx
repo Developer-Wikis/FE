@@ -5,20 +5,20 @@ import Label from '~/components/base/Label';
 import AddForm from '~/components/common/AddForm';
 import InputField from '~/components/common/InputField';
 import Modal from '~/components/common/Modal';
-import { IUser } from '~/types/user';
+import { User } from '~/types/user';
 import { mediaQuery } from '~/utils/helper/mediaQuery';
 import EditAvatar from './EditAvatar';
 import ImageEditModal from './ImageEditModal';
 
 interface EditUserInfoProps {
   // onEditImage: () => void;
-  // user: IUser;
+  user: User;
   onEditNickname: (value: string) => void;
 }
 
-const EditUserInfo = ({ onEditNickname }: EditUserInfoProps) => {
+const EditUserInfo = ({ user, onEditNickname }: EditUserInfoProps) => {
   const [isOpenModal, setIsOpenModal] = useState(false);
-  const [profileImage, setProfileImage] = useState<string>('');
+  const [profileImage, setProfileImage] = useState<string>(user.profileUrl);
 
   const onCloseModal = () => {
     setIsOpenModal(false);
@@ -41,7 +41,7 @@ const EditUserInfo = ({ onEditNickname }: EditUserInfoProps) => {
       <UserInfo>
         <InputField>
           <Label htmlFor="email">이메일</Label>
-          <Input id="email" name="email" value="이메일 넣기" disabled />
+          <Input id="email" name="email" value={user.email} disabled />
         </InputField>
         <InputField>
           <Label htmlFor="nickname">닉네임</Label>
@@ -50,7 +50,7 @@ const EditUserInfo = ({ onEditNickname }: EditUserInfoProps) => {
             name="nickname"
             id="nickname"
             onSubmit={onEditNickname}
-            defaultValue="지니짱효니짱"
+            defaultValue={user.username}
             reset={false}
           />
         </InputField>

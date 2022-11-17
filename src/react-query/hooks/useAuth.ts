@@ -32,17 +32,8 @@ export const useAuth = () => {
     clearUser();
   };
 
-  const updateUser = async (token: string) => {
-    const newUser = await getUserInfo(token);
-    setUser({
-      token,
-      ...newUser,
-    });
-  };
-
   return {
     login,
     logout,
-    updateUser,
   };
 };

@@ -19,14 +19,13 @@ const Header = () => {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  // const { currentUser, logout, updateUser } = useContext(UserContext);
-  const { user } = useUser();
-  const { logout, updateUser } = useAuth();
+  const { user, fetchUser } = useUser();
+  const { logout } = useAuth();
   const storage = useStorage('local');
 
   const getUserProfile = async () => {
-    setIsLoading(true);
     const token = storage.getItem(LOCAL_KEY.token, '');
+    setIsLoading(true);
 
     // 로컬에서 토큰 변경 및 삭제 시
     if (user && !token && token !== user.token) {
@@ -35,7 +34,7 @@ const Header = () => {
 
     // 새로고침하여 userState 초기화 시
     if (token && !user) {
-      await updateUser(token);
+      fetchUser();
     }
 
     setIsLoading(false);
