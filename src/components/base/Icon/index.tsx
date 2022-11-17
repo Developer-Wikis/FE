@@ -8,15 +8,36 @@ export interface IconProps {
   color?: ThemeColors;
   stroke?: ThemeColors;
   block?: boolean;
+  width?: string;
+  height?: string;
+  fill?: ThemeColors;
 }
 
-const Icon = ({ name, size = '20', color = 'white', block = true, ...props }: IconProps) => {
+const Icon = ({
+  name,
+  size = '20',
+  color = 'white',
+  block = true,
+  fill,
+  stroke,
+  width,
+  height,
+  ...props
+}: IconProps) => {
   const SvgIcon = icons[name];
+  const colorStyle =
+    fill && stroke
+      ? { fill: theme.colors[fill], stroke: theme.colors[stroke] }
+      : { color: theme.colors[color] };
+
   const StyledSvgIcon = styled(SvgIcon)<{ block: boolean }>`
     display: ${block ? 'block' : ''};
+    width: ${width ? width : size}px;
+    height: ${height ? height : size}px;
+    ${colorStyle}
   `;
 
-  return <StyledSvgIcon width={size} height={size} color={theme.colors[color]} {...props} />;
+  return <StyledSvgIcon {...props} />;
 };
 
 Icon.Button = IconButton;

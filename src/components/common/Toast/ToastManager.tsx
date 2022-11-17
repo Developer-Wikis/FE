@@ -55,7 +55,6 @@ const StyledUl = styled.ul`
   z-index: 2000;
 
   ${mediaQuery('sm')} {
-    // 16px -> space.mobileSlide 로 변경
-    width: calc(100% - calc(16px * 2));
+    width: calc(100% - calc(${({ theme }) => theme.space.mobileSide} * 2));
   }
 `;

@@ -28,3 +28,7 @@ export function isBrowser() {
 export function isProduction() {
   return process.env.NODE_ENV === 'production';
 }
+
+export function isMocking() {
+  return process.env.NEXT_PUBLIC_API_MOCKING === 'enabled';
+}

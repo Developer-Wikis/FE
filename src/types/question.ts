@@ -8,6 +8,7 @@ export interface IQuestionItem {
   viewCount: number;
   commentCount: number;
   createAt: string;
+  isBookmarked: boolean;
 }
 
 export interface IQuestion {
