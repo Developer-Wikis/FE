@@ -8,6 +8,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children?: ReactNode;
   style?: CSSProperties;
   size?: keyof typeof buttonSizes;
+  fullWidth?: boolean;
   loading?: boolean;
   startIcon?: ReactNode;
   endIcon?: ReactNode;
@@ -18,16 +19,24 @@ const Button = ({
   disabled,
   children,
   size = 'md',
+  fullWidth,
   loading,
   startIcon,
   endIcon,
   ...props
 }: ButtonProps) => {
   return (
-    <StyledButton buttonType={buttonType} disabled={disabled || loading} size={size} {...props}>
+    <StyledButton
+      isLoading={!!loading}
+      buttonType={buttonType}
+      fullWidth={fullWidth}
+      disabled={disabled || loading}
+      size={size}
+      {...props}
+    >
       {startIcon && <StartIcon>{startIcon}</StartIcon>}
       {loading && <Spinner />}
-      <Content className={loading ? 'hidden' : ''}>{children}</Content>
+      {children}
       {endIcon && <EndIcon>{endIcon}</EndIcon>}
     </StyledButton>
   );
@@ -35,8 +44,8 @@ const Button = ({
 
 export default Button;
 
-const StyledButton = styled.button<ButtonProps>`
-  display: flex;
+const StyledButton = styled.button<ButtonProps & { isLoading: boolean }>`
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   position: relative;
@@ -44,18 +53,12 @@ const StyledButton = styled.button<ButtonProps>`
 
   ${({ buttonType }) => buttonType && buttonStyle[buttonType]};
   ${({ size }) => size && buttonSizes[size]};
+  ${({ fullWidth }) => fullWidth && `width: 100%;`}
+  ${({ isLoading }) => isLoading && `color: transparent;`}
 
   &:disabled {
     opacity: 0.7;
     cursor: not-allowed;
-  }
-`;
-
-const Content = styled.span`
-  line-height: inherit;
-
-  &.hidden {
-    visibility: hidden;
   }
 `;
 

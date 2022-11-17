@@ -23,11 +23,6 @@ const ProfileEdit = () => {
     // Toast 띄우기
   };
 
-  const onEditImage = () => {
-    alert('프로필 이미지 수정');
-    // 프로필 모달 관련 코드 작성
-  };
-
   const onDeleteAccount = () => {
     if (confirm('확인 버튼을 누르면 계정이 삭제됩니다.')) {
       alert('계정 삭제');
@@ -39,7 +34,7 @@ const ProfileEdit = () => {
   return (
     <Container>
       <PageTitle align="left">회원 정보 수정</PageTitle>
-      <EditUserInfo onEditNickname={onEditNickname} onEditImage={onEditImage} />
+      <EditUserInfo onEditNickname={onEditNickname} />
       <Line />
       <PageTitle align="left">계정 삭제</PageTitle>
       <DeleteAccount onDeleteAccount={onDeleteAccount} />

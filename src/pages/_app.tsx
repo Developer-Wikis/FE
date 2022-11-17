@@ -15,11 +15,16 @@ import { isProduction } from '../utils/helper/checkType';
 import UserProvider from '~/context/user';
 import ToastContainer from '../components/common/Toast/index';
 
+import { Hydrate, QueryClientProvider } from '@tanstack/react-query';
+import { queryClient } from '~/react-query/queryClient';
+import type { DehydratedState } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+
 if (process.env.NEXT_PUBLIC_API_MOCKING === 'enabled') {
   import('../mocks');
 }
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps }: AppProps<{ dehydratedState: DehydratedState }>) {
   const router = useRouter();
   useEffect(() => {
     if (!isProduction()) return;
@@ -46,17 +51,21 @@ function MyApp({ Component, pageProps }: AppProps) {
           />
         </>
       )}
-
-      <ThemeProvider theme={theme}>
-        <UserProvider>
-          <Header />
-          <MainContainer>
-            <Component {...pageProps} />
-          </MainContainer>
-          <Footer />
-          {ToastContainer.render()}
-        </UserProvider>
-      </ThemeProvider>
+      <QueryClientProvider client={queryClient}>
+        <Hydrate state={pageProps.dehydratedState}>
+          <ThemeProvider theme={theme}>
+            <UserProvider>
+              <Header />
+              <MainContainer>
+                <Component {...pageProps} />
+              </MainContainer>
+              <Footer />
+              {ToastContainer.render()}
+            </UserProvider>
+          </ThemeProvider>
+          <ReactQueryDevtools initialIsOpen={false} />
+        </Hydrate>
+      </QueryClientProvider>
     </>
   );
 }

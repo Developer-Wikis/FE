@@ -13,6 +13,6 @@ const authHeader = (token: string) => {
   };
 };
 
-export const getUerInfo = (token: string) => {
+export const getUserInfo = (token: string) => {
   return axios.get('/user', authHeader(token));
 };
