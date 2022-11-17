@@ -74,6 +74,7 @@ const StyledLink = styled(Link)`
   display: flex;
   align-items: center;
   width: calc(100% - 59px);
+  overflow: hidden;
   padding: 17px 0;
 
   ${mediaQuery('sm')} {
@@ -93,15 +94,13 @@ const CategoryName = styled.div`
   text-overflow: ellipsis;
   flex-shrink: 0;
   ${({ theme }) => theme.fontStyle.body2}
-  font-weight: 500;
-  color: ${({ theme }) => theme.colors.gray600};
+  color: ${({ theme }) => theme.colors.gray500};
 
   ${mediaQuery('sm')} {
     width: 100px;
-    margin-bottom: 1px;
+    margin-bottom: 2px;
     padding: 0;
     ${({ theme }) => theme.fontStyle.caption}
-    font-weight: 400;
   }
 `;
 
