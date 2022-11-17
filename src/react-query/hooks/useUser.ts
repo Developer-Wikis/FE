@@ -7,7 +7,7 @@ import { LOCAL_KEY } from '~/utils/constant/user';
 
 interface UseUser {
   user: User | null;
-  setUser: (user: User) => void;
+  setUser: (user: User, refreshToken: string) => void;
   clearUser: () => void;
   fetchUser: () => Promise<User | null>;
 }
@@ -32,16 +32,20 @@ export const useUser = (): UseUser => {
 
   const { data: user = null } = useQuery<User>([QUERY_KEY.user], queryFn, {
     onError: () => {
-      storage.removeItem(LOCAL_KEY.token);
+      clearUser();
     },
     retry: false,
   });
 
-  const setUser = (newUser: User) => {
+  const setUser = (newUser: User, refreshToken: string) => {
+    storage.setItem(LOCAL_KEY.token, newUser.token);
+    storage.setItem(LOCAL_KEY.refresh, refreshToken);
     queryClient.setQueryData([QUERY_KEY.user], newUser);
   };
 
   const clearUser = () => {
+    storage.removeItem(LOCAL_KEY.token);
+    storage.removeItem(LOCAL_KEY.refresh);
     queryClient.setQueryData([QUERY_KEY.user], null);
   };
 

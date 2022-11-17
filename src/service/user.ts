@@ -4,7 +4,7 @@ const userApi = {
   getUserInfo: () => {
     return auth.get('/user').then((res) => res.data);
   },
-  removeAccount: (userId: number) => {
+  deleteAccount: (userId: number) => {
     return auth.delete(`/user/${userId}`).then((res) => res.data);
   },
 };

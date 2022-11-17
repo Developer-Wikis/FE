@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from '~/components/base/Link';
 import { useRouter } from 'next/router';
 import oauthApi from '~/service/oauth';
@@ -14,22 +14,10 @@ const Login = () => {
   const router = useRouter();
   const [googleUrl, setGoogleUrl] = useState('');
   const { login } = useAuth();
-
-  const requestLogin = async (code: string) => {
-    try {
-      const redirectUrl = `${window.location.origin}/login`;
-      login(code, redirectUrl);
-      router.push('/');
-    } catch (e) {
-      alert('로그인에 실패했습니다.');
-      router.push('/login');
-    }
-  };
+  const redirectUrl = useRef('');
 
   const requestGoogleLink = async () => {
-    const redirectUrl = `${window.location.origin}/login`;
-    const res = await oauthApi.getGoogleLink(redirectUrl);
-
+    const res = await oauthApi.getGoogleLink(redirectUrl.current);
     setGoogleUrl(res.data);
   };
 
@@ -40,6 +28,7 @@ const Login = () => {
   };
 
   useEffect(() => {
+    redirectUrl.current = `${window.location.origin}/login`;
     requestGoogleLink();
   }, []);
 
@@ -47,7 +36,7 @@ const Login = () => {
     const { code } = router.query;
 
     if (code && isString(code)) {
-      requestLogin(code);
+      login(code, redirectUrl.current);
     }
   }, [router.query]);
 

@@ -11,7 +11,7 @@ export interface ICurrentUser {
 
 export interface User {
   token: string;
-  id: number | null;
+  id: number;
   username: string;
   email: string;
   profileUrl: string;

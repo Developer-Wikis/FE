@@ -5,6 +5,7 @@ import PageTitle from '~/components/base/PageTitle';
 import PageContainer from '~/components/common/PageContainer';
 import DeleteAccount from '~/components/domain/profile/DeleteAccount';
 import EditUserInfo from '~/components/domain/profile/EditUserInfo';
+import { useAuth } from '~/react-query/hooks/useAuth';
 import { useUser } from '~/react-query/hooks/useUser';
 import { SUBMIT_CHECK } from '~/utils/helper/validation';
 
@@ -16,6 +17,7 @@ import { SUBMIT_CHECK } from '~/utils/helper/validation';
 
 const ProfileEdit = () => {
   const { user, fetchUser } = useUser();
+  const { deleteAccount } = useAuth();
   const router = useRouter();
 
   const onEditNickname = (value: string) => {
@@ -30,10 +32,8 @@ const ProfileEdit = () => {
   };
 
   const onDeleteAccount = () => {
-    if (confirm('확인 버튼을 누르면 계정이 삭제됩니다.')) {
-      alert('계정 삭제');
-      // 계정 삭제 API 코드 작성
-      // 홈으로 이동
+    if (confirm('확인 버튼을 누르면 계정이 삭제됩니다.') && user) {
+      deleteAccount(user.id);
     }
   };
 
