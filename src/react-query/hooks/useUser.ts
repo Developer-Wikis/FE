@@ -1,10 +1,9 @@
 import useStorage from '~/hooks/useStorage';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { getUserInfo } from '~/service/user';
+import userApi from '~/service/user';
 import { QUERY_KEY } from '../queryKey';
 import { User } from '~/types/user';
 import { LOCAL_KEY } from '~/utils/constant/user';
-import { useMemo } from 'react';
 
 interface UseUser {
   user: User | null;
@@ -16,7 +15,7 @@ interface UseUser {
 const tokenToUserData = async (token: string) => {
   if (!token) return null;
 
-  const userData = await getUserInfo(token);
+  const userData = await userApi.getUserInfo();
   return {
     ...userData,
     /* API username으로 변경되면 수정 */

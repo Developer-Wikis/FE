@@ -1,6 +1,5 @@
 import useStorage from '~/hooks/useStorage';
-import { googleLogin } from '~/service/oauth';
-import { getUserInfo } from '~/service/user';
+import oauthApi from '~/service/oauth';
 import { LOCAL_KEY } from '~/utils/constant/user';
 import { useUser } from './useUser';
 
@@ -9,7 +8,7 @@ export const useAuth = () => {
   const storage = useStorage('local');
 
   const login = async (code: string, redirectUrl: string) => {
-    const res = await googleLogin({ code, redirectUrl });
+    const res = await oauthApi.googleLogin({ code, redirectUrl });
 
     if (!res) {
       storage.removeItem(LOCAL_KEY.token);

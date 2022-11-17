@@ -1,7 +1,7 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from '~/components/base/Link';
 import { useRouter } from 'next/router';
-import { getGoogleLink } from '~/service/oauth';
+import oauthApi from '~/service/oauth';
 import { isString } from '~/utils/helper/checkType';
 import Article from '~/components/common/Article';
 import PageTitle from '~/components/base/PageTitle';
@@ -28,7 +28,7 @@ const Login = () => {
 
   const requestGoogleLink = async () => {
     const redirectUrl = `${window.location.origin}/login`;
-    const res = await getGoogleLink(redirectUrl);
+    const res = await oauthApi.getGoogleLink(redirectUrl);
 
     setGoogleUrl(res.data);
   };

@@ -1,18 +1,12 @@
-import { LOCAL_KEY } from '~/utils/constant/user';
-import useStorage from '~/hooks/useStorage';
-import axios from 'axios';
+import { auth } from './base';
 
-const storage = useStorage('local');
-const token = storage.getItem(LOCAL_KEY.token, '');
-
-const authHeader = (token: string) => {
-  return {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
+const userApi = {
+  getUserInfo: () => {
+    return auth.get('/user').then((res) => res.data);
+  },
+  removeAccount: (userId: number) => {
+    return auth.delete(`/user/${userId}`).then((res) => res.data);
+  },
 };
 
-export const getUserInfo = (token: string) => {
-  return axios.get('/user', authHeader(token)).then((res) => res.data);
-};
+export default userApi;
