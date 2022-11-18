@@ -10,11 +10,11 @@ interface QuestionListProps extends Omit<QuestionItemProps, 'question'> {
 
 const QuestionList = forwardRef(
   (
-    { questions, currentCategory, onBookmarkToggle }: QuestionListProps,
+    { questions, currentCategory, onBookmarkToggle, ...props }: QuestionListProps,
     ref?: Ref<HTMLLIElement>,
   ) => {
     return (
-      <Container>
+      <Container {...props}>
         {questions.map((question, index) => (
           <QuestionItem
             question={question}
@@ -32,11 +32,9 @@ const QuestionList = forwardRef(
 export default QuestionList;
 
 const Container = styled.ul`
-  margin-top: 32px;
   border-top: 1px solid ${({ theme }) => theme.colors.gray300};
 
   ${mediaQuery('sm')} {
-    margin-top: 0;
     border-top: 0;
   }
 `;
