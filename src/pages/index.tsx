@@ -140,12 +140,12 @@ const Home: NextPage = () => {
       <MainContent>
         {queryParams && (
           <>
-            <MiddleCategory
+            <StyledMiddleCategory
               subCategories={['all', ...SUB_CATEGORIES[queryParams.mainCategory]]}
               onSelect={onChangeSubCategory}
               currentCategory={queryParams.subCategory}
             />
-            <QuestionList
+            <StyledQuestionList
               ref={setObserverTarget}
               questions={questions}
               currentCategory={{
@@ -158,7 +158,7 @@ const Home: NextPage = () => {
             />
 
             {isMocking() && (
-              <StyledPagination
+              <Pagination
                 totalElements={21}
                 onChange={onChangePage}
                 current={queryParams.page}
@@ -182,6 +182,10 @@ const MainContent = styled(PageContainer)`
   }
 `;
 
-const StyledPagination = styled(Pagination)`
-  margin-top: 29px;
+const StyledMiddleCategory = styled(MiddleCategory)`
+  margin-bottom: 32px;
+`;
+
+const StyledQuestionList = styled(QuestionList)`
+  margin-bottom: 29px;
 `;
