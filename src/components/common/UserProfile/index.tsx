@@ -14,9 +14,10 @@ const UserProfile = ({
   avatarSize = 'md',
   fontSize = 'md',
   text,
+  ...props
 }: UserProfileProps) => {
   return (
-    <Container>
+    <Container {...props}>
       <Avatar src={profileUrl} size={avatarSize} />
       <Text fontSize={fontSize}>{text}</Text>
     </Container>
