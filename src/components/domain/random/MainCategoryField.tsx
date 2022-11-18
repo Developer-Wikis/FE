@@ -3,8 +3,7 @@ import Label from '~/components/base/Label';
 import Select from '~/components/base/Select';
 import ErrorMessage from '~/components/common/ErrorMessage';
 import InputField from '~/components/common/InputField';
-import { MAIN_CATEGORIES } from '~/utils/constant/category';
-import { convertMainCategory } from '~/utils/helper/converter';
+import { getMainCategorySelectList } from '~/utils/helper/categorySelect';
 
 interface MainCategoryFieldProps {
   handleChange: (e: ChangeEvent<HTMLSelectElement>) => void;
@@ -17,10 +16,7 @@ const MainCategoryField = ({ handleChange, selected, message }: MainCategoryFiel
     <InputField>
       <Label htmlFor="mainCategory">직무 선택</Label>
       <Select
-        list={MAIN_CATEGORIES.map((mainCode) => ({
-          value: mainCode,
-          text: convertMainCategory(mainCode),
-        }))}
+        list={getMainCategorySelectList()}
         name="mainCategory"
         onChange={handleChange}
         selected={selected}
