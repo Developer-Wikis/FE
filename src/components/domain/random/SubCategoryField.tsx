@@ -32,7 +32,7 @@ const SubCategoryField = ({ mainCategory, subCategories, handleChange }: SubCate
     <StyledInputField>
       <Label htmlFor="subCategories">분류 선택</Label>
 
-      {mainCategory === 'none' && <Notice>직무를 선택해주세요</Notice>}
+      {mainCategory === 'none' && <Notice>직무를 선택해 주세요.</Notice>}
       {mainCategory !== 'none' && (
         <Container>
           <SubCategoryCheckbox
