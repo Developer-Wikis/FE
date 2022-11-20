@@ -8,3 +8,11 @@ export interface ICurrentUser {
   token: string;
   user: IUser;
 }
+
+export interface User {
+  token: string;
+  id: number;
+  username: string;
+  email: string;
+  profileUrl: string;
+}

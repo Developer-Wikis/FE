@@ -3,15 +3,15 @@ import { MouseEvent, useEffect } from 'react';
 import BackgroundDim from '~/components/base/BackgroundDim';
 import Button from '~/components/base/Button';
 import Link from '~/components/base/Link';
+import { User } from '~/types/user';
 import { ThemeColors } from '~/types/theme';
-import { IUser } from '~/types/user';
 import { mediaQuery } from '~/utils/helper/mediaQuery';
 import CloseButton from '../CloseButton';
 import Logo from '../Logo';
 import UserProfile from '../UserProfile';
 
 interface SlideProps {
-  user: IUser;
+  user: User | null;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -41,7 +41,7 @@ const Slide = ({ user, isOpen, onClose }: SlideProps) => {
         <SlideContent>
           <nav>
             <UserArea>
-              {user.id ? (
+              {user ? (
                 <Link href={`/profile/${user.id}`}>
                   <UserProfile profileUrl={user.profileUrl} text={user.username} />
                 </Link>

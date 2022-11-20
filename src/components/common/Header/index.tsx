@@ -8,31 +8,33 @@ import Icon from '~/components/base/Icon/index';
 import { mediaQuery } from '~/utils/helper/mediaQuery';
 import useStorage from '~/hooks/useStorage';
 import { LOCAL_KEY } from '~/utils/constant/user';
-import { UserContext } from '~/context/user';
 import Slide from './Slide';
 import CategoryListItem from './CategoryListItem';
 import ProfileDropdown from './ProfileDropdown';
+import { useUser } from '~/react-query/hooks/useUser';
+import { useAuth } from '~/react-query/hooks/useAuth';
 
 const Header = () => {
   const router = useRouter();
   const [selectedCategory, setSelectedCategory] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const { currentUser, logout, updateUser } = useContext(UserContext);
+  const { user, fetchUser } = useUser();
+  const { logout } = useAuth();
   const storage = useStorage('local');
 
   const getUserProfile = async () => {
-    setIsLoading(true);
     const token = storage.getItem(LOCAL_KEY.token, '');
+    setIsLoading(true);
 
     // 로컬에서 토큰 변경 및 삭제 시
-    if (currentUser.token && !token && token !== currentUser.token) {
+    if (user && !token && token !== user.token) {
       logout();
     }
 
     // 새로고침하여 userState 초기화 시
-    if (token && token !== currentUser.token) {
-      await updateUser(token);
+    if (token && !user) {
+      await fetchUser();
     }
 
     setIsLoading(false);
@@ -91,23 +93,20 @@ const Header = () => {
           </LeftArea>
 
           <RightArea>
-            {!currentUser.token && !isLoading ? (
+            {!user && !isLoading && (
               <Link size="sm" linkType="borderGray" href="/login">
                 로그인
               </Link>
-            ) : (
-              <ProfileDropdown user={currentUser.user} />
             )}
-
+            {user && <ProfileDropdown user={user} />}
             <Link size="sm" linkType="red" href="/random/create?step=0" as="/random/create">
               랜덤 질문
             </Link>
           </RightArea>
         </HeaderContent>
 
-        <Slide user={currentUser.user} isOpen={isOpen} onClose={() => setIsOpen(false)} />
+        <Slide user={user} isOpen={isOpen} onClose={() => setIsOpen(false)} />
       </StyledHeader>
-
       <Line />
     </>
   );

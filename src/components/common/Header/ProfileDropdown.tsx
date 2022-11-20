@@ -1,17 +1,17 @@
 import styled from '@emotion/styled';
-import { MouseEvent, useContext, useState } from 'react';
+import { MouseEvent, useState } from 'react';
 import Link from '~/components/base/Link';
-import { UserContext } from '~/context/user';
 import useClickAway from '~/hooks/useClickAway';
-import { IUser } from '~/types/user';
+import { useAuth } from '~/react-query/hooks/useAuth';
+import { User } from '~/types/user';
 import Avatar from '../Avatar';
 
 interface ProfileDropdownProps {
-  user: IUser;
+  user: User;
 }
 
 const ProfileDropdown = ({ user: { username, profileUrl } }: ProfileDropdownProps) => {
-  const { logout } = useContext(UserContext);
+  const { logout } = useAuth();
   const [open, setOpen] = useState(false);
   const ref = useClickAway<HTMLDetailsElement>(() => {
     if (open) handleClick();
