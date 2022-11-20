@@ -36,7 +36,7 @@ const textSize = {
 
   lg: `
     margin-left: 12px;
-    ${theme.fontStyle.subtitle1}
+    ${theme.fontStyle.headline1}
   `,
 };
 
