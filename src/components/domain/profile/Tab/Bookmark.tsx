@@ -10,8 +10,8 @@ import {
   getSubCategoryWithAllSelectList,
 } from '~/utils/helper/categorySelect';
 
-type WithNone<T> = T | 'none';
-export type TSubQuery = { mainCategory: WithNone<MainType>; subCategory: WithNone<SubWithAllType> };
+type WithAll<T> = T | 'all';
+export type TSubQuery = { mainCategory: WithAll<MainType>; subCategory: SubWithAllType };
 
 export type TQueryBookmark = {
   tab: 'question';
@@ -29,13 +29,13 @@ interface BookmarkProps {
 const Bookmark = ({ query, onChange }: BookmarkProps) => {
   const handleMainCategory = (e: ChangeEvent<HTMLSelectElement>) =>
     onChange('subQuery', {
-      mainCategory: e.target.value as WithNone<MainType>,
-      subCategory: 'none',
+      mainCategory: e.target.value as WithAll<MainType>,
+      subCategory: 'all',
     });
   const handleSubCategory = (e: ChangeEvent<HTMLSelectElement>) =>
     onChange('subQuery', {
       ...query.subQuery,
-      subCategory: e.target.value as WithNone<SubWithAllType>,
+      subCategory: e.target.value as SubWithAllType,
     });
 
   return (
@@ -44,17 +44,19 @@ const Bookmark = ({ query, onChange }: BookmarkProps) => {
         <div>
           <StyledSelect
             name="mainCategory"
-            list={getMainCategorySelectList()}
+            list={[{ value: 'all', text: '전체' }, ...getMainCategorySelectList()]}
             onChange={handleMainCategory}
             selected={query.subQuery.mainCategory}
+            withoutDefault
           />
-          {query.subQuery.mainCategory !== 'none' && (
+          {query.subQuery.mainCategory !== 'all' && (
             <StyledSelect
               name="subCategory"
               list={getSubCategoryWithAllSelectList(query.subQuery.mainCategory)}
               onChange={handleSubCategory}
               selected={query.subQuery.subCategory}
               key={query.subQuery.mainCategory}
+              withoutDefault
             />
           )}
         </div>

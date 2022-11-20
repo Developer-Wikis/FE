@@ -22,7 +22,7 @@ export type TQuery = TQueryBookmark | TQueryComment;
 const Profile = () => {
   const [query, setQuery] = useState<TQuery>({
     tab: 'question',
-    subQuery: { mainCategory: 'fe', subCategory: 'all' },
+    subQuery: { mainCategory: 'all', subCategory: 'all' },
     content: [],
     page: 0,
     totalPage: 5,
