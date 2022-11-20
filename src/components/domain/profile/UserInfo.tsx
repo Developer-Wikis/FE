@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import Link from '~/components/base/Link';
-import Avatar from '~/components/common/Avatar';
+import UserProfile from '~/components/common/UserProfile';
 import { IUser } from '~/types/user';
 
 interface UserInfoProps {
@@ -10,8 +10,7 @@ interface UserInfoProps {
 const UserInfo = ({ user, ...props }: UserInfoProps) => {
   return (
     <Container {...props}>
-      <Avatar src={user.profileUrl} size="md" />
-      <Username>{user.username || 'jini'}</Username>
+      <StyledUserProfile text={user.username || 'jini'} fontSize="lg" />
       <Link href={`/profile/edit`} linkType="borderGray" size="sm">
         회원 정보 수정
       </Link>
@@ -26,8 +25,6 @@ const Container = styled.div`
   align-items: center;
 `;
 
-const Username = styled.h3`
-  margin-left: 12px;
+const StyledUserProfile = styled(UserProfile)`
   margin-right: 14px;
-  ${({ theme }) => theme.fontStyle.headline1}
 `;
