@@ -27,6 +27,7 @@ const SubCategoryField = ({
         name="subCategory"
         onChange={handleChange}
         value={selected}
+        defaultText="분류를 선택해 주세요."
       />
       {message && <ErrorMessage message={message} />}
     </InputField>
