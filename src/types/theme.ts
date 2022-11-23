@@ -32,6 +32,11 @@ export const theme = {
       font-size: 16px;
       line-height: 1.5;
     `,
+    body1_500: `
+      font-size: 16px;
+      line-height: 1.5;
+      font-weight: 500;
+    `,
     body1_600: `
       font-size: 16px;
       line-height: 1.5;
@@ -40,6 +45,11 @@ export const theme = {
     body2: `
       font-size: 14px;
       line-height: 20px;
+    `,
+    body2_500: `
+      font-size: 14px;
+      line-height: 20px;
+      font-weight: 500;
     `,
     body2_600: `
       font-size: 14px;

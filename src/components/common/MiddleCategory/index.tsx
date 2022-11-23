@@ -9,9 +9,14 @@ interface MiddleCategoryProps {
   currentCategory: SubWithAllType;
 }
 
-const MiddleCategory = ({ subCategories, onSelect, currentCategory }: MiddleCategoryProps) => {
+const MiddleCategory = ({
+  subCategories,
+  onSelect,
+  currentCategory,
+  ...props
+}: MiddleCategoryProps) => {
   return (
-    <CategoryList>
+    <CategoryList {...props}>
       {subCategories.map((subCode) => (
         <li key={subCode} className={subCode === currentCategory ? 'selected' : ''}>
           <button onClick={() => onSelect(subCode)}>{convertSubCategory(subCode)}</button>
@@ -55,6 +60,7 @@ const CategoryList = styled.ul`
     flex-wrap: nowrap;
     justify-content: start;
     overflow-x: scroll;
+    padding: 8px 0 4px;
 
     li {
       flex-shrink: 0;

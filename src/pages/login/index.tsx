@@ -1,35 +1,23 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from '~/components/base/Link';
 import { useRouter } from 'next/router';
-import { getGoogleLink, googleLogin } from '~/service/oauth';
+import oauthApi from '~/service/oauth';
 import { isString } from '~/utils/helper/checkType';
 import Article from '~/components/common/Article';
 import PageTitle from '~/components/base/PageTitle';
 import PageDescription from '~/components/common/PageDescription';
 import styled from '@emotion/styled';
 import Icon from '~/components/base/Icon';
-import { UserContext } from '~/context/user';
+import { useAuth } from '~/react-query/hooks/useAuth';
 
 const Login = () => {
   const router = useRouter();
   const [googleUrl, setGoogleUrl] = useState('');
-  const { login } = useContext(UserContext);
-
-  const requestLogin = async (code: string) => {
-    try {
-      const res = await googleLogin({ code, redirectUrl: `${window.location.origin}/login` });
-      login({ token: res.data.jwtToken, refreshToken: res.data.refreshToken });
-      router.push('/');
-    } catch (e) {
-      alert('로그인에 실패했습니다.');
-      router.push('/login');
-    }
-  };
+  const { login } = useAuth();
+  const redirectUrl = useRef('');
 
   const requestGoogleLink = async () => {
-    const redirectUrl = `${window.location.origin}/login`;
-    const res = await getGoogleLink(redirectUrl);
-
+    const res = await oauthApi.getGoogleLink(redirectUrl.current);
     setGoogleUrl(res.data);
   };
 
@@ -40,6 +28,7 @@ const Login = () => {
   };
 
   useEffect(() => {
+    redirectUrl.current = `${window.location.origin}/login`;
     requestGoogleLink();
   }, []);
 
@@ -47,7 +36,7 @@ const Login = () => {
     const { code } = router.query;
 
     if (code && isString(code)) {
-      requestLogin(code);
+      login(code, redirectUrl.current);
     }
   }, [router.query]);
 

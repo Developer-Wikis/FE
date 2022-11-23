@@ -7,7 +7,8 @@ export interface IQuestionItem {
   subCategory: SubType;
   viewCount: number;
   commentCount: number;
-  createAt: string;
+  createdAt: string;
+  isBookmarked: boolean;
 }
 
 export interface IQuestion {

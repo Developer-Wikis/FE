@@ -1,23 +1,47 @@
 import styled from '@emotion/styled';
+import { useState } from 'react';
 import Input from '~/components/base/Input';
 import Label from '~/components/base/Label';
 import AddForm from '~/components/common/AddForm';
 import InputField from '~/components/common/InputField';
+import Modal from '~/components/common/Modal';
+import { User } from '~/types/user';
 import { mediaQuery } from '~/utils/helper/mediaQuery';
 import EditAvatar from './EditAvatar';
+import ImageEditModal from './ImageEditModal';
 
 interface EditUserInfoProps {
-  onEditImage: () => void;
+  // onEditImage: () => void;
+  user: User;
   onEditNickname: (value: string) => void;
 }
 
-const EditUserInfo = ({ onEditImage, onEditNickname }: EditUserInfoProps) => {
+const EditUserInfo = ({ user, onEditNickname }: EditUserInfoProps) => {
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  const [profileImage, setProfileImage] = useState<string>(user.profileUrl);
+
+  const onCloseModal = () => {
+    setIsOpenModal(false);
+  };
+
+  const onClickProfileImage = () => {
+    setIsOpenModal(true);
+  };
+
+  const onChangeProfileImage = (imageUrl: string) => {
+    /* 서버 요청 코드 작성
+    profileImageURL 받아서 setProfileImage 하기 */
+
+    setProfileImage(imageUrl);
+    onCloseModal();
+  };
+
   return (
     <Container>
       <UserInfo>
         <InputField>
           <Label htmlFor="email">이메일</Label>
-          <Input id="email" name="email" value="이메일 넣기" disabled />
+          <Input id="email" name="email" value={user.email} disabled />
         </InputField>
         <InputField>
           <Label htmlFor="nickname">닉네임</Label>
@@ -26,15 +50,18 @@ const EditUserInfo = ({ onEditImage, onEditNickname }: EditUserInfoProps) => {
             name="nickname"
             id="nickname"
             onSubmit={onEditNickname}
-            defaultValue="지니짱효니짱"
+            defaultValue={user.username}
             reset={false}
           />
         </InputField>
       </UserInfo>
       <UserProfile>
         <HideLabel htmlFor="profileImage">프로필 수정</HideLabel>
-        <EditAvatar size="lg" imageUrl="" onClick={onEditImage} />
+        <EditAvatar size="lg" imageUrl={profileImage} onClick={onClickProfileImage} />
       </UserProfile>
+      <Modal visible={isOpenModal} onClose={onCloseModal}>
+        <ImageEditModal onChangeImage={onChangeProfileImage} />
+      </Modal>
     </Container>
   );
 };

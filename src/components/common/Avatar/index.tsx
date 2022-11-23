@@ -41,4 +41,5 @@ const Container = styled.div<AvatarProps>`
   position: relative;
   border-radius: 50%;
   overflow: hidden;
+  border: 1px solid ${({ theme }) => theme.colors.gray300};
 `;

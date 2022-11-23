@@ -14,6 +14,7 @@ export default {
       defaultValue: buttonStyle.black,
     },
     size: { control: 'radio', options: Object.keys(buttonSizes), defaultValue: buttonSizes.md },
+    fullWidth: { control: 'boolean', defaultValue: false },
     disabled: { control: 'boolean', defaultValue: false },
     loading: { control: 'boolean', defaultValue: false },
     startIcon: { control: 'text' },

@@ -17,6 +17,7 @@
     "@tanstack/react-query-devtools": "^4.14.5",
     "axios": "^0.27.2",
     "emailjs-com": "^3.2.0",
+    "heic2any": "^0.0.3",
     "next": "12.3.1",
     "react": "18.2.0",
     "react-dom": "18.2.0"

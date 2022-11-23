@@ -1,17 +1,17 @@
 import styled from '@emotion/styled';
-import { MouseEvent, useContext, useState } from 'react';
+import { MouseEvent, useState } from 'react';
 import Link from '~/components/base/Link';
-import { UserContext } from '~/context/user';
 import useClickAway from '~/hooks/useClickAway';
-import { IUser } from '~/types/user';
+import { useAuth } from '~/react-query/hooks/useAuth';
+import { User } from '~/types/user';
 import Avatar from '../Avatar';
 
 interface ProfileDropdownProps {
-  user: IUser;
+  user: User;
 }
 
 const ProfileDropdown = ({ user: { username, profileUrl } }: ProfileDropdownProps) => {
-  const { logout } = useContext(UserContext);
+  const { logout } = useAuth();
   const [open, setOpen] = useState(false);
   const ref = useClickAway<HTMLDetailsElement>(() => {
     if (open) handleClick();
@@ -50,7 +50,7 @@ const ProfileDropdown = ({ user: { username, profileUrl } }: ProfileDropdownProp
             </Link>
           </StyledLi>
           <StyledLi>
-            <Link href="/my" onClick={handleClick}>
+            <Link href={`/profile`} onClick={handleClick}>
               마이페이지
             </Link>
           </StyledLi>
@@ -93,6 +93,7 @@ const Content = styled.div`
   border-radius: 4px;
   background-color: ${({ theme }) => theme.colors.white};
   box-shadow: 0px 1px 2px rgba(204, 204, 204, 0.25);
+  z-index: 100;
 
   &::before {
     content: '';

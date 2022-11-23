@@ -2,17 +2,20 @@ import { unauth } from './base';
 
 // 응답값 확정되면 수정해서 적용 예정
 interface LoginResponse {
-  jwtToken: string;
+  accessToken: string;
   refreshToken: string;
   tokenType: string;
-  userEmail: string;
-  userName: string;
+  email: string;
+  username: string;
 }
 
-export const googleLogin = ({ code, redirectUrl }: { code: string; redirectUrl: string }) => {
-  return unauth.get(`/oauth/google/userinfo`, { params: { code, redirectUrl } });
+const oauthApi = {
+  googleLogin: ({ code, redirectUrl }: { code: string; redirectUrl: string }) => {
+    return unauth.get(`/oauth/google/userinfo`, { params: { code, redirectUrl } });
+  },
+  getGoogleLink: (url: string) => {
+    return unauth.get(`/oauth/google`, { params: { url } });
+  },
 };
 
-export const getGoogleLink = (url: string) => {
-  return unauth.get(`/oauth/google`, { params: { url } });
-};
+export default oauthApi;

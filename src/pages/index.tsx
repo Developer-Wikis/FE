@@ -9,10 +9,12 @@ import useAxios from '~/hooks/useAxios';
 import questionApi from '~/service/question';
 import { IQuestionItem } from '~/types/question';
 import { useRouter } from 'next/router';
-import { isMainType, isSubWithAllType } from '~/utils/helper/checkType';
+import { isMainType, isMocking, isSubWithAllType } from '~/utils/helper/checkType';
 import useIntersectionObserver from '~/hooks/useIntersectionObserver';
 import { MainType, SubWithAllType, SUB_CATEGORIES } from '~/utils/constant/category';
 import { isValidCategoryPair } from '~/utils/helper/validation';
+import { mediaQuery } from '~/utils/helper/mediaQuery';
+import Pagination from '~/components/common/Pagination';
 
 type QueryParams = {
   mainCategory: MainType;
@@ -25,6 +27,13 @@ const initialValues: QueryParams = {
   subCategory: 'all',
   page: 0,
 };
+
+/*
+TODO:
+- 무한스크롤 제거
+- 목록 조회/북마크 기능 api 연결
+- react-query 적용
+*/
 
 const Home: NextPage = () => {
   const [queryParams, setQueryParams] = useState<QueryParams | null>(null);
@@ -49,6 +58,14 @@ const Home: NextPage = () => {
   };
   const { setTarget: setObserverTarget } = useIntersectionObserver({ onIntersect, threshold: 0.2 });
 
+  const onChangePage = (page: number) => {
+    if (!queryParams) return;
+
+    const nextQueryParams = { ...queryParams, page };
+    setQueryParams(nextQueryParams);
+    requestQuestionList(nextQueryParams);
+  };
+
   const onChangeSubCategory = (subCategory: SubWithAllType) => {
     if (!queryParams || queryParams.subCategory === subCategory) return;
 
@@ -70,11 +87,15 @@ const Home: NextPage = () => {
     const result = await request(queryParams);
     if (!result) return;
 
-    setQuestions(
-      queryParams.page === initialValues.page
-        ? result.data.content
-        : [...questions, ...result.data.content],
-    );
+    if (isMocking()) {
+      setQuestions(result.data.content);
+    } else {
+      setQuestions(
+        queryParams.page === initialValues.page
+          ? result.data.content
+          : [...questions, ...result.data.content],
+      );
+    }
 
     if (result.data.last) {
       setIsEndPage(true);
@@ -119,19 +140,31 @@ const Home: NextPage = () => {
       <MainContent>
         {queryParams && (
           <>
-            <MiddleCategory
+            <StyledMiddleCategory
               subCategories={['all', ...SUB_CATEGORIES[queryParams.mainCategory]]}
               onSelect={onChangeSubCategory}
               currentCategory={queryParams.subCategory}
             />
-            <QuestionList
+            <StyledQuestionList
               ref={setObserverTarget}
               questions={questions}
               currentCategory={{
                 mainCategory: queryParams.mainCategory,
                 subCategory: queryParams.subCategory,
               }}
+              onBookmarkToggle={(id) => {
+                alert(`${id} clicked`);
+              }}
             />
+
+            {isMocking() && (
+              <Pagination
+                totalElements={21}
+                onChange={onChangePage}
+                current={queryParams.page}
+                key={JSON.stringify(queryParams)}
+              />
+            )}
           </>
         )}
       </MainContent>
@@ -143,4 +176,16 @@ export default Home;
 
 const MainContent = styled(PageContainer)`
   margin-top: 32px;
+
+  ${mediaQuery('sm')} {
+    margin-top: 0;
+  }
+`;
+
+const StyledMiddleCategory = styled(MiddleCategory)`
+  margin-bottom: 32px;
+`;
+
+const StyledQuestionList = styled(QuestionList)`
+  margin-bottom: 29px;
 `;

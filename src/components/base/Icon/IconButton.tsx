@@ -14,11 +14,18 @@ const IconButton = ({
   onClick,
   type = 'button',
   style,
+  fill,
+  stroke,
+  block,
+  width,
+  height,
   ...props
 }: IconButtonProps) => {
+  const iconProps = { name, size, color, fill, stroke, block, width, height };
+
   return (
     <button onClick={onClick} type={type} style={style} {...props}>
-      <Icon name={name} size={size} color={color} />
+      <Icon {...iconProps} />
     </button>
   );
 };

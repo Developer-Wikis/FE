@@ -8,31 +8,33 @@ import Icon from '~/components/base/Icon/index';
 import { mediaQuery } from '~/utils/helper/mediaQuery';
 import useStorage from '~/hooks/useStorage';
 import { LOCAL_KEY } from '~/utils/constant/user';
-import { UserContext } from '~/context/user';
 import Slide from './Slide';
 import CategoryListItem from './CategoryListItem';
 import ProfileDropdown from './ProfileDropdown';
+import { useUser } from '~/react-query/hooks/useUser';
+import { useAuth } from '~/react-query/hooks/useAuth';
 
 const Header = () => {
   const router = useRouter();
   const [selectedCategory, setSelectedCategory] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const { currentUser, logout, updateUser } = useContext(UserContext);
+  const { user, fetchUser } = useUser();
+  const { logout } = useAuth();
   const storage = useStorage('local');
 
   const getUserProfile = async () => {
-    setIsLoading(true);
     const token = storage.getItem(LOCAL_KEY.token, '');
+    setIsLoading(true);
 
     // 로컬에서 토큰 변경 및 삭제 시
-    if (currentUser.token && !token && token !== currentUser.token) {
+    if (user && !token && token !== user.token) {
       logout();
     }
 
     // 새로고침하여 userState 초기화 시
-    if (token && token !== currentUser.token) {
-      await updateUser(token);
+    if (token && !user) {
+      await fetchUser();
     }
 
     setIsLoading(false);
@@ -55,52 +57,58 @@ const Header = () => {
   }, [router.isReady, router.query]);
 
   return (
-    <StyledHeader>
-      <HeaderContent>
-        <LeftArea>
-          <FirstRow>
-            <Link href="/">
-              <h1>
-                <Logo />
-              </h1>
-            </Link>
+    <>
+      <StyledHeader>
+        <HeaderContent>
+          <LeftArea>
+            <FirstRow>
+              <Link href="/">
+                <h1>
+                  <Logo />
+                </h1>
+              </Link>
 
-            <Hamburger name="Hamburger" color="gray800" size="24" onClick={() => setIsOpen(true)} />
-          </FirstRow>
-
-          <Nav>
-            <CategoryList>
-              <CategoryListItem
-                href="/?mainCategory=fe"
-                select={selectedCategory === 'fe'}
-                name="프론트엔드"
+              <Hamburger
+                name="Hamburger"
+                color="gray800"
+                size="24"
+                onClick={() => setIsOpen(true)}
               />
-              <CategoryListItem
-                href="/?mainCategory=be"
-                select={selectedCategory === 'be'}
-                name="백엔드"
-              />
-            </CategoryList>
-          </Nav>
-        </LeftArea>
+            </FirstRow>
 
-        <RightArea>
-          {!currentUser.token && !isLoading ? (
-            <Link size="sm" linkType="borderGray" href="/login">
-              로그인
+            <Nav>
+              <CategoryList>
+                <CategoryListItem
+                  href="/?mainCategory=fe"
+                  select={selectedCategory === 'fe'}
+                  name="프론트엔드"
+                />
+                <CategoryListItem
+                  href="/?mainCategory=be"
+                  select={selectedCategory === 'be'}
+                  name="백엔드"
+                />
+              </CategoryList>
+            </Nav>
+          </LeftArea>
+
+          <RightArea>
+            {!user && !isLoading && (
+              <Link size="sm" linkType="borderGray" href="/login">
+                로그인
+              </Link>
+            )}
+            {user && <ProfileDropdown user={user} />}
+            <Link size="sm" linkType="red" href="/random/create?step=0" as="/random/create">
+              랜덤 질문
             </Link>
-          ) : (
-            <ProfileDropdown user={currentUser.user} />
-          )}
+          </RightArea>
+        </HeaderContent>
 
-          <Link size="sm" linkType="red" href="/random/create?step=0" as="/random/create">
-            랜덤 질문
-          </Link>
-        </RightArea>
-      </HeaderContent>
-
-      <Slide user={currentUser.user} isOpen={isOpen} onClose={() => setIsOpen(false)} />
-    </StyledHeader>
+        <Slide user={user} isOpen={isOpen} onClose={() => setIsOpen(false)} />
+      </StyledHeader>
+      <Line />
+    </>
   );
 };
 
@@ -108,6 +116,10 @@ export default Header;
 
 const StyledHeader = styled.header`
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray300};
+
+  ${mediaQuery('sm')} {
+    border-bottom: 1px solid ${({ theme }) => theme.colors.gray400};
+  }
 `;
 
 const HeaderContent = styled(PageContainer)`
@@ -118,7 +130,7 @@ const HeaderContent = styled(PageContainer)`
 
   ${mediaQuery('sm')} {
     display: block;
-    height: 128px;
+    height: auto;
   }
 `;
 
@@ -150,7 +162,7 @@ const Nav = styled.nav`
     display: flex;
     align-items: center;
     margin-left: 0;
-    height: 64px;
+    height: 55px;
   }
 `;
 
@@ -177,5 +189,17 @@ const RightArea = styled.div`
 
   ${mediaQuery('sm')} {
     display: none;
+  }
+`;
+
+const Line = styled.hr`
+  display: none;
+
+  ${mediaQuery('sm')} {
+    display: block;
+    height: 6px;
+    background-color: ${({ theme }) => theme.colors.gray200};
+    border: 0;
+    margin: 0;
   }
 `;

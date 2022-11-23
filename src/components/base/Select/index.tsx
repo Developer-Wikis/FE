@@ -6,11 +6,21 @@ interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
   name?: string;
   onChange: (e: ChangeEvent<HTMLSelectElement>) => void;
   selected?: string;
+  withoutDefault?: boolean;
+  defaultText?: string;
 }
-const Select = ({ list, name, onChange, selected, ...props }: SelectProps) => {
+const Select = ({
+  list,
+  name,
+  onChange,
+  selected,
+  withoutDefault = false,
+  defaultText = '선택해 주세요.',
+  ...props
+}: SelectProps) => {
   return (
     <StyledSelect name={name} id={name} onChange={onChange} value={selected} {...props}>
-      <option value="none">선택해주세요</option>
+      {!withoutDefault && <option value="none">{defaultText}</option>}
       {list.map((category, index) => (
         <option key={index} value={category.value}>
           {category.text}
