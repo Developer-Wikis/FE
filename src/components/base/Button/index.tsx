@@ -3,21 +3,20 @@ import { ButtonHTMLAttributes, CSSProperties, MouseEvent, ReactNode } from 'reac
 import Spinner from '~/components/common/Spinner/inext';
 import { buttonSizes, buttonStyle } from './types';
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  buttonType?: keyof typeof buttonStyle;
-  disabled?: boolean;
   children?: ReactNode;
-  style?: CSSProperties;
+  buttonType?: keyof typeof buttonStyle;
   size?: keyof typeof buttonSizes;
+  disabled?: boolean;
   loading?: boolean;
   startIcon?: ReactNode;
   endIcon?: ReactNode;
 }
 
 const Button = ({
-  buttonType = 'black',
-  disabled,
   children,
+  buttonType = 'black',
   size = 'md',
+  disabled,
   loading,
   startIcon,
   endIcon,
