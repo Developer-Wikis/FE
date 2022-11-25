@@ -9,9 +9,14 @@ interface MiddleCategoryProps {
   currentCategory: SubWithAllType;
 }
 
-const MiddleCategory = ({ subCategories, onSelect, currentCategory }: MiddleCategoryProps) => {
+const MiddleCategory = ({
+  subCategories,
+  onSelect,
+  currentCategory,
+  ...props
+}: MiddleCategoryProps) => {
   return (
-    <CategoryList>
+    <CategoryList {...props}>
       {subCategories.map((subCode) => (
         <li key={subCode} className={subCode === currentCategory ? 'selected' : ''}>
           <button onClick={() => onSelect(subCode)}>{convertSubCategory(subCode)}</button>

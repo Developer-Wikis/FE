@@ -14,9 +14,10 @@ const UserProfile = ({
   avatarSize = 'md',
   fontSize = 'md',
   text,
+  ...props
 }: UserProfileProps) => {
   return (
-    <Container>
+    <Container {...props}>
       <Avatar src={profileUrl} size={avatarSize} />
       <Text fontSize={fontSize}>{text}</Text>
     </Container>
@@ -35,7 +36,7 @@ const textSize = {
 
   lg: `
     margin-left: 12px;
-    ${theme.fontStyle.subtitle1}
+    ${theme.fontStyle.headline1}
   `,
 };
 
