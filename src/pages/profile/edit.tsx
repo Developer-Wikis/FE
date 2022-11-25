@@ -6,6 +6,7 @@ import PageContainer from '~/components/common/PageContainer';
 import DeleteAccount from '~/components/domain/profile/DeleteAccount';
 import EditUserInfo from '~/components/domain/profile/EditUserInfo';
 import { useAuth } from '~/react-query/hooks/useAuth';
+import { useEditProfile } from '~/react-query/hooks/useEditProfile';
 import { useUser } from '~/react-query/hooks/useUser';
 import { SUBMIT_CHECK } from '~/utils/helper/validation';
 
@@ -19,6 +20,7 @@ const ProfileEdit = () => {
   const { user, fetchUser } = useUser();
   const { deleteAccount } = useAuth();
   const router = useRouter();
+  const { editUsername } = useEditProfile();
 
   const onEditNickname = (value: string) => {
     if (SUBMIT_CHECK.nickname.isValid(value)) {
@@ -26,7 +28,10 @@ const ProfileEdit = () => {
       return;
     }
 
-    alert('닉네임 : ' + value);
+    if (user) {
+      editUsername({ userId: user?.id, username: value });
+    }
+
     // 닉네임 변경 API 코드 작성
     // Toast 띄우기
   };

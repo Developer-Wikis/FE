@@ -7,6 +7,10 @@ const userApi = {
   deleteAccount: (userId: number) => {
     return auth.delete(`/user/${userId}`).then((res) => res.data);
   },
+  editUsername: ({ userId, username }: { userId: number; username: string }) => {
+    // username으로 바뀔 예정
+    return auth.post(`/user/nickname/${userId}`, { userName: username }).then((res) => res.data);
+  },
 };
 
 export default userApi;
