@@ -14,7 +14,18 @@ export const useEditProfile = () => {
     },
   });
 
+  const { mutate: editProfileImage } = useMutation(userApi.editProfileImage, {
+    onSuccess: () => {
+      queryClient.invalidateQueries([QUERY_KEY.user]);
+      alert('프로필 이미지가 정상적으로 변경되었습니다.');
+    },
+    onError: () => {
+      alert('프로필 이미지 변경에 실패했습니다. 다시 시도해주세요.');
+    },
+  });
+
   return {
     editUsername,
+    editProfileImage,
   };
 };

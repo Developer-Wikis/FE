@@ -31,9 +31,6 @@ const ProfileEdit = () => {
     if (user) {
       editUsername({ userId: user?.id, username: value });
     }
-
-    // 닉네임 변경 API 코드 작성
-    // Toast 띄우기
   };
 
   const onDeleteAccount = () => {

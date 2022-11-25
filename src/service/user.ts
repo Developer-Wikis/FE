@@ -9,7 +9,10 @@ const userApi = {
   },
   editUsername: ({ userId, username }: { userId: number; username: string }) => {
     // username으로 바뀔 예정
-    return auth.post(`/user/nickname/${userId}`, { userName: username }).then((res) => res.data);
+    return auth.post(`/user/username/${userId}`, { username: username }).then((res) => res.data);
+  },
+  editProfileImage: ({ userId, formData }: { userId: number; formData: FormData }) => {
+    return auth.post(`/user/image/${userId}`, formData).then((res) => res.data);
   },
 };
 
