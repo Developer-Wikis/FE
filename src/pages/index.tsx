@@ -41,26 +41,15 @@ const Home: NextPage = () => {
   useEffect(() => {
     if (!router.isReady) return;
 
-    const { query } = router;
-    query.subCategory = query.subCategory ?? 'all';
-    const nextQueryParams = { ...initialValues };
-
-    if (
-      isMainType(query.mainCategory) &&
-      isSubWithAllType(query.subCategory) &&
-      isValidCategoryPair(query.mainCategory, query.subCategory)
-    ) {
-      nextQueryParams.mainCategory = query.mainCategory;
-      nextQueryParams.subCategory = query.subCategory;
-    }
-
-    const notChanged =
-      queryParams &&
-      nextQueryParams.mainCategory === queryParams.mainCategory &&
-      nextQueryParams.subCategory === queryParams.subCategory;
-    if (notChanged) return;
-
-    setQueryParams(nextQueryParams);
+    const filteredQuery = filterQuery(
+      {
+        mainCategory: router.query.mainCategory,
+        subCategory: router.query.subCategory,
+        page: router.query.page,
+      },
+      initialValues,
+    );
+    setQueryParams(filteredQuery);
   }, [router.isReady, router.query.mainCategory, router.query.subCategory]);
 
   return (
@@ -86,7 +75,6 @@ const Home: NextPage = () => {
             alert(`${id} clicked`);
           }}
         />
-
         <Pagination
           totalElements={data.totalElements}
           onChange={onChangePage}
@@ -99,6 +87,20 @@ const Home: NextPage = () => {
 };
 
 export default Home;
+
+function filterQuery(
+  query: Record<keyof QueryParams, string | string[] | undefined>,
+  defaultValue: QueryParams,
+): QueryParams {
+  const { mainCategory, subCategory = 'all', page } = query;
+
+  if (!isMainType(mainCategory)) return defaultValue;
+  if (!isSubWithAllType(subCategory) || !isValidCategoryPair(mainCategory, subCategory))
+    return { ...defaultValue, mainCategory };
+  if (!Number.isInteger(Number(page)))
+    return { mainCategory, subCategory, page: defaultValue.page };
+  return { mainCategory, subCategory, page: Number(page) };
+}
 
 const MainContent = styled(PageContainer)`
   margin-top: 32px;
