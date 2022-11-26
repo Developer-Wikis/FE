@@ -14,6 +14,7 @@ import { MainType, SubWithAllType, SUB_CATEGORIES } from '~/utils/constant/categ
 import { isValidCategoryPair } from '~/utils/helper/validation';
 import { mediaQuery } from '~/utils/helper/mediaQuery';
 import Pagination from '~/components/common/Pagination';
+import useUrlState from '~/hooks/useUrlState';
 
 type QueryParams = {
   mainCategory: MainType;
@@ -34,36 +35,28 @@ TODO:
 */
 
 const Home: NextPage = () => {
-  const [queryParams, setQueryParams] = useState<QueryParams | null>(null);
+  const [queryParams, setQueryParams] = useUrlState(initialValues);
   const [questions, setQuestions] = useState<IQuestionItem[]>([]);
 
   const router = useRouter();
   const { request } = useAxios(questionApi.getList, [queryParams]);
 
   const onChangePage = (page: number) => {
-    if (!queryParams) return;
-
     const nextQueryParams = { ...queryParams, page };
     setQueryParams(nextQueryParams);
     requestQuestionList(nextQueryParams);
   };
 
   const onChangeSubCategory = (subCategory: SubWithAllType) => {
-    if (!queryParams || queryParams.subCategory === subCategory) return;
+    if (queryParams.subCategory === subCategory) return;
 
     const nextQueryParams = { ...queryParams, subCategory, page: initialValues.page };
 
     setQueryParams(nextQueryParams);
-    router.push({
-      pathname: '/',
-      query: { mainCategory: queryParams.mainCategory, subCategory },
-    });
     requestQuestionList(nextQueryParams);
   };
 
   const requestQuestionList = async (queryParams: QueryParams) => {
-    if (!queryParams) return;
-
     const result = await request(queryParams);
     if (!result) return;
 
