@@ -33,7 +33,8 @@ export default questionApi;
 type RequestType<T> = Promise<AxiosResponse<T, any>>;
 type TList = {
   content: IQuestionItem[];
-  last: boolean;
+  totalPages: number;
+  totalElements: number;
 };
 type TDetail = IQuestionItem & {
   tailQuestions: string[];
