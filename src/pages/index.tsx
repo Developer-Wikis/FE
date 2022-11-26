@@ -3,18 +3,16 @@ import Head from 'next/head';
 import PageContainer from '~/components/common/PageContainer';
 import QuestionList from '~/components/domain/QuestionList';
 import styled from '@emotion/styled';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import MiddleCategory from '~/components/common/MiddleCategory';
-import useAxios from '~/hooks/useAxios';
-import questionApi from '~/service/question';
-import { IQuestionItem } from '~/types/question';
 import { useRouter } from 'next/router';
-import { isMainType, isMocking, isSubWithAllType } from '~/utils/helper/checkType';
+import { isMainType, isSubWithAllType } from '~/utils/helper/checkType';
 import { MainType, SubWithAllType, SUB_CATEGORIES } from '~/utils/constant/category';
 import { isValidCategoryPair } from '~/utils/helper/validation';
 import { mediaQuery } from '~/utils/helper/mediaQuery';
 import Pagination from '~/components/common/Pagination';
 import useUrlState from '~/hooks/useUrlState';
+import useQuestionList from '~/react-query/hooks/useQuestionList';
 
 type QueryParams = {
   mainCategory: MainType;
@@ -28,39 +26,16 @@ const initialValues: QueryParams = {
   page: 0,
 };
 
-/*
-TODO:
-- 목록 조회/북마크 기능 api 연결
-- react-query 적용
-*/
-
 const Home: NextPage = () => {
-  const [queryParams, setQueryParams] = useUrlState(initialValues);
-  const [questions, setQuestions] = useState<IQuestionItem[]>([]);
-
   const router = useRouter();
-  const { request } = useAxios(questionApi.getList, [queryParams]);
 
-  const onChangePage = (page: number) => {
-    const nextQueryParams = { ...queryParams, page };
-    setQueryParams(nextQueryParams);
-    requestQuestionList(nextQueryParams);
-  };
+  const [queryParams, setQueryParams] = useUrlState(initialValues);
+  const { data } = useQuestionList(queryParams);
 
+  const onChangePage = (page: number) => setQueryParams({ ...queryParams, page });
   const onChangeSubCategory = (subCategory: SubWithAllType) => {
     if (queryParams.subCategory === subCategory) return;
-
-    const nextQueryParams = { ...queryParams, subCategory, page: initialValues.page };
-
-    setQueryParams(nextQueryParams);
-    requestQuestionList(nextQueryParams);
-  };
-
-  const requestQuestionList = async (queryParams: QueryParams) => {
-    const result = await request(queryParams);
-    if (!result) return;
-
-    setQuestions(result.data.content);
+    setQueryParams({ ...queryParams, subCategory, page: initialValues.page });
   };
 
   useEffect(() => {
@@ -86,7 +61,6 @@ const Home: NextPage = () => {
     if (notChanged) return;
 
     setQueryParams(nextQueryParams);
-    requestQuestionList(nextQueryParams);
   }, [router.isReady, router.query.mainCategory, router.query.subCategory]);
 
   return (
@@ -97,32 +71,28 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <MainContent>
-        {queryParams && (
-          <>
-            <StyledMiddleCategory
-              subCategories={['all', ...SUB_CATEGORIES[queryParams.mainCategory]]}
-              onSelect={onChangeSubCategory}
-              currentCategory={queryParams.subCategory}
-            />
-            <StyledQuestionList
-              questions={questions}
-              currentCategory={{
-                mainCategory: queryParams.mainCategory,
-                subCategory: queryParams.subCategory,
-              }}
-              onBookmarkToggle={(id) => {
-                alert(`${id} clicked`);
-              }}
-            />
+        <StyledMiddleCategory
+          subCategories={['all', ...SUB_CATEGORIES[queryParams.mainCategory]]}
+          onSelect={onChangeSubCategory}
+          currentCategory={queryParams.subCategory}
+        />
+        <StyledQuestionList
+          questions={data.content}
+          currentCategory={{
+            mainCategory: queryParams.mainCategory,
+            subCategory: queryParams.subCategory,
+          }}
+          onBookmarkToggle={(id) => {
+            alert(`${id} clicked`);
+          }}
+        />
 
-            <Pagination
-              totalElements={21}
-              onChange={onChangePage}
-              current={queryParams.page}
-              key={JSON.stringify(queryParams)}
-            />
-          </>
-        )}
+        <Pagination
+          totalElements={data.totalElements}
+          onChange={onChangePage}
+          current={queryParams.page}
+          key={JSON.stringify(queryParams)}
+        />
       </MainContent>
     </div>
   );
