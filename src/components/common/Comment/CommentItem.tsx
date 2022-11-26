@@ -19,20 +19,15 @@ const CommentItem = ({ commentId, comment }: CommentListProps) => {
     <StyledLi>
       <CommentContainer>
         <Writer>
-          <span title={comment.nickname}>{comment.nickname}</span>
+          <span title={comment.username}>{comment.username}</span>
         </Writer>
         {editId !== commentId ? (
-          <CommentContent
-            commentId={commentId}
-            content={comment.content}
-            createdAt={comment.createdAt}
-          />
+          <CommentContent comment={comment} />
         ) : (
           <EditorContainer>
             <EditCommentForm defaultValue={comment.content} commentId={commentId} />
           </EditorContainer>
         )}
-
         {passwordState.commentId === commentId && <PasswordConfirm commentId={commentId} />}
       </CommentContainer>
     </StyledLi>

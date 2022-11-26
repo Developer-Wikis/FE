@@ -1,37 +1,43 @@
 import styled from '@emotion/styled';
 import { useContext } from 'react';
 import Icon from '~/components/base/Icon';
+import { useUser } from '~/react-query/hooks/useUser';
+import { ICommentItem } from '~/types/comment';
 import { formatDate } from '~/utils/helper/formatting';
 import { mediaQuery } from '~/utils/helper/mediaQuery';
 import { CommentContext } from './context';
 
 interface CommentContentProps {
-  commentId: number;
-  content: string;
-  createdAt: string;
+  comment: ICommentItem;
 }
-const CommentContent = ({ commentId, content, createdAt }: CommentContentProps) => {
+const CommentContent = ({ comment }: CommentContentProps) => {
   const { onOpenPassword } = useContext(CommentContext);
+  const { user } = useUser();
+
+  const isAnonymous = comment.role === 'ANONYMOUS';
+  const isMyComment = user && user.id === comment.userId;
 
   const handleDelete = () => {
-    onOpenPassword(commentId, 'delete');
+    onOpenPassword(comment.id, 'delete');
   };
 
   const handleEditStart = () => {
-    onOpenPassword(commentId, 'edit');
+    onOpenPassword(comment.id, 'edit');
   };
 
   return (
     <>
       <Content>
-        <p>{content}</p>
+        <p>{comment.content}</p>
       </Content>
       <Info>
-        <CreatedAt>{formatDate(createdAt)}</CreatedAt>
-        <Buttons>
-          <Icon.Button name="Pencil" color="gray500" size="25" onClick={handleEditStart} />
-          <Icon.Button name="Close" color="gray500" size="12" onClick={handleDelete} />
-        </Buttons>
+        <CreatedAt>{formatDate(comment.createdAt)}</CreatedAt>
+        {(isAnonymous || isMyComment) && (
+          <Buttons>
+            <Icon.Button name="Pencil" color="gray500" size="25" onClick={handleEditStart} />
+            <Icon.Button name="Close" color="gray500" size="12" onClick={handleDelete} />
+          </Buttons>
+        )}
       </Info>
     </>
   );
