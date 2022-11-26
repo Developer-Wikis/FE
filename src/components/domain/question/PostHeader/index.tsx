@@ -1,7 +1,9 @@
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
 import Icon from '~/components/base/Icon';
+import { useCallback, useEffect, useState } from 'react';
 import PageTitle from '~/components/base/PageTitle';
+import useTimeoutFn from '~/hooks/useTimeoutFn';
 import useBookmark from '~/react-query/hooks/useBookmark';
 import { useUser } from '~/react-query/hooks/useUser';
 import { SubType } from '~/utils/constant/category';
@@ -15,8 +17,18 @@ interface PostHeaderProps {
 
 const PostHeader = ({ subCategory, title, questionId }: PostHeaderProps) => {
   const { isBookmarked, postBookmark } = useBookmark({ questionId });
+  const [bookmarkState, setBookmarkState] = useState<boolean>(isBookmarked);
   const { user } = useUser();
   const router = useRouter();
+
+  const [run, clear] = useTimeoutFn(
+    useCallback(() => {
+      if (isBookmarked !== bookmarkState) {
+        postBookmark(!isBookmarked);
+      }
+    }, [bookmarkState]),
+    2000,
+  );
 
   const onBookmarkToggle = async () => {
     if (!user) {
@@ -25,8 +37,13 @@ const PostHeader = ({ subCategory, title, questionId }: PostHeaderProps) => {
       return;
     }
 
-    postBookmark(!isBookmarked);
+    setBookmarkState((state) => !state);
+    run();
   };
+
+  useEffect(() => {
+    setBookmarkState(isBookmarked);
+  }, [isBookmarked]);
 
   return (
     <Container>
@@ -34,10 +51,10 @@ const PostHeader = ({ subCategory, title, questionId }: PostHeaderProps) => {
         name="Star"
         width="21"
         height="20"
-        fill={isBookmarked ? 'red' : 'gray100'}
-        stroke={isBookmarked ? 'red' : 'gray300'}
+        fill={bookmarkState ? 'red' : 'gray100'}
+        stroke={bookmarkState ? 'red' : 'gray300'}
         onClick={onBookmarkToggle}
-        aria-label={`북마크 ${isBookmarked ? '삭제' : '추가'}하기`}
+        aria-label={`북마크 ${bookmarkState ? '삭제' : '추가'}하기`}
       />
       <CategoryName>{convertSubCategory(subCategory)}</CategoryName>
       <PostTitle>{title}</PostTitle>
