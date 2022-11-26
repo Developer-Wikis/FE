@@ -7,6 +7,9 @@ interface CheckboxProps {
   required?: boolean;
   checked: boolean;
   onChange: () => void;
+  /**
+   * Checkbox의 내용이 들어갑니다.
+   */
   children: ReactNode;
 }
 const Checkbox = ({
