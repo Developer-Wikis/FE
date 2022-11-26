@@ -10,7 +10,6 @@ import questionApi from '~/service/question';
 import { IQuestionItem } from '~/types/question';
 import { useRouter } from 'next/router';
 import { isMainType, isMocking, isSubWithAllType } from '~/utils/helper/checkType';
-import useIntersectionObserver from '~/hooks/useIntersectionObserver';
 import { MainType, SubWithAllType, SUB_CATEGORIES } from '~/utils/constant/category';
 import { isValidCategoryPair } from '~/utils/helper/validation';
 import { mediaQuery } from '~/utils/helper/mediaQuery';
@@ -30,7 +29,6 @@ const initialValues: QueryParams = {
 
 /*
 TODO:
-- 무한스크롤 제거
 - 목록 조회/북마크 기능 api 연결
 - react-query 적용
 */
@@ -38,25 +36,9 @@ TODO:
 const Home: NextPage = () => {
   const [queryParams, setQueryParams] = useState<QueryParams | null>(null);
   const [questions, setQuestions] = useState<IQuestionItem[]>([]);
-  const [isEndPage, setIsEndPage] = useState(false);
 
   const router = useRouter();
   const { request } = useAxios(questionApi.getList, [queryParams]);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const onIntersect: IntersectionObserverCallback = ([{ isIntersecting }]) => {
-    if (isEndPage) {
-      setObserverTarget(undefined);
-      return;
-    }
-
-    if (isIntersecting && !isLoading && queryParams) {
-      const nextQueryParams = { ...queryParams, page: queryParams.page + 1 };
-      setQueryParams(nextQueryParams);
-      requestQuestionList(nextQueryParams);
-    }
-  };
-  const { setTarget: setObserverTarget } = useIntersectionObserver({ onIntersect, threshold: 0.2 });
 
   const onChangePage = (page: number) => {
     if (!queryParams) return;
@@ -70,7 +52,7 @@ const Home: NextPage = () => {
     if (!queryParams || queryParams.subCategory === subCategory) return;
 
     const nextQueryParams = { ...queryParams, subCategory, page: initialValues.page };
-    setIsEndPage(false);
+
     setQueryParams(nextQueryParams);
     router.push({
       pathname: '/',
@@ -82,25 +64,10 @@ const Home: NextPage = () => {
   const requestQuestionList = async (queryParams: QueryParams) => {
     if (!queryParams) return;
 
-    setIsLoading(true);
-
     const result = await request(queryParams);
     if (!result) return;
 
-    if (isMocking()) {
-      setQuestions(result.data.content);
-    } else {
-      setQuestions(
-        queryParams.page === initialValues.page
-          ? result.data.content
-          : [...questions, ...result.data.content],
-      );
-    }
-
-    if (result.data.last) {
-      setIsEndPage(true);
-    }
-    setIsLoading(false);
+    setQuestions(result.data.content);
   };
 
   useEffect(() => {
@@ -126,7 +93,6 @@ const Home: NextPage = () => {
     if (notChanged) return;
 
     setQueryParams(nextQueryParams);
-    setIsEndPage(false);
     requestQuestionList(nextQueryParams);
   }, [router.isReady, router.query.mainCategory, router.query.subCategory]);
 
@@ -146,7 +112,6 @@ const Home: NextPage = () => {
               currentCategory={queryParams.subCategory}
             />
             <StyledQuestionList
-              ref={setObserverTarget}
               questions={questions}
               currentCategory={{
                 mainCategory: queryParams.mainCategory,
@@ -157,14 +122,12 @@ const Home: NextPage = () => {
               }}
             />
 
-            {isMocking() && (
-              <Pagination
-                totalElements={21}
-                onChange={onChangePage}
-                current={queryParams.page}
-                key={JSON.stringify(queryParams)}
-              />
-            )}
+            <Pagination
+              totalElements={21}
+              onChange={onChangePage}
+              current={queryParams.page}
+              key={JSON.stringify(queryParams)}
+            />
           </>
         )}
       </MainContent>
