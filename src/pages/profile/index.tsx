@@ -1,50 +1,46 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import PageContainer from '~/components/common/PageContainer';
-import Pagination from '~/components/common/Pagination';
 import Tab, { TTab } from '~/components/domain/profile/Tab';
 import UserInfo from '~/components/domain/profile/UserInfo';
-import Bookmark, { TQueryBookmark, TSubQuery } from '~/components/domain/profile/Tab/Bookmark';
-import Comment, { TQueryComment } from '~/components/domain/profile/Tab/Comment';
+import Bookmark from '~/components/domain/profile/Tab/Bookmark';
+import Comment from '~/components/domain/profile/Tab/Comment';
 import { IUser } from '~/types/user';
+import { useUser } from '~/react-query/hooks/useUser';
+import useProfileBookmark from '~/react-query/hooks/useProfileBookmark';
+import useProfileComment from '~/react-query/hooks/useProfileComment';
 
 /*
 TODO:
-- useUser 적용
 - api 연결
 - 반응형 대응
 - URI query (/profile?tab=question&page=1) - UI 동기화
-- 더미데이터 제거
 */
 
-export type TQuery = TQueryBookmark | TQueryComment;
-
 const Profile = () => {
-  const [query, setQuery] = useState<TQuery>({
-    tab: 'question',
-    subQuery: { mainCategory: 'all', subCategory: 'all' },
-    content: [],
-    page: 0,
-    totalPage: 5,
-  });
+  const [tab, setTab] = useState<TTab>('question');
 
-  const handlePageChange = (page: number) => handleChange('page', page);
-  const handleChange = (name: string, value: TTab | TSubQuery | number) => {
-    // api 연결 후 응답값으로 setQuery
-    setQuery({ ...query, [name]: value });
+  const { user } = useUser();
+  const bookmark = useProfileBookmark();
+  const comment = useProfileComment();
 
-    alert(JSON.stringify({ ...query, [name]: value }, null, 2));
-  };
+  useEffect(() => {
+    bookmark.prefetch();
+    comment.prefetch();
+  }, []);
 
   return (
     <StyledPageContainer>
-      <StyledUserInfo user={{} as IUser} />
-      <StyledProfileTab tab={query.tab} onChange={handleChange} />
+      <StyledUserInfo user={user || ({} as IUser)} />
+      <StyledProfileTab tab={tab} onChange={setTab} />
       <TabContent>
-        {query.tab === 'question' && <Bookmark query={query} onChange={handleChange} />}
-        {query.tab === 'comment' && <Comment content={query.content} />}
+        {tab === 'question' && (
+          <Bookmark query={bookmark.query} data={bookmark.data} onChange={bookmark.setQuery} />
+        )}
+        {tab === 'comment' && (
+          <Comment query={comment.query} data={comment.data} onChange={comment.setQuery} />
+        )}
       </TabContent>
-      <Pagination totalElements={query.totalPage * 20} onChange={handlePageChange} />
     </StyledPageContainer>
   );
 };

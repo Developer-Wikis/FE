@@ -4,7 +4,7 @@ import Link from '~/components/base/Link';
 export type TTab = 'question' | 'comment';
 interface Tab {
   tab: TTab;
-  onChange: (name: 'tab', value: TTab) => void;
+  onChange: (value: TTab) => void;
 }
 
 const Tab = ({ tab, onChange, ...props }: Tab) => {
@@ -19,7 +19,7 @@ const Tab = ({ tab, onChange, ...props }: Tab) => {
             as={`/profile`}
             size="lg"
             className={getClassName('question')}
-            onClick={() => onChange('tab', 'question')}
+            onClick={() => onChange('question')}
           >
             북마크한 질문 {0}
           </StyledLink>
@@ -29,7 +29,7 @@ const Tab = ({ tab, onChange, ...props }: Tab) => {
             href={{ pathname: `/profile`, query: { tab: 'comment' } }}
             size="lg"
             className={getClassName('comment')}
-            onClick={() => onChange('tab', 'comment')}
+            onClick={() => onChange('comment')}
           >
             작성한 댓글 {0}
           </StyledLink>

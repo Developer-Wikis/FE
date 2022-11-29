@@ -1,3 +1,6 @@
+import { IProfileCommentItem } from '~/types/comment';
+import { IQuestionItem } from '~/types/question';
+import { Paging } from '~/types/utilityType';
 import { auth } from './base';
 
 const userApi = {
@@ -15,6 +18,16 @@ const userApi = {
   },
   editProfileDefaultImage: (userId: number) => {
     return auth.put(`/user/profile/default/${userId}`).then((res) => res.data);
+  },
+  getBookmark: (params: {
+    mainCategory: string;
+    subCategory: string;
+    page: number;
+  }): Promise<Paging<IQuestionItem>> => {
+    return auth.get('/questions/bookmark', { params }).then((res) => res.data);
+  },
+  getComment: (params: { page: number }): Promise<Paging<IProfileCommentItem>> => {
+    return auth.get('/user/comment', { params }).then((res) => res.data);
   },
 };
 
