@@ -10,7 +10,7 @@ interface UserInfoProps {
 const UserInfo = ({ user, ...props }: UserInfoProps) => {
   return (
     <Container {...props}>
-      <StyledUserProfile text={user.username || 'jini'} fontSize="lg" />
+      <StyledUserProfile profileUrl={user.profileUrl} text={user.username} fontSize="lg" />
       <Link href={`/profile/edit`} linkType="borderGray" size="sm">
         회원 정보 수정
       </Link>
