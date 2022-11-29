@@ -88,6 +88,7 @@ const RandomText = () => {
         <PageContainer>
           <Article full>
             <PostHeader
+              questionId={curQuestion.id}
               subCategory={curQuestion.subCategory}
               title={isString(curQuestion.title) ? curQuestion.title : ''}
             />
