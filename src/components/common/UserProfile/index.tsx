@@ -6,9 +6,21 @@ export const AvatarSize = ['sm', 'md'] as const;
 export const AvatarFontSize = ['sm', 'md', 'lg'] as const;
 
 interface UserProfileProps {
+  /**
+   * 프로필 이미지의 경로를 설정합니다.
+   */
   profileUrl?: string;
+  /**
+   * 프로필 이미지 사이즈를 설정합니다.
+   */
   avatarSize?: typeof AvatarSize[number];
+  /**
+   * 폰트 사이즈를 설정합니다.
+   */
   fontSize?: typeof AvatarFontSize[number];
+  /**
+   * 프로필에 작성할 텍스트를 설정합니다.
+   */
   text: string;
 }
 

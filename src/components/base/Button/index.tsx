@@ -2,14 +2,39 @@ import styled from '@emotion/styled';
 import { ButtonHTMLAttributes, CSSProperties, MouseEvent, ReactNode } from 'react';
 import Spinner from '~/components/common/Spinner/inext';
 import { buttonSizes, buttonStyle } from './types';
+
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  /**
+   * Button의 내용이 들어갑니다.
+   */
   children?: ReactNode;
+  /**
+   * Button의 ColorType을 설정합니다.
+   */
   buttonType?: keyof typeof buttonStyle;
+  /**
+   * Button의 size를 설정합니다.
+   */
   size?: keyof typeof buttonSizes;
+  /**
+   * true일 경우 좌우 공간을 모두 차지합니다.
+   */
   fullWidth?: boolean;
+  /**
+   * true일 경우 button이 disabled 됩니다.
+   */
   disabled?: boolean;
+  /**
+   * true일 경우 로딩 스피너가 나타납니다.
+   */
   loading?: boolean;
+  /**
+   * Button의 앞부분에 요소를 추가합니다.
+   */
   startIcon?: ReactNode;
+  /**
+   * Button의 뒷부분에 요소를 추가합니다.
+   */
   endIcon?: ReactNode;
 }
 

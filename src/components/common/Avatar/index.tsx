@@ -4,8 +4,17 @@ import { MouseEvent, SyntheticEvent, useEffect, useState } from 'react';
 import { AvatarSize, AvatarSizes } from './types';
 
 interface AvatarProps {
+  /**
+   * 이미지의 경로를 설정합니다.
+   */
   src?: string;
+  /**
+   * 이미지의 사이즈를 설정합니다.
+   */
   size?: AvatarSizes;
+  /**
+   * 이미지를 대체할 텍스트를 설정합니다.
+   */
   alt?: string;
   onClick?: (e: MouseEvent<HTMLImageElement>) => void;
 }
