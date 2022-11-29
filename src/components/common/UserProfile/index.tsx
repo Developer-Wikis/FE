@@ -2,10 +2,13 @@ import styled from '@emotion/styled';
 import { theme } from '~/types/theme';
 import Avatar from '../Avatar';
 
+export const AvatarSize = ['sm', 'md'] as const;
+export const AvatarFontSize = ['sm', 'md', 'lg'] as const;
+
 interface UserProfileProps {
   profileUrl?: string;
-  avatarSize?: 'md' | 'sm';
-  fontSize?: 'sm' | 'md' | 'lg';
+  avatarSize?: typeof AvatarSize[number];
+  fontSize?: typeof AvatarFontSize[number];
   text: string;
 }
 
