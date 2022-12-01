@@ -1,6 +1,8 @@
 export interface ICommentItem {
   id: number;
-  nickname: string;
+  username: string;
+  role: 'ANONYMOUS' | 'USER';
+  userId: number;
   content: string;
   createdAt: string;
 }

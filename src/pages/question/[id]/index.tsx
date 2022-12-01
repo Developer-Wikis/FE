@@ -104,7 +104,11 @@ const QuestionDetail = ({ questionId: defaultId, query }: QuestionDetailProps) =
 
   return (
     <Container>
-      <PostHeader subCategory={detailData.subCategory} title={detailData.title} />
+      <PostHeader
+        subCategory={detailData.subCategory}
+        title={detailData.title}
+        questionId={detailData.id}
+      />
       <PostContent>
         <Recorder key={detailData.id} />
         <TailQuestions

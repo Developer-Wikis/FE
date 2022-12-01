@@ -35,3 +35,10 @@ export const objectToQuery = (payload: object) => {
 export function convertSubCategory(code: SubWithAllType) {
   return subCategories[code];
 }
+
+export const objectToForm = (data: { [key: string]: string | File }) => {
+  const formData = new FormData();
+  Object.keys(data).forEach((key) => formData.append(key, data[key]));
+
+  return formData;
+};

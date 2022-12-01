@@ -28,8 +28,9 @@ const nextConfig = {
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
   },
   images: {
-    // google 기본 프로필 이미지 가져올 때 사용
-    domains: ['lh3.googleusercontent.com'],
+    // lh3.googleusercontent.com: google 기본 프로필 이미지
+    // kr.object.ncloudstorage.com: cloud 이미지
+    domains: ['lh3.googleusercontent.com', 'kr.object.ncloudstorage.com'],
     formats: ['image/avif', 'image/webp'],
   },
 };

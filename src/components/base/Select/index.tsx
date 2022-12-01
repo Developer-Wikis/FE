@@ -2,11 +2,20 @@ import styled from '@emotion/styled';
 import { ChangeEvent, SelectHTMLAttributes } from 'react';
 
 interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
+  /**
+   * Select의 옵션 데이터를 설정합니다.
+   */
   list: { value: string; text: string }[];
   name?: string;
   onChange: (e: ChangeEvent<HTMLSelectElement>) => void;
   selected?: string;
+  /**
+   * true일 경우 기본 옵션을 제거합니다.
+   */
   withoutDefault?: boolean;
+  /**
+   * 기본 옵션의 내용을 설정합니다.
+   */
   defaultText?: string;
 }
 const Select = ({

@@ -5,7 +5,9 @@ import Label from '~/components/base/Label';
 import AddForm from '~/components/common/AddForm';
 import InputField from '~/components/common/InputField';
 import Modal from '~/components/common/Modal';
+import { useEditProfile } from '~/react-query/hooks/useEditProfile';
 import { User } from '~/types/user';
+import { objectToForm } from '~/utils/helper/converter';
 import { mediaQuery } from '~/utils/helper/mediaQuery';
 import EditAvatar from './EditAvatar';
 import ImageEditModal from './ImageEditModal';
@@ -18,7 +20,7 @@ interface EditUserInfoProps {
 
 const EditUserInfo = ({ user, onEditNickname }: EditUserInfoProps) => {
   const [isOpenModal, setIsOpenModal] = useState(false);
-  const [profileImage, setProfileImage] = useState<string>(user.profileUrl);
+  const { editProfileImage } = useEditProfile();
 
   const onCloseModal = () => {
     setIsOpenModal(false);
@@ -28,11 +30,9 @@ const EditUserInfo = ({ user, onEditNickname }: EditUserInfoProps) => {
     setIsOpenModal(true);
   };
 
-  const onChangeProfileImage = (imageUrl: string) => {
-    /* 서버 요청 코드 작성
-    profileImageURL 받아서 setProfileImage 하기 */
-
-    setProfileImage(imageUrl);
+  const onChangeProfileImage = async (imageFile: File) => {
+    const formData = await objectToForm({ image: imageFile });
+    editProfileImage({ userId: user.id, formData });
     onCloseModal();
   };
 
@@ -57,7 +57,7 @@ const EditUserInfo = ({ user, onEditNickname }: EditUserInfoProps) => {
       </UserInfo>
       <UserProfile>
         <HideLabel htmlFor="profileImage">프로필 수정</HideLabel>
-        <EditAvatar size="lg" imageUrl={profileImage} onClick={onClickProfileImage} />
+        <EditAvatar size="lg" imageUrl={user.profileUrl} onClick={onClickProfileImage} />
       </UserProfile>
       <Modal visible={isOpenModal} onClose={onCloseModal}>
         <ImageEditModal onChangeImage={onChangeProfileImage} />
