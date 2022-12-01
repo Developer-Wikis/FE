@@ -13,6 +13,9 @@ const userApi = {
   editProfileImage: ({ userId, formData }: { userId: number; formData: FormData }) => {
     return auth.post(`/user/image/${userId}`, formData).then((res) => res.data);
   },
+  editProfileDefaultImage: (userId: number) => {
+    return auth.put(`/user/profile/default/${userId}`).then((res) => res.data);
+  },
 };
 
 export default userApi;

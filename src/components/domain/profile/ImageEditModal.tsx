@@ -8,9 +8,10 @@ import { isValidFileSize, isValidImageFileExtension } from '~/utils/helper/valid
 
 interface ImageEditModalProps {
   onChangeImage: (imageFile: File) => void;
+  onChangeDefaultImage: () => void;
 }
 
-const ImageEditModal = ({ onChangeImage }: ImageEditModalProps) => {
+const ImageEditModal = ({ onChangeImage, onChangeDefaultImage }: ImageEditModalProps) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const onClickUploadButton = () => {
@@ -44,15 +45,15 @@ const ImageEditModal = ({ onChangeImage }: ImageEditModalProps) => {
     onChangeImage(imageFile);
   };
 
-  // const onChangeDefaultImage = () => {
-  //   console.log('기본 이미지로 변경');
-  // };
+  const handleChangeDefaultImage = () => {
+    onChangeDefaultImage();
+  };
 
   return (
     <Container>
-      {/* <Button size="lg" buttonType="borderGray" fullWidth onClick={onChangeDefaultImage}>
+      <Button size="lg" buttonType="borderGray" fullWidth onClick={handleChangeDefaultImage}>
         기본 이미지로 변경
-      </Button> */}
+      </Button>
       <UploadButton size="lg" buttonType="red" fullWidth onClick={onClickUploadButton}>
         <ButtonText>
           <StyledIcon name="Upload" size="18" />
@@ -86,7 +87,7 @@ const Container = styled(Article)`
 `;
 
 const UploadButton = styled(Button)`
-  /* margin-top: 10px; */
+  margin-top: 10px;
   flex-direction: column;
 `;
 
