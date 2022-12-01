@@ -11,9 +11,9 @@ export default {
     buttonType: {
       control: 'radio',
       options: Object.keys(buttonStyle),
-      defaultValue: buttonStyle.black,
+      defaultValue: 'black',
     },
-    size: { control: 'radio', options: Object.keys(buttonSizes), defaultValue: buttonSizes.md },
+    size: { control: 'radio', options: Object.keys(buttonSizes), defaultValue: 'md' },
     fullWidth: { control: 'boolean', defaultValue: false },
     disabled: { control: 'boolean', defaultValue: false },
     loading: { control: 'boolean', defaultValue: false },
@@ -22,12 +22,6 @@ export default {
   },
 } as ComponentMeta<typeof Button>;
 
-// More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
 export const Template: ComponentStory<typeof Button> = (args) => {
   return <Button {...args} />;
 };
-
-// export const Primary = Template.bind({});
-// Template.args = {
-//   buttonType: 'black',
-// };
