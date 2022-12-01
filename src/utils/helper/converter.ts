@@ -36,7 +36,7 @@ export function convertSubCategory(code: SubWithAllType) {
   return subCategories[code];
 }
 
-export const objectToForm = async (data: { [key: string]: string | File }) => {
+export const objectToForm = (data: { [key: string]: string | File }) => {
   const formData = new FormData();
   Object.keys(data).forEach((key) => formData.append(key, data[key]));
 

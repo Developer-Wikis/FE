@@ -8,7 +8,6 @@ const userApi = {
     return auth.delete(`/user/${userId}`).then((res) => res.data);
   },
   editUsername: ({ userId, username }: { userId: number; username: string }) => {
-    // username으로 바뀔 예정
     return auth.post(`/user/username/${userId}`, { username: username }).then((res) => res.data);
   },
   editProfileImage: ({ userId, formData }: { userId: number; formData: FormData }) => {
