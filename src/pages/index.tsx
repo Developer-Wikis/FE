@@ -3,7 +3,7 @@ import Head from 'next/head';
 import PageContainer from '~/components/common/PageContainer';
 import QuestionList from '~/components/domain/QuestionList';
 import styled from '@emotion/styled';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import MiddleCategory from '~/components/common/MiddleCategory';
 import { useRouter } from 'next/router';
 import { isMainType, isSubWithAllType } from '~/utils/helper/checkType';
@@ -29,8 +29,9 @@ const initialValues: QueryParams = {
 const Home: NextPage = () => {
   const router = useRouter();
 
+  const [isReady, setIsReady] = useState(false);
   const [queryParams, setQueryParams] = useUrlState(initialValues);
-  const { data } = useQuestionList(queryParams);
+  const { data } = useQuestionList(queryParams, isReady);
 
   const onChangePage = (page: number) => setQueryParams({ ...queryParams, page });
   const onChangeSubCategory = (subCategory: SubWithAllType) => {
@@ -50,8 +51,10 @@ const Home: NextPage = () => {
       initialValues,
     );
     setQueryParams(filteredQuery);
+    setIsReady(true);
   }, [router.isReady, router.query.mainCategory, router.query.subCategory]);
 
+  if (!isReady) return null;
   return (
     <div>
       <Head>

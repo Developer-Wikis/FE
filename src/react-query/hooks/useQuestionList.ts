@@ -10,7 +10,7 @@ type QueryParams = {
   page: number;
 };
 
-const useQuestionList = (queryParams: QueryParams) => {
+const useQuestionList = (queryParams: QueryParams, isReady: boolean) => {
   const { user } = useUser();
 
   const fallback = { content: [], totalElements: 0 };
@@ -20,6 +20,7 @@ const useQuestionList = (queryParams: QueryParams) => {
     {
       keepPreviousData: true,
       staleTime: 0,
+      enabled: isReady,
     },
   );
 
