@@ -22,7 +22,7 @@ const useCommentHandler = () => {
   };
 
   const onCloseEditor = () => {
-    updateEditId(null);
+    resetPasswordState();
   };
 
   const onOpenEditor = (commentId: number) => {
@@ -31,8 +31,7 @@ const useCommentHandler = () => {
 
   const onDeleteComment = async (payload: { commentId: number; password?: string }) => {
     await deleteComment(payload);
-    // 상태코드에 따라 다르게 에러 출력하기
-    updatePasswordState({ commentId: null, action: '', password: '' });
+    resetPasswordState();
   };
 
   const onSubmitPassword = async (payload: { commentId: number; password: string }) => {

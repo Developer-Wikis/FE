@@ -15,10 +15,9 @@ const CommentContent = ({ comment }: CommentContentProps) => {
 
   const isAnonymous = comment.role === 'ANONYMOUS';
   const isMyComment = user && user.id === comment.userId;
-  const isEditableComment = !user || comment.role === 'ANONYMOUS';
 
   const handleDelete = () => {
-    if (isEditableComment) {
+    if (isAnonymous) {
       onOpenPassword(comment.id, 'delete');
       return;
     }
@@ -26,7 +25,7 @@ const CommentContent = ({ comment }: CommentContentProps) => {
   };
 
   const handleEditStart = () => {
-    if (isEditableComment) {
+    if (isAnonymous) {
       onOpenPassword(comment.id, 'edit');
       return;
     }
