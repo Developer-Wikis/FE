@@ -3,7 +3,7 @@ import { ChangeEvent, FormEvent, useContext, useState } from 'react';
 import Button from '~/components/base/Button';
 import Icon from '~/components/base/Icon';
 import Input from '~/components/base/Input';
-import { CommentContext } from '~/components/common/Comment/context';
+import useCommentHandler from '~/hooks/useCommentHandler';
 
 interface PasswordConfirmProps {
   commentId: number;
@@ -11,22 +11,20 @@ interface PasswordConfirmProps {
 
 const PasswordConfirm = ({ commentId }: PasswordConfirmProps) => {
   const [password, setPassword] = useState('');
-  const { onOpenPassword, onSubmitPassword } = useContext(CommentContext);
-  const [isLoading, setIsLoading] = useState(false);
+
+  const { onSubmitPassword, onClosePassword, isLoadingDelete } = useCommentHandler();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
-    await onSubmitPassword(commentId, password);
-    setIsLoading(false);
+    onSubmitPassword({ commentId, password });
   };
 
   const handleClose = () => {
-    onOpenPassword(null, '');
+    onClosePassword();
   };
 
   return (
@@ -38,7 +36,7 @@ const PasswordConfirm = ({ commentId }: PasswordConfirmProps) => {
           value={password}
           onChange={handleChange}
         />
-        <SubmitButton size="sm" loading={isLoading}>
+        <SubmitButton size="sm" loading={isLoadingDelete}>
           확인
         </SubmitButton>
         <Icon.Button name="Close" color="gray500" size="12" onClick={handleClose} />

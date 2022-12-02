@@ -1,28 +1,32 @@
 import styled from '@emotion/styled';
-import { useContext } from 'react';
 import Icon from '~/components/base/Icon';
+import useCommentHandler from '~/hooks/useCommentHandler';
 import { useUser } from '~/react-query/hooks/useUser';
 import { ICommentItem } from '~/types/comment';
 import { formatDate } from '~/utils/helper/formatting';
 import { mediaQuery } from '~/utils/helper/mediaQuery';
-import { CommentContext } from './context';
 
 interface CommentContentProps {
   comment: ICommentItem;
 }
 const CommentContent = ({ comment }: CommentContentProps) => {
-  const { onOpenPassword, onOpenEditor } = useContext(CommentContext);
   const { user } = useUser();
+  const { onOpenPassword, onOpenEditor, onDeleteComment } = useCommentHandler();
 
   const isAnonymous = comment.role === 'ANONYMOUS';
   const isMyComment = user && user.id === comment.userId;
+  const isEditableComment = !user || comment.role === 'ANONYMOUS';
 
   const handleDelete = () => {
-    onOpenPassword(comment.id, 'delete');
+    if (isEditableComment) {
+      onOpenPassword(comment.id, 'delete');
+      return;
+    }
+    onDeleteComment({ commentId: comment.id });
   };
 
   const handleEditStart = () => {
-    if (!user) {
+    if (isEditableComment) {
       onOpenPassword(comment.id, 'edit');
       return;
     }
