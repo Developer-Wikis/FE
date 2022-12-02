@@ -4,5 +4,6 @@ export interface ICommentItem {
   role: 'ANONYMOUS' | 'USER';
   userId: number;
   content: string;
+  profileUrl: string;
   createdAt: string;
 }

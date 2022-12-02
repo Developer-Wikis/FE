@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { useContext } from 'react';
 import { ICommentItem } from '~/types/comment';
 import { mediaQuery } from '~/utils/helper/mediaQuery';
+import UserProfile from '../UserProfile';
 import CommentContent from './CommentContent';
 import { CommentContext } from './context';
 import EditCommentForm from './EditCommentForm';
@@ -19,7 +20,16 @@ const CommentItem = ({ commentId, comment }: CommentListProps) => {
     <StyledLi>
       <CommentContainer>
         <Writer>
-          <span title={comment.username}>{comment.username}</span>
+          {comment.userId ? (
+            <UserProfile
+              profileUrl={comment.profileUrl}
+              avatarSize="sm"
+              fontSize="sm"
+              text={comment.username}
+            />
+          ) : (
+            <span title={comment.username}>{comment.username}</span>
+          )}
         </Writer>
         {editId !== commentId ? (
           <CommentContent comment={comment} />

@@ -48,6 +48,7 @@ export default CommentContent;
 const Content = styled.div`
   flex-grow: 1;
   margin-left: 16px;
+  color: ${({ theme }) => theme.colors.gray800};
 
   p {
     word-break: break-all;
