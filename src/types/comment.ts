@@ -18,3 +18,8 @@ interface UserComment {
 }
 
 export type CommentType = AnonymousComment | UserComment;
+
+export interface CommentEditPayload {
+  password?: string;
+  content: string;
+}

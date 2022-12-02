@@ -2,7 +2,6 @@ import { createContext, ReactNode, useState } from 'react';
 import { useComment } from '~/react-query/hooks/useComment';
 import commentApi from '~/service/comment';
 import { ICommentItem } from '~/types/comment';
-import { commentValuesType } from '../AddCommentForm';
 
 interface PasswordState {
   commentId: null | number;
@@ -11,13 +10,13 @@ interface PasswordState {
 }
 
 export interface ContextTypes {
+  questionId: number;
   comments: ICommentItem[];
   editId: null | number;
   passwordState: PasswordState;
   onOpenPassword: (commentId: number | null, action: CommentActionType) => void;
+  onOpenEditor: (commentId: number) => void;
   onSubmitPassword: (commentId: number, password: string) => void;
-  onAddComment: (values: commentValuesType) => void;
-  onEditComment: (commentId: number, content: string) => void;
   onCancelEdit: () => void;
 }
 export const CommentContext = createContext<ContextTypes>({} as ContextTypes);
@@ -43,6 +42,10 @@ const CommentProvider = ({ children, questionId }: CommentStoreProps) => {
 
   const onOpenPassword = (commentId: number | null, action: CommentActionType) => {
     setPasswordState({ commentId, action, password: '' });
+  };
+
+  const onOpenEditor = (commentId: number) => {
+    setEditId(commentId);
   };
 
   const onSubmitPassword = async (commentId: number, password: string) => {
@@ -71,44 +74,22 @@ const CommentProvider = ({ children, questionId }: CommentStoreProps) => {
     }
   };
 
-  const onAddComment = async (values: commentValuesType) => {
-    try {
-      await commentApi.create(questionId, values);
-      await updateComments();
-      setPasswordState({ commentId: null, action: '', password: '' });
-    } catch (e) {
-      // 상태코드에 따라 다르게 에러 출력하기
-      alert('댓글 등록에 실패했습니다.');
-    }
-  };
-
-  const onEditComment = async (commentId: number, content: string) => {
-    try {
-      await commentApi.edit(questionId, commentId, { password: passwordState.password, content });
-      await updateComments();
-      setPasswordState({ commentId: null, action: '', password: '' });
-      setEditId(null);
-    } catch (e) {
-      // 상태코드에 따라 다르게 에러 출력하기
-      alert('댓글 수정에 실패했습니다.');
-    }
-  };
-
   const onCancelEdit = () => {
+    setPasswordState({ commentId: null, action: '', password: '' });
     setEditId(null);
   };
 
   return (
     <CommentContext.Provider
       value={{
+        questionId,
         comments,
         editId,
         passwordState,
         onOpenPassword,
         onSubmitPassword,
-        onAddComment,
-        onEditComment,
         onCancelEdit,
+        onOpenEditor,
       }}
     >
       {children}
