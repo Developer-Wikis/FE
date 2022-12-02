@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { useContext, useRef, useState } from 'react';
+import { useRef } from 'react';
 import Button from '~/components/base/Button';
 import useForm from '~/hooks/useForm';
 import { useAddComment } from '~/react-query/hooks/useComment';
@@ -7,7 +7,6 @@ import { useUser } from '~/react-query/hooks/useUser';
 import { mediaQuery } from '~/utils/helper/mediaQuery';
 import { SUBMIT_CHECK } from '~/utils/helper/validation';
 import CommentTextArea from './CommentTextArea';
-import { CommentContext } from './context';
 
 const initialValues = {
   nickname: '',
