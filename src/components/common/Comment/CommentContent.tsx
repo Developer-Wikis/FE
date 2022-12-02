@@ -11,7 +11,7 @@ interface CommentContentProps {
   comment: ICommentItem;
 }
 const CommentContent = ({ comment }: CommentContentProps) => {
-  const { onOpenPassword } = useContext(CommentContext);
+  const { onOpenPassword, onOpenEditor } = useContext(CommentContext);
   const { user } = useUser();
 
   const isAnonymous = comment.role === 'ANONYMOUS';
@@ -22,7 +22,11 @@ const CommentContent = ({ comment }: CommentContentProps) => {
   };
 
   const handleEditStart = () => {
-    onOpenPassword(comment.id, 'edit');
+    if (!user) {
+      onOpenPassword(comment.id, 'edit');
+      return;
+    }
+    onOpenEditor(comment.id);
   };
 
   return (

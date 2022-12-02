@@ -16,6 +16,9 @@ interface CommentListProps {
 const CommentItem = ({ commentId, comment }: CommentListProps) => {
   const { editId, passwordState } = useContext(CommentContext);
 
+  const isShowPasswordInput = passwordState.commentId === commentId;
+  const isShowEditor = editId !== commentId;
+
   return (
     <StyledLi>
       <CommentContainer>
@@ -31,14 +34,14 @@ const CommentItem = ({ commentId, comment }: CommentListProps) => {
             <span title={comment.username}>{comment.username}</span>
           )}
         </Writer>
-        {editId !== commentId ? (
+        {isShowEditor ? (
           <CommentContent comment={comment} />
         ) : (
           <EditorContainer>
             <EditCommentForm defaultValue={comment.content} commentId={commentId} />
           </EditorContainer>
         )}
-        {passwordState.commentId === commentId && <PasswordConfirm commentId={commentId} />}
+        {isShowPasswordInput && <PasswordConfirm commentId={commentId} />}
       </CommentContainer>
     </StyledLi>
   );

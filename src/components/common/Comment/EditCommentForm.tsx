@@ -1,6 +1,8 @@
 import styled from '@emotion/styled';
 import { ChangeEvent, FormEvent, useContext, useRef, useState } from 'react';
 import Button from '~/components/base/Button';
+import { useEditComment } from '~/react-query/hooks/useComment';
+import { useUser } from '~/react-query/hooks/useUser';
 import { SUBMIT_CHECK } from '~/utils/helper/validation';
 import CommentTextArea from './CommentTextArea';
 import { CommentContext } from './context';
@@ -13,8 +15,9 @@ interface EditCommentFormProps {
 const EditCommentForm = ({ defaultValue, commentId }: EditCommentFormProps) => {
   const [content, setContent] = useState(defaultValue);
   const contentRef = useRef<null | HTMLTextAreaElement>(null);
-  const { onEditComment, onCancelEdit } = useContext(CommentContext);
-  const [isLoading, setIsLoading] = useState(false);
+  const { onCancelEdit, passwordState, questionId } = useContext(CommentContext);
+  const { user } = useUser();
+  const { editComment, isLoading } = useEditComment(questionId);
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setContent(e.target.value);
@@ -29,9 +32,14 @@ const EditCommentForm = ({ defaultValue, commentId }: EditCommentFormProps) => {
       return;
     }
 
-    setIsLoading(true);
-    await onEditComment(commentId, content);
-    setIsLoading(false);
+    if (user) {
+      await editComment({ commentId, payload: { content } });
+    } else {
+      await editComment({ commentId, payload: { password: passwordState.password, content } });
+    }
+
+    // 위 에러 시 아래 코드 실행 안됨
+    onCancelEdit();
   };
 
   return (

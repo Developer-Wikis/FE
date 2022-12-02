@@ -53,9 +53,10 @@ const AddCommentForm = ({ questionId }: { questionId: number }) => {
     }
 
     const commentData = user ? { content: values.content } : values;
-    const result = await addComment(commentData);
+    await addComment(commentData);
 
-    !result && handleReset({ ...values, content: '' });
+    // 위 에러 시 아래 코드 실행 안됨
+    handleReset({ ...values, content: '' });
   }
 
   return (
