@@ -2,7 +2,6 @@ import styled from '@emotion/styled';
 import AddCommentForm from './AddCommentForm';
 import CommentList from './CommentList';
 import CommentProvider from './context';
-import TotalCount from './TotalCount';
 
 interface CommentProps {
   questionId: number;
@@ -11,13 +10,12 @@ interface CommentProps {
 const Comment = ({ questionId }: CommentProps) => {
   return (
     <Container>
-      <CommentProvider questionId={questionId}>
-        <TotalCount />
-        <CommentContent>
-          <CommentList />
-          <AddCommentForm questionId={questionId} />
-        </CommentContent>
-      </CommentProvider>
+      <CommentContent>
+        <CommentProvider questionId={questionId}>
+          <CommentList questionId={questionId} />
+        </CommentProvider>
+      </CommentContent>
+      <AddCommentForm questionId={questionId} />
     </Container>
   );
 };
@@ -29,7 +27,5 @@ const Container = styled.div`
 `;
 
 const CommentContent = styled.div`
-  margin-top: 18px;
-  border-top: 2px solid ${({ theme }) => theme.colors.gray800};
   align-items: center;
 `;
