@@ -15,7 +15,7 @@ const Comment = ({ questionId }: CommentProps) => {
         <TotalCount />
         <CommentContent>
           <CommentList />
-          <AddCommentForm />
+          <AddCommentForm questionId={questionId} />
         </CommentContent>
       </CommentProvider>
     </Container>

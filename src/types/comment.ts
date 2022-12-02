@@ -7,3 +7,14 @@ export interface ICommentItem {
   profileUrl: string;
   createdAt: string;
 }
+
+interface AnonymousComment {
+  nickname: string;
+  password: string;
+  content: string;
+}
+interface UserComment {
+  content: string;
+}
+
+export type CommentType = AnonymousComment | UserComment;
