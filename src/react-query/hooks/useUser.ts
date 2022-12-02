@@ -48,6 +48,7 @@ export const useUser = (): UseUser => {
     storage.removeItem(LOCAL_KEY.refresh);
     queryClient.setQueryData([QUERY_KEY.user], null);
     queryClient.removeQueries([QUERY_KEY.user]);
+    queryClient.removeQueries([QUERY_KEY.question]);
   };
 
   const fetchUser = async () => {

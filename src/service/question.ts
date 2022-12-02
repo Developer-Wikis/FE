@@ -1,4 +1,4 @@
-import { unauth } from './base';
+import { auth, unauth } from './base';
 import { IQuestion, IQuestionItem, ICategoryQuery, IQuestionDetail } from '~/types/question';
 import { MainType } from '~/utils/constant/category';
 import { AxiosResponse } from 'axios';
@@ -14,8 +14,8 @@ const questionApi = {
     params: ICategoryQuery & {
       page: number;
     },
-  ): RequestType<TList> {
-    return unauth.get('/questions', { params });
+  ): Promise<TList> {
+    return auth.get('/questions', { params }).then((res) => res.data);
   },
   getDetail(id: number, params: ICategoryQuery): Promise<IQuestionDetail> {
     return unauth.get(`/questions/${id}`, { params }).then((res) => res.data);
@@ -33,7 +33,8 @@ export default questionApi;
 type RequestType<T> = Promise<AxiosResponse<T, any>>;
 type TList = {
   content: IQuestionItem[];
-  last: boolean;
+  totalPages: number;
+  totalElements: number;
 };
 type TDetail = IQuestionItem & {
   tailQuestions: string[];
