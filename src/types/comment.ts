@@ -23,3 +23,5 @@ export interface CommentEditPayload {
   password?: string;
   content: string;
 }
+
+export type CommentActionType = 'delete' | 'edit' | '';

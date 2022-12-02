@@ -1,12 +1,12 @@
 import commentApi from '~/service/comment';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEY } from '../queryKey';
-import { CommentEditPayload, CommentType } from '~/types/comment';
+import { CommentEditPayload, CommentType, ICommentItem } from '~/types/comment';
 
 export const useComment = (questionId: number) => {
   const queryFn = () => commentApi.getList(questionId);
 
-  const { data: comments = [], refetch: updateComments } = useQuery(
+  const { data: comments = [], refetch: updateComments } = useQuery<ICommentItem[]>(
     [QUERY_KEY.comments, questionId],
     {
       queryFn,
@@ -63,4 +63,34 @@ export const useEditComment = (questionId: number) => {
     editComment,
     isLoading,
   };
+};
+
+export const useDeleteComment = (questionId: number) => {
+  const queryClient = useQueryClient();
+
+  const mutationFn = (payload: { commentId: number; password?: string }) =>
+    commentApi.delete({ questionId, ...payload });
+
+  const { mutateAsync: deleteComment, isLoading } = useMutation(mutationFn, {
+    onSuccess: () => {
+      queryClient.invalidateQueries([QUERY_KEY.comments]);
+    },
+    onError: () => {
+      alert('댓글 삭제에 실패했습니다. 다시 시도해주세요.');
+    },
+  });
+
+  return {
+    deleteComment,
+    isLoading,
+  };
+};
+
+export const useCheckPassword = (questionId: number) => {
+  const queryFn = ({ commentId, password }: { commentId: number; password: string }) =>
+    commentApi.checkPassword({ questionId, commentId, password });
+
+  const { data } = useMutation(queryFn, {
+    onSuccess: () => {},
+  });
 };
