@@ -1,10 +1,10 @@
 import styled from '@emotion/styled';
-import { useComment } from '~/react-query/hooks/useComment';
+import { useGetComment } from '~/react-query/hooks/useComment';
 import CommentItem from './CommentItem';
 import TotalCount from './TotalCount';
 
 const CommentList = ({ questionId }: { questionId: number }) => {
-  const { comments } = useComment(questionId);
+  const { comments } = useGetComment(questionId);
   return (
     <>
       <TotalCount total={comments.length} />

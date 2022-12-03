@@ -12,7 +12,8 @@ interface PasswordConfirmProps {
 const PasswordConfirm = ({ commentId }: PasswordConfirmProps) => {
   const [password, setPassword] = useState('');
 
-  const { onSubmitPassword, onClosePassword, isLoadingDelete } = useCommentHandler();
+  const { onSubmitPassword, onClosePassword, isLoadingDelete, isLoadingCheckPassword } =
+    useCommentHandler();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
@@ -36,7 +37,7 @@ const PasswordConfirm = ({ commentId }: PasswordConfirmProps) => {
           value={password}
           onChange={handleChange}
         />
-        <SubmitButton size="sm" loading={isLoadingDelete}>
+        <SubmitButton size="sm" loading={isLoadingDelete || isLoadingCheckPassword}>
           확인
         </SubmitButton>
         <Icon.Button name="Close" color="gray500" size="12" onClick={handleClose} />
