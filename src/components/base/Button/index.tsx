@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { ButtonHTMLAttributes, CSSProperties, MouseEvent, ReactNode } from 'react';
-import Spinner from '~/components/common/Spinner/inext';
+import Spinner from '~/components/common/Spinner';
 import { buttonSizes, buttonStyle } from './types';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
