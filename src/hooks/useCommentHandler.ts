@@ -1,8 +1,7 @@
 import { useContext } from 'react';
 import { CommentContext } from '~/components/common/Comment/context';
-import { useDeleteComment, useEditComment } from '~/react-query/hooks/useComment';
+import { useCheckPassword, useDeleteComment, useEditComment } from '~/react-query/hooks/useComment';
 import { useUser } from '~/react-query/hooks/useUser';
-import commentApi from '~/service/comment';
 import { CommentActionType } from '~/types/comment';
 
 const useCommentHandler = () => {
@@ -10,6 +9,7 @@ const useCommentHandler = () => {
     useContext(CommentContext);
   const { deleteComment, isLoading: isLoadingDelete } = useDeleteComment(questionId);
   const { editComment, isLoading: isLoadingEdit } = useEditComment(questionId);
+  const { checkPassword, isLoading: isLoadingCheckPassword } = useCheckPassword(questionId);
 
   const { user } = useUser();
 
@@ -31,7 +31,6 @@ const useCommentHandler = () => {
 
   const onDeleteComment = async (payload: { commentId: number; password?: string }) => {
     await deleteComment(payload);
-    // 상태코드에 따라 다르게 에러 출력하기
     updatePasswordState({ commentId: null, action: '', password: '' });
   };
 
@@ -42,21 +41,15 @@ const useCommentHandler = () => {
     }
 
     if (passwordState.action === 'edit') {
-      try {
-        const isCorrectPassword = await commentApi.checkPassword({
-          questionId,
-          commentId: payload.commentId,
-          password: payload.password,
-        });
+      const isCorrectPassword = await checkPassword({
+        commentId: payload.commentId,
+        password: payload.password,
+      });
 
-        if (isCorrectPassword.data) {
-          onOpenEditor(payload.commentId);
-          updatePasswordState({ commentId: null, action: 'edit', password: payload.password });
-        } else {
-          alert('비밀번호가 일치하지 않습니다.');
-        }
-      } catch (e) {
-        // 상태코드에 따라 다르게 에러 출력하기
+      if (isCorrectPassword.data) {
+        onOpenEditor(payload.commentId);
+        updatePasswordState({ commentId: null, action: 'edit', password: payload.password });
+      } else {
         alert('비밀번호가 일치하지 않습니다.');
       }
     }
@@ -83,6 +76,7 @@ const useCommentHandler = () => {
     onCloseEditor,
     isLoadingEdit,
     isLoadingDelete,
+    isLoadingCheckPassword,
   };
 };
 
