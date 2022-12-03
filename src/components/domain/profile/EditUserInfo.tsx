@@ -37,6 +37,12 @@ const EditUserInfo = ({ user, onEditNickname }: EditUserInfoProps) => {
   };
 
   const onChangeDefaultImage = async () => {
+    if (!user.profileUrl) {
+      alert('현재 기본 이미지로 설정되어 있습니다.');
+      onCloseModal();
+      return;
+    }
+
     editDefaultImage(user.id);
     onCloseModal();
   };
