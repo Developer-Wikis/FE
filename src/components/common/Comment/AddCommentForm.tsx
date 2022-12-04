@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { useContext, useRef, useState } from 'react';
 import Button from '~/components/base/Button';
+import Input from '~/components/base/Input';
 import useForm from '~/hooks/useForm';
 import { mediaQuery } from '~/utils/helper/mediaQuery';
 import { SUBMIT_CHECK } from '~/utils/helper/validation';
@@ -55,14 +56,16 @@ const AddCommentForm = () => {
     <Container>
       <Content>
         <Writer>
-          <Input
+          <StyledInput
+            size="sm"
             name="nickname"
             ref={nicknameRef}
             placeholder="닉네임"
             value={values.nickname}
             onChange={handleChange}
           />
-          <Input
+          <StyledInput
+            size="sm"
             name="password"
             type="password"
             ref={passwordRef}
@@ -103,14 +106,7 @@ const Writer = styled.div`
   }
 `;
 
-const Input = styled.input`
-  background-color: white;
-  border: 1px solid ${({ theme }) => theme.colors.gray300};
-  border-radius: 4px;
-  ${({ theme }) => theme.fontStyle.body2};
-
-  height: 32px;
-  padding-left: 8px;
+const StyledInput = styled(Input)`
   box-sizing: border-box;
 
   &:first-of-type {
