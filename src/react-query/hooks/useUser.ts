@@ -25,10 +25,12 @@ const tokenToUserData = async (token: string) => {
 
 export const useUser = (): UseUser => {
   const storage = useStorage('local');
-  const token = storage.getItem(LOCAL_KEY.token, '');
 
   const queryClient = useQueryClient();
-  const queryFn = () => tokenToUserData(token);
+  const queryFn = () => {
+    const token = storage.getItem(LOCAL_KEY.token, '');
+    return tokenToUserData(token)
+  };
 
   const { data: user = null } = useQuery<User>([QUERY_KEY.user], queryFn, {
     onError: () => {
