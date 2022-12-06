@@ -27,8 +27,8 @@ const Header = () => {
     const token = storage.getItem(LOCAL_KEY.token, '');
     setIsLoading(true);
 
-    // 로컬에서 토큰 변경 및 삭제 시
-    if (user && !token && token !== user.token) {
+    // 로컬에서 토큰 삭제 시
+    if (user && !token) {
       logout();
     }
 

@@ -1,17 +1,16 @@
 import styled from '@emotion/styled';
 import { MouseEvent, useEffect } from 'react';
 import BackgroundDim from '~/components/base/BackgroundDim';
-import Button from '~/components/base/Button';
 import Link from '~/components/base/Link';
-import { User } from '~/types/user';
+import { IUser } from '~/types/user';
 import { ThemeColors } from '~/types/theme';
-import { mediaQuery } from '~/utils/helper/mediaQuery';
 import CloseButton from '../CloseButton';
 import Logo from '../Logo';
 import UserProfile from '../UserProfile';
+import { Nullable } from '~/types/utilityType';
 
 interface SlideProps {
-  user: User | null;
+  user: Nullable<IUser>;
   isOpen: boolean;
   onClose: () => void;
 }

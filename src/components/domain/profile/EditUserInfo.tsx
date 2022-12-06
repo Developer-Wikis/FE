@@ -6,7 +6,7 @@ import AddForm from '~/components/common/AddForm';
 import InputField from '~/components/common/InputField';
 import Modal from '~/components/common/Modal';
 import { useEditProfile } from '~/react-query/hooks/useEditProfile';
-import { User } from '~/types/user';
+import { IUser } from '~/types/user';
 import { objectToForm } from '~/utils/helper/converter';
 import { mediaQuery } from '~/utils/helper/mediaQuery';
 import EditAvatar from './EditAvatar';
@@ -14,7 +14,7 @@ import ImageEditModal from './ImageEditModal';
 
 interface EditUserInfoProps {
   // onEditImage: () => void;
-  user: User;
+  user: IUser;
   onEditNickname: (value: string) => void;
 }
 
