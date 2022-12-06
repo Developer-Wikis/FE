@@ -14,11 +14,11 @@ import useProfileComment from '~/react-query/hooks/useProfileComment';
 TODO:
 - api 연결
 - 반응형 대응
-- URI query (/profile?tab=question&page=1) - UI 동기화
+- URI query (/profile?tab=bookmark&page=1) - UI 동기화
 */
 
 const Profile = () => {
-  const [tab, setTab] = useState<TTab>('question');
+  const [tab, setTab] = useState<TTab>('bookmark');
 
   const { user } = useUser();
   const bookmark = useProfileBookmark();
@@ -34,7 +34,7 @@ const Profile = () => {
       <StyledUserInfo user={user || ({} as IUser)} />
       <StyledProfileTab tab={tab} onChange={setTab} />
       <TabContent>
-        {tab === 'question' && (
+        {tab === 'bookmark' && (
           <Bookmark query={bookmark.query} data={bookmark.data} onChange={bookmark.setQuery} />
         )}
         {tab === 'comment' && (
