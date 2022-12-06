@@ -12,6 +12,7 @@ import {
   getSubCategoryWithAllSelectList,
 } from '~/utils/helper/categorySelect';
 import NoResult from './NoResult';
+import PageInfo from './PageInfo';
 
 type WithAll<T> = T | 'all';
 
@@ -61,9 +62,7 @@ const Bookmark = ({ query, data, onChange }: BookmarkProps) => {
           )}
         </div>
 
-        <PageInfo>
-          {query.page + 1}/{data.totalPages} 페이지
-        </PageInfo>
+        <PageInfo cur={query.page} total={data.totalPages} />
       </StyledDiv>
 
       {data.totalElements === 0 ? (
@@ -99,11 +98,6 @@ const StyledSelect = styled(Select)`
   & ~ & {
     margin-left: 13px;
   }
-`;
-
-const PageInfo = styled.span`
-  ${({ theme }) => theme.fontStyle.body2}
-  color: ${({ theme }) => theme.colors.gray500};
 `;
 
 const StyledQuestionList = styled(QuestionList)`
