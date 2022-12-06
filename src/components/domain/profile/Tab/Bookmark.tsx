@@ -3,17 +3,16 @@ import { useRouter } from 'next/router';
 import { ChangeEvent, useEffect, useState } from 'react';
 import Select from '~/components/base/Select';
 import Pagination from '~/components/common/Pagination';
-import QuestionList from '~/components/domain/QuestionList';
 import useProfileBookmark from '~/react-query/hooks/useProfileBookmark';
 import { MainType, SubWithAllType } from '~/utils/constant/category';
 import {
   getMainCategorySelectList,
   getSubCategoryWithAllSelectList,
 } from '~/utils/helper/categorySelect';
-import NoResult from './NoResult';
 import PageInfo from './PageInfo';
 import { isMainType, isSubWithAllType } from '~/utils/helper/checkType';
 import { isValidCategoryPair } from '~/utils/helper/validation';
+import BookmarkList from './BookmarkList';
 
 type WithAll<T> = T | 'all';
 
@@ -80,19 +79,7 @@ const Bookmark = () => {
 
         <PageInfo cur={query.page} total={data.totalPages} />
       </StyledDiv>
-
-      {data.totalElements === 0 ? (
-        <NoResult>북마크한 질문이 없습니다.</NoResult>
-      ) : (
-        <StyledQuestionList
-          questions={data.content}
-          currentCategory={{
-            mainCategory: 'fe',
-            subCategory: 'all',
-          }}
-        />
-      )}
-
+      <StyledBookmarkList data={data} />
       <Pagination totalElements={data.totalElements} onChange={handlePage} />
     </>
   );
@@ -141,6 +128,6 @@ const StyledSelect = styled(Select)`
   }
 `;
 
-const StyledQuestionList = styled(QuestionList)`
+const StyledBookmarkList = styled(BookmarkList)`
   margin-bottom: 32px;
 `;
