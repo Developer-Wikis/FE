@@ -2,6 +2,7 @@ import commentApi from '~/service/comment';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEY } from '../queryKey';
 import { CommentEditPayload, CommentType, ICommentItem } from '~/types/comment';
+import { AxiosError } from 'axios';
 
 export const useGetComment = (questionId: number) => {
   const queryFn = () => commentApi.getList(questionId);
@@ -71,7 +72,11 @@ export const useDeleteComment = (questionId: number) => {
     onSuccess: () => {
       queryClient.invalidateQueries([QUERY_KEY.comments]);
     },
-    onError: () => {
+    onError: (error: AxiosError) => {
+      if (error?.response?.status === 401) {
+        alert('비밀번호가 일치하지 않습니다.');
+        return;
+      }
       alert('댓글 삭제에 실패했습니다. 다시 시도해주세요.');
     },
   });
