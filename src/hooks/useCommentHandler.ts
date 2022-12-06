@@ -23,6 +23,7 @@ const useCommentHandler = () => {
 
   const onCloseEditor = () => {
     resetPasswordState();
+    updateEditId(null);
   };
 
   const onOpenEditor = (commentId: number) => {
