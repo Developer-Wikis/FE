@@ -1,13 +1,15 @@
 import styled from '@emotion/styled';
 import Link from '~/components/base/Link';
+import { IUser } from '~/types/user';
 import { Nullable } from '~/types/utilityType';
 
 interface Tab {
+  user: Nullable<IUser>;
   tab: Nullable<string>;
   onChange: (value: string) => void;
 }
 
-const Tab = ({ tab, onChange, ...props }: Tab) => {
+const Tab = ({ user, tab, onChange, ...props }: Tab) => {
   const getClassName = (linkTab: string) => (tab === linkTab ? 'is-active' : undefined);
 
   return (
@@ -21,7 +23,7 @@ const Tab = ({ tab, onChange, ...props }: Tab) => {
             className={getClassName('bookmark')}
             onClick={() => onChange('bookmark')}
           >
-            북마크한 질문 {0}
+            북마크한 질문 {user?.bookmarkSize}
           </StyledLink>
         </li>
         <li>
@@ -31,7 +33,7 @@ const Tab = ({ tab, onChange, ...props }: Tab) => {
             className={getClassName('comment')}
             onClick={() => onChange('comment')}
           >
-            작성한 댓글 {0}
+            작성한 댓글 {user?.commentSize}
           </StyledLink>
         </li>
       </StyledUl>
