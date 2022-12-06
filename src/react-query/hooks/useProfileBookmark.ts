@@ -1,9 +1,9 @@
-import { useState } from 'react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { TQueryBookmark } from '~/components/domain/profile/Tab/Bookmark';
 import userApi from '~/service/user';
 import { QUERY_KEY } from '../queryKey';
 import { useUser } from './useUser';
+import useUrlState from '~/hooks/useUrlState';
 
 const initialState: TQueryBookmark = {
   mainCategory: 'all',
@@ -13,27 +13,25 @@ const initialState: TQueryBookmark = {
 
 const getBookmark = (query: TQueryBookmark) => userApi.getBookmark(query);
 
-const useProfileBookmark = () => {
-  const [query, setQuery] = useState<TQueryBookmark>(initialState);
+const useProfileBookmark = (isReady: boolean) => {
+  const [query, setQuery] = useUrlState<TQueryBookmark>(initialState, (state) => ({
+    tab: 'bookmark',
+    ...state,
+  }));
 
   const { user } = useUser();
-  const queryClient = useQueryClient();
-
-  const prefetch = () =>
-    queryClient.prefetchQuery([QUERY_KEY.user, QUERY_KEY.bookmark, initialState], () =>
-      getBookmark(initialState),
-    );
 
   const fallback = { content: [], totalPages: 0, totalElements: 0 };
   const { data = fallback } = useQuery(
     [QUERY_KEY.user, QUERY_KEY.bookmark, query],
     () => getBookmark(query),
     {
-      enabled: Boolean(user),
+      enabled: Boolean(user) || !isReady,
+      keepPreviousData: true,
     },
   );
 
-  return { query, setQuery, data, prefetch };
+  return { query, setQuery, data };
 };
 
 export default useProfileBookmark;

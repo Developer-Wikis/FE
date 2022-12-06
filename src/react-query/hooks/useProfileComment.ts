@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import userApi from '~/service/user';
 import { QUERY_KEY } from '../queryKey';
 import { useUser } from './useUser';
+import useUrlState from '~/hooks/useUrlState';
 
 const initialState = {
   page: 0,
@@ -14,26 +14,25 @@ type Params = {
 
 const getComment = (query: Params) => userApi.getComment(query);
 
-const useProfileComment = () => {
-  const [query, setQuery] = useState<Params>(initialState);
-  const { user } = useUser();
-  const queryClient = useQueryClient();
+const useProfileComment = (isReady: boolean) => {
+  const [query, setQuery] = useUrlState<Params>(initialState, (state) => ({
+    tab: 'comment',
+    ...state,
+  }));
 
-  const prefetch = () =>
-    queryClient.prefetchQuery([QUERY_KEY.user, QUERY_KEY.comments, initialState], () =>
-      getComment(initialState),
-    );
+  const { user } = useUser();
 
   const fallback = { content: [], totalPages: 0, totalElements: 0 };
   const { data = fallback } = useQuery(
     [QUERY_KEY.user, QUERY_KEY.comments, query],
     () => getComment(query),
     {
-      enabled: Boolean(user),
+      enabled: Boolean(user) || !isReady,
+      keepPreviousData: true,
     },
   );
 
-  return { query, setQuery, data, prefetch };
+  return { query, setQuery, data };
 };
 
 export default useProfileComment;

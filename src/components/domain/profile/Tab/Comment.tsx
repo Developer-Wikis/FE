@@ -2,17 +2,26 @@ import styled from '@emotion/styled';
 import CommentItem from './CommentItem';
 import Pagination from '~/components/common/Pagination';
 import NoResult from './NoResult';
-import { Paging } from '~/types/utilityType';
-import { IProfileCommentItem } from '~/types/comment';
+import useProfileComment from '~/react-query/hooks/useProfileComment';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 
-interface CommentProps {
-  query: { page: number };
-  data: Paging<IProfileCommentItem>;
-  onChange: (value: { page: number }) => void;
-}
+const Comment = () => {
+  const [isReady, setIsReady] = useState(false);
+  const { data, query, setQuery } = useProfileComment(isReady);
+  const router = useRouter();
 
-const Comment = ({ query, data, onChange }: CommentProps) => {
-  const handlePage = (page: number) => onChange({ ...query, page });
+  const handlePage = (page: number) => setQuery({ ...query, page });
+
+  useEffect(() => {
+    if (!router.isReady || router.query.tab !== 'comment') return;
+
+    const initialValues = { page: 0 };
+    const filteredQuery = filter({ page: router.query.page }, initialValues);
+
+    setQuery(filteredQuery);
+    setIsReady(true);
+  }, [router.isReady]);
 
   if (data.totalElements === 0) return <NoResult>작성한 댓글이 없습니다.</NoResult>;
   return (
@@ -29,6 +38,16 @@ const Comment = ({ query, data, onChange }: CommentProps) => {
 };
 
 export default Comment;
+
+function filter(
+  query: Record<'page', string | string[] | undefined>,
+  defaultValue: { page: number },
+) {
+  const { page } = query;
+
+  if (!Number.isInteger(Number(page))) return defaultValue;
+  return { page: Number(page) };
+}
 
 const StyledUl = styled.ul`
   border-top: 1px solid ${({ theme }) => theme.colors.gray300};

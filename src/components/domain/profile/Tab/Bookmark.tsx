@@ -1,11 +1,10 @@
 import styled from '@emotion/styled';
-import { ChangeEvent } from 'react';
+import { useRouter } from 'next/router';
+import { ChangeEvent, useEffect, useState } from 'react';
 import Select from '~/components/base/Select';
 import Pagination from '~/components/common/Pagination';
 import QuestionList from '~/components/domain/QuestionList';
-
-import { IQuestionItem } from '~/types/question';
-import { Paging } from '~/types/utilityType';
+import useProfileBookmark from '~/react-query/hooks/useProfileBookmark';
 import { MainType, SubWithAllType } from '~/utils/constant/category';
 import {
   getMainCategorySelectList,
@@ -13,6 +12,8 @@ import {
 } from '~/utils/helper/categorySelect';
 import NoResult from './NoResult';
 import PageInfo from './PageInfo';
+import { isMainType, isSubWithAllType } from '~/utils/helper/checkType';
+import { isValidCategoryPair } from '~/utils/helper/validation';
 
 type WithAll<T> = T | 'all';
 
@@ -22,22 +23,37 @@ export type TQueryBookmark = {
   page: number;
 };
 
-interface BookmarkProps {
-  query: TQueryBookmark;
-  data: Paging<IQuestionItem>;
-  onChange: (value: TQueryBookmark) => void;
-}
+const Bookmark = () => {
+  const [isReady, setIsReady] = useState(false);
+  const { data, query, setQuery } = useProfileBookmark(isReady);
+  const router = useRouter();
 
-const Bookmark = ({ query, data, onChange }: BookmarkProps) => {
   const handleMainCategory = (e: ChangeEvent<HTMLSelectElement>) =>
-    onChange({ mainCategory: e.target.value as WithAll<MainType>, subCategory: 'all', page: 0 });
+    setQuery({ mainCategory: e.target.value as WithAll<MainType>, subCategory: 'all', page: 0 });
   const handleSubCategory = (e: ChangeEvent<HTMLSelectElement>) =>
-    onChange({
+    setQuery({
       mainCategory: query.mainCategory,
       subCategory: e.target.value as SubWithAllType,
       page: 0,
     });
-  const handlePage = (page: number) => onChange({ ...query, page });
+  const handlePage = (page: number) => setQuery({ ...query, page });
+
+  useEffect(() => {
+    if (!router.isReady || router.query.tab !== 'bookmark') return;
+
+    const initialValues = { mainCategory: 'all', subCategory: 'all', page: 0 } as TQueryBookmark;
+    const filteredQuery = filter(
+      {
+        mainCategory: router.query.mainCategory,
+        subCategory: router.query.subCategory,
+        page: router.query.page,
+      },
+      initialValues,
+    );
+
+    setQuery(filteredQuery);
+    setIsReady(true);
+  }, [router.isReady]);
 
   return (
     <>
@@ -83,6 +99,31 @@ const Bookmark = ({ query, data, onChange }: BookmarkProps) => {
 };
 
 export default Bookmark;
+
+function filter(
+  query: Record<keyof TQueryBookmark, string | string[] | undefined>,
+  defaultValue: TQueryBookmark,
+): TQueryBookmark {
+  const { mainCategory, subCategory, page } = query;
+
+  if (!isMainType(mainCategory) && mainCategory !== 'all') {
+    return defaultValue;
+  }
+  if (!isSubWithAllType(subCategory) || !isValidCategoryPairWithAll(mainCategory, subCategory)) {
+    return { ...defaultValue, mainCategory };
+  }
+  if (!Number.isInteger(Number(page))) {
+    return { mainCategory, subCategory, page: defaultValue.page };
+  }
+
+  return { mainCategory, subCategory, page: Number(page) };
+}
+
+function isValidCategoryPairWithAll(main: 'all' | MainType, sub: SubWithAllType) {
+  if (main === 'all' && sub === 'all') return true;
+  if (main !== 'all') return isValidCategoryPair(main, sub);
+  return false;
+}
 
 const StyledDiv = styled.div`
   display: flex;

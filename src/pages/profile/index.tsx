@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import PageContainer from '~/components/common/PageContainer';
-import Tab, { TTab } from '~/components/domain/profile/Tab';
+import Tab from '~/components/domain/profile/Tab';
 import UserInfo from '~/components/domain/profile/UserInfo';
 import Bookmark from '~/components/domain/profile/Tab/Bookmark';
 import Comment from '~/components/domain/profile/Tab/Comment';
 import { IUser } from '~/types/user';
 import { useUser } from '~/react-query/hooks/useUser';
-import useProfileBookmark from '~/react-query/hooks/useProfileBookmark';
-import useProfileComment from '~/react-query/hooks/useProfileComment';
+import { useRouter } from 'next/router';
+import useTab from '../../hooks/useTab';
 
 /*
 TODO:
@@ -18,29 +18,31 @@ TODO:
 */
 
 const Profile = () => {
-  const [tab, setTab] = useState<TTab>('bookmark');
-
+  const [isReady, setIsReady] = useState(false);
+  const { tab, setTab, TabItem } = useTab(null, { bookmark: Bookmark, comment: Comment });
   const { user } = useUser();
-  const bookmark = useProfileBookmark();
-  const comment = useProfileComment();
+  const router = useRouter();
 
   useEffect(() => {
-    bookmark.prefetch();
-    comment.prefetch();
-  }, []);
+    if (!router.isReady) return;
+
+    switch (router.query.tab) {
+      case 'bookmark':
+      case 'comment':
+        setTab(router.query.tab);
+        break;
+      default:
+        setTab('bookmark');
+    }
+    setIsReady(true);
+  }, [router.isReady]);
 
   return (
     <StyledPageContainer>
       <StyledUserInfo user={user || ({} as IUser)} />
       <StyledProfileTab tab={tab} onChange={setTab} />
-      <TabContent>
-        {tab === 'bookmark' && (
-          <Bookmark query={bookmark.query} data={bookmark.data} onChange={bookmark.setQuery} />
-        )}
-        {tab === 'comment' && (
-          <Comment query={comment.query} data={comment.data} onChange={comment.setQuery} />
-        )}
-      </TabContent>
+
+      <TabContent>{TabItem && <TabItem />}</TabContent>
     </StyledPageContainer>
   );
 };

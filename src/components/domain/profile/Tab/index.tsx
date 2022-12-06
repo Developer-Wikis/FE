@@ -1,14 +1,14 @@
 import styled from '@emotion/styled';
 import Link from '~/components/base/Link';
+import { Nullable } from '~/types/utilityType';
 
-export type TTab = 'bookmark' | 'comment';
 interface Tab {
-  tab: TTab;
-  onChange: (value: TTab) => void;
+  tab: Nullable<string>;
+  onChange: (value: string) => void;
 }
 
 const Tab = ({ tab, onChange, ...props }: Tab) => {
-  const getClassName = (linkTab: TTab) => (tab === linkTab ? 'is-active' : undefined);
+  const getClassName = (linkTab: string) => (tab === linkTab ? 'is-active' : undefined);
 
   return (
     <StyledNav {...props}>
