@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { forwardRef, Ref } from 'react';
 import { IQuestionItem } from '~/types/question';
 import { mediaQuery } from '~/utils/helper/mediaQuery';
 import QuestionItem, { QuestionItemProps } from './QuestionItem';
@@ -8,26 +7,25 @@ interface QuestionListProps extends Omit<QuestionItemProps, 'question'> {
   questions: IQuestionItem[];
 }
 
-const QuestionList = forwardRef(
-  (
-    { questions, currentCategory, onBookmarkToggle, ...props }: QuestionListProps,
-    ref?: Ref<HTMLLIElement>,
-  ) => {
-    return (
-      <Container {...props}>
-        {questions.map((question, index) => (
-          <QuestionItem
-            question={question}
-            key={question.id}
-            ref={index === questions.length - 1 ? ref : null}
-            currentCategory={currentCategory}
-            onBookmarkToggle={onBookmarkToggle}
-          />
-        ))}
-      </Container>
-    );
-  },
-);
+const QuestionList = ({
+  questions,
+  currentCategory,
+  onBookmarkToggle,
+  ...props
+}: QuestionListProps) => {
+  return (
+    <Container {...props}>
+      {questions.map((question) => (
+        <QuestionItem
+          question={question}
+          key={question.id}
+          currentCategory={currentCategory}
+          onBookmarkToggle={onBookmarkToggle}
+        />
+      ))}
+    </Container>
+  );
+};
 
 export default QuestionList;
 
