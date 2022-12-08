@@ -2,25 +2,22 @@ import commentApi from '~/service/comment';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEY } from '../queryKey';
 import { CommentEditPayload, CommentType, ICommentItem } from '~/types/comment';
+import { AxiosError } from 'axios';
 
 export const useGetComment = (questionId: number) => {
   const queryFn = () => commentApi.getList(questionId);
 
-  const { data: comments = [], refetch: updateComments } = useQuery<ICommentItem[]>(
-    [QUERY_KEY.comments, questionId],
-    {
-      queryFn,
-      onError: () => {
-        /* toast로 변경 */
-        alert('댓글 목록을 가져오는데에 실패하였습니다.');
-      },
-      staleTime: 0,
+  const { data: comments = [] } = useQuery<ICommentItem[]>([QUERY_KEY.comments, questionId], {
+    queryFn,
+    onError: () => {
+      /* toast로 변경 */
+      alert('댓글 목록을 가져오는데에 실패하였습니다.');
     },
-  );
+    staleTime: 0,
+  });
 
   return {
     comments,
-    updateComments,
   };
 };
 
@@ -75,7 +72,11 @@ export const useDeleteComment = (questionId: number) => {
     onSuccess: () => {
       queryClient.invalidateQueries([QUERY_KEY.comments]);
     },
-    onError: () => {
+    onError: (error: AxiosError) => {
+      if (error?.response?.status === 401) {
+        alert('비밀번호가 일치하지 않습니다.');
+        return;
+      }
       alert('댓글 삭제에 실패했습니다. 다시 시도해주세요.');
     },
   });

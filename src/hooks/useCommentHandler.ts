@@ -22,6 +22,7 @@ const useCommentHandler = () => {
   };
 
   const onCloseEditor = () => {
+    resetPasswordState();
     updateEditId(null);
   };
 
@@ -31,7 +32,7 @@ const useCommentHandler = () => {
 
   const onDeleteComment = async (payload: { commentId: number; password?: string }) => {
     await deleteComment(payload);
-    updatePasswordState({ commentId: null, action: '', password: '' });
+    resetPasswordState();
   };
 
   const onSubmitPassword = async (payload: { commentId: number; password: string }) => {

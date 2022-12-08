@@ -1,24 +1,35 @@
 import styled from '@emotion/styled';
+import { useContext } from 'react';
 import Icon from '~/components/base/Icon';
 import useCommentHandler from '~/hooks/useCommentHandler';
 import { useUser } from '~/react-query/hooks/useUser';
 import { ICommentItem } from '~/types/comment';
 import { formatDate } from '~/utils/helper/formatting';
 import { mediaQuery } from '~/utils/helper/mediaQuery';
+import { CommentContext } from './context';
 
 interface CommentContentProps {
   comment: ICommentItem;
 }
 const CommentContent = ({ comment }: CommentContentProps) => {
   const { user } = useUser();
-  const { onOpenPassword, onOpenEditor, onDeleteComment } = useCommentHandler();
+  const { onOpenPassword, onOpenEditor, onDeleteComment, onCloseEditor, onClosePassword } =
+    useCommentHandler();
 
+  const { passwordState } = useContext(CommentContext);
   const isAnonymous = comment.role === 'ANONYMOUS';
   const isMyComment = user && user.id === comment.userId;
-  const isEditableComment = !user || comment.role === 'ANONYMOUS';
 
   const handleDelete = () => {
-    if (isEditableComment) {
+    if (passwordState.action === 'edit' && passwordState.password) {
+      if (confirm('수정한 내용이 있다면 초기화됩니다. 계속하시겠습니까?')) {
+        onCloseEditor();
+      } else {
+        return;
+      }
+    }
+
+    if (isAnonymous) {
       onOpenPassword(comment.id, 'delete');
       return;
     }
@@ -26,7 +37,19 @@ const CommentContent = ({ comment }: CommentContentProps) => {
   };
 
   const handleEditStart = () => {
-    if (isEditableComment) {
+    if (passwordState.action === 'delete') {
+      onClosePassword();
+    }
+
+    if (passwordState.password) {
+      if (confirm('수정한 내용이 있다면 초기화됩니다. 계속하시겠습니까?')) {
+        onCloseEditor();
+      } else {
+        return;
+      }
+    }
+
+    if (isAnonymous) {
       onOpenPassword(comment.id, 'edit');
       return;
     }
