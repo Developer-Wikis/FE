@@ -45,6 +45,7 @@ const CommentProvider = ({ children, questionId }: CommentStoreProps) => {
 
   const closeEditor = () => {
     setEditId(null);
+    closePassword();
   };
 
   const closePassword = () => {

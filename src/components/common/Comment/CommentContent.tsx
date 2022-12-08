@@ -17,12 +17,12 @@ interface CommentContentProps {
 const CommentContent = ({ user, comment, deleteComment }: CommentContentProps) => {
   const { openPassword, openEditor, closeEditor, closePassword } = useContext(CommentContext);
 
-  const { passwordState } = useContext(CommentContext);
+  const { passwordState, editId } = useContext(CommentContext);
   const isAnonymous = comment.role === 'ANONYMOUS';
   const isMyComment = user && user.id === comment.userId;
 
   const handleDelete = async () => {
-    if (passwordState.action === 'edit' && passwordState.password) {
+    if (editId) {
       if (confirm('수정한 내용이 있다면 초기화됩니다. 계속하시겠습니까?')) {
         closeEditor();
       } else {

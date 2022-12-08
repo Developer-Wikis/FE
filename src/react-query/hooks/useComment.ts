@@ -8,7 +8,6 @@ import {
 } from '@tanstack/react-query';
 import { QUERY_KEY } from '../queryKey';
 import { CommentEditPayload, CommentType, ICommentItem } from '~/types/comment';
-import { AxiosResponse } from 'axios';
 
 export const useGetComment = (questionId: number) => {
   const queryFn = () => commentApi.getList(questionId);
@@ -57,7 +56,7 @@ export interface EditCommentPayload {
 }
 
 export interface EditComment {
-  mutateAsync: MutationFunction<AxiosResponse<undefined>, EditCommentPayload>;
+  mutateAsync: MutationFunction<undefined, EditCommentPayload>;
   isLoading: boolean;
 }
 
@@ -88,7 +87,7 @@ export interface DeleteCommentPayload {
 }
 
 export interface DeleteComment {
-  mutateAsync: MutationFunction<AxiosResponse<undefined>, DeleteCommentPayload>;
+  mutateAsync: MutationFunction<undefined, DeleteCommentPayload>;
   isLoading: boolean;
 }
 
@@ -119,7 +118,7 @@ export interface CheckPasswordPayload {
 }
 
 export interface CheckPassword {
-  mutateAsync: MutationFunction<AxiosResponse<boolean>, CheckPasswordPayload>;
+  mutateAsync: MutationFunction<boolean, CheckPasswordPayload>;
   isLoading: boolean;
 }
 

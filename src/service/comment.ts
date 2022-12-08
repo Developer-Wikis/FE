@@ -22,16 +22,24 @@ const commentApi = {
     questionId: number;
     commentId: number;
     payload: CommentEditPayload;
-  }) {
-    return auth.put(`/questions/${questionId}/comments/${commentId}`, payload);
+  }): Promise<undefined> {
+    return auth
+      .put(`/questions/${questionId}/comments/${commentId}`, payload)
+      .then((res) => res.data);
   },
-  delete({ questionId, commentId, password }: CommentPayload) {
-    return unauth.delete(`/questions/${questionId}/comments/${commentId}`, { data: { password } });
+  async delete({ questionId, commentId, password }: CommentPayload): Promise<undefined> {
+    return unauth
+      .delete(`/questions/${questionId}/comments/${commentId}`, {
+        data: { password },
+      })
+      .then((res) => res.data);
   },
-  checkPassword({ questionId, commentId, password }: CommentPayload) {
-    return unauth.post(`/questions/${questionId}/comments/${commentId}/check`, {
-      password,
-    });
+  checkPassword({ questionId, commentId, password }: CommentPayload): Promise<boolean> {
+    return unauth
+      .post(`/questions/${questionId}/comments/${commentId}/check`, {
+        password,
+      })
+      .then((res) => res.data);
   },
 };
 

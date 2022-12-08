@@ -33,7 +33,7 @@ const PasswordConfirm = ({ commentId, deleteComment, checkPassword }: PasswordCo
     if (passwordState.action === 'edit') {
       const isCorrectPassword = await checkPassword.mutateAsync({ commentId, password });
 
-      if (isCorrectPassword.data) {
+      if (isCorrectPassword) {
         openEditor(commentId);
         updatePasswordState({ commentId: null, action: 'edit', password });
       } else {
