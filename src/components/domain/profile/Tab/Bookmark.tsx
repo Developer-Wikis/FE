@@ -13,6 +13,7 @@ import PageInfo from './PageInfo';
 import { isMainType, isSubWithAllType } from '~/utils/helper/checkType';
 import { isValidCategoryPair } from '~/utils/helper/validation';
 import BookmarkList from './BookmarkList';
+import { useBookmarkProfile } from '~/react-query/hooks/useBookmarkList';
 
 type WithAll<T> = T | 'all';
 
@@ -25,6 +26,7 @@ export type TQueryBookmark = {
 const Bookmark = () => {
   const [isReady, setIsReady] = useState(false);
   const { data, query, setQuery } = useProfileBookmark(isReady);
+  const postBookmark = useBookmarkProfile(query);
   const router = useRouter();
 
   const handleMainCategory = (e: ChangeEvent<HTMLSelectElement>) =>
@@ -36,6 +38,10 @@ const Bookmark = () => {
       page: 0,
     });
   const handlePage = (page: number) => setQuery({ ...query, page });
+
+  const handleBookmarkToggle = (questionId: number) => {
+    postBookmark(questionId);
+  };
 
   useEffect(() => {
     if (!router.isReady || router.query.tab !== 'bookmark') return;
@@ -79,7 +85,7 @@ const Bookmark = () => {
 
         <PageInfo cur={query.page} total={data.totalPages} />
       </StyledDiv>
-      <StyledBookmarkList data={data} />
+      <StyledBookmarkList data={data} onBookmarkToggle={handleBookmarkToggle} />
       <Pagination totalElements={data.totalElements} onChange={handlePage} />
     </>
   );

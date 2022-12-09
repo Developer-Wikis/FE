@@ -13,7 +13,7 @@ import { mediaQuery } from '~/utils/helper/mediaQuery';
 import Pagination from '~/components/common/Pagination';
 import useUrlState from '~/hooks/useUrlState';
 import useQuestionList from '~/react-query/hooks/useQuestionList';
-import useBookmarkHome from '~/react-query/hooks/useBookmarkList';
+import { useBookmarkHome } from '~/react-query/hooks/useBookmarkList';
 import { useUser } from '~/react-query/hooks/useUser';
 
 type QueryParams = {
