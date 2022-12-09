@@ -13,6 +13,8 @@ import { mediaQuery } from '~/utils/helper/mediaQuery';
 import Pagination from '~/components/common/Pagination';
 import useUrlState from '~/hooks/useUrlState';
 import useQuestionList from '~/react-query/hooks/useQuestionList';
+import useBookmarkHome from '~/react-query/hooks/useBookmarkList';
+import { useUser } from '~/react-query/hooks/useUser';
 
 type QueryParams = {
   mainCategory: MainType;
@@ -28,15 +30,26 @@ const initialValues: QueryParams = {
 
 const Home: NextPage = () => {
   const router = useRouter();
+  const { user } = useUser();
 
   const [isReady, setIsReady] = useState(false);
   const [queryParams, setQueryParams] = useUrlState(initialValues);
   const { data } = useQuestionList(queryParams, isReady);
+  const postBookmark = useBookmarkHome(queryParams);
 
   const onChangePage = (page: number) => setQueryParams({ ...queryParams, page });
   const onChangeSubCategory = (subCategory: SubWithAllType) => {
     if (queryParams.subCategory === subCategory) return;
     setQueryParams({ ...queryParams, subCategory, page: initialValues.page });
+  };
+  const onBookmarkToggle = (questionId: number) => {
+    if (!user) {
+      alert('로그인이 필요한 서비스입니다.');
+      router.push('/login');
+      return;
+    }
+
+    postBookmark(questionId);
   };
 
   useEffect(() => {
@@ -74,9 +87,7 @@ const Home: NextPage = () => {
             mainCategory: queryParams.mainCategory,
             subCategory: queryParams.subCategory,
           }}
-          onBookmarkToggle={(id) => {
-            alert(`${id} clicked`);
-          }}
+          onBookmarkToggle={onBookmarkToggle}
         />
         <Pagination
           totalElements={data.totalElements}
