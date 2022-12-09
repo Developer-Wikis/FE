@@ -17,5 +17,6 @@ const NoResult = ({ children, ...props }: NoResultProps) => {
 export default NoResult;
 
 const StyledDiv = styled.div`
+  padding: 64px 0;
   text-align: center;
 `;
