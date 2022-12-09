@@ -13,8 +13,9 @@ import { mediaQuery } from '~/utils/helper/mediaQuery';
 import Pagination from '~/components/common/Pagination';
 import useUrlState from '~/hooks/useUrlState';
 import useQuestionList from '~/react-query/hooks/useQuestionList';
-import { useBookmarkHome } from '~/react-query/hooks/useBookmarkList';
+import useBookmarkList from '~/react-query/hooks/useBookmarkList';
 import { useUser } from '~/react-query/hooks/useUser';
+import { QUERY_KEY } from '~/react-query/queryKey';
 
 type QueryParams = {
   mainCategory: MainType;
@@ -35,7 +36,7 @@ const Home: NextPage = () => {
   const [isReady, setIsReady] = useState(false);
   const [queryParams, setQueryParams] = useUrlState(initialValues);
   const { data } = useQuestionList(queryParams, isReady);
-  const postBookmark = useBookmarkHome(queryParams);
+  const postBookmark = useBookmarkList(() => [QUERY_KEY.question, queryParams]);
 
   const onChangePage = (page: number) => setQueryParams({ ...queryParams, page });
   const onChangeSubCategory = (subCategory: SubWithAllType) => {

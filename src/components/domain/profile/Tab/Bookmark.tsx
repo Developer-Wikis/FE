@@ -13,7 +13,8 @@ import PageInfo from './PageInfo';
 import { isMainType, isSubWithAllType } from '~/utils/helper/checkType';
 import { isValidCategoryPair } from '~/utils/helper/validation';
 import BookmarkList from './BookmarkList';
-import { useBookmarkProfile } from '~/react-query/hooks/useBookmarkList';
+import useBookmarkList from '~/react-query/hooks/useBookmarkList';
+import { QUERY_KEY } from '~/react-query/queryKey';
 
 type WithAll<T> = T | 'all';
 
@@ -26,7 +27,7 @@ export type TQueryBookmark = {
 const Bookmark = () => {
   const [isReady, setIsReady] = useState(false);
   const { data, query, setQuery } = useProfileBookmark(isReady);
-  const postBookmark = useBookmarkProfile(query);
+  const postBookmark = useBookmarkList(() => [QUERY_KEY.user, QUERY_KEY.bookmark, query]);
   const router = useRouter();
 
   const handleMainCategory = (e: ChangeEvent<HTMLSelectElement>) =>
