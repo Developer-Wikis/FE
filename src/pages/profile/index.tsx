@@ -11,7 +11,7 @@ import useTab from '~/hooks/useTab';
 
 const Profile = () => {
   const { tab, setTab, TabItem } = useTab(null, { bookmark: Bookmark, comment: Comment });
-  const { user } = useUser();
+  const { user, refetch: userRefetch } = useUser();
   const router = useRouter();
 
   useEffect(() => {
@@ -26,6 +26,10 @@ const Profile = () => {
         setTab('bookmark');
     }
   }, [router.isReady]);
+
+  useEffect(() => {
+    userRefetch();
+  }, []);
 
   return (
     <StyledPageContainer>

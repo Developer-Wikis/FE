@@ -28,6 +28,7 @@ const useProfileBookmark = (isReady: boolean) => {
     {
       enabled: Boolean(user) || !isReady,
       keepPreviousData: true,
+      staleTime: 0,
     },
   );
 

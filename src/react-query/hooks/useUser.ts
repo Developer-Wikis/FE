@@ -1,5 +1,5 @@
 import useStorage from '~/hooks/useStorage';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient, QueryObserverResult } from '@tanstack/react-query';
 import userApi from '~/service/user';
 import { QUERY_KEY } from '../queryKey';
 import { IUser, User } from '~/types/user';
@@ -10,6 +10,7 @@ interface UseUser {
   setUser: (user: User, refreshToken: string) => void;
   clearUser: () => void;
   fetchUser: () => Promise<IUser | null>;
+  refetch: () => Promise<QueryObserverResult<IUser>>;
 }
 
 const tokenToUserData = async (token: string) => {
@@ -60,5 +61,6 @@ export const useUser = (): UseUser => {
     setUser,
     clearUser,
     fetchUser,
+    refetch,
   };
 };
