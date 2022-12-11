@@ -1,9 +1,5 @@
 import { createContext, ReactNode, useState } from 'react';
-import { useComment } from '~/react-query/hooks/useComment';
-import commentApi from '~/service/comment';
-import { ICommentItem } from '~/types/comment';
-import { commentValuesType } from '../AddCommentForm';
-
+import { CommentActionType } from '~/types/comment';
 interface PasswordState {
   commentId: null | number;
   action: CommentActionType;
@@ -11,29 +7,23 @@ interface PasswordState {
 }
 
 export interface ContextTypes {
-  comments: ICommentItem[];
+  questionId: number;
   editId: null | number;
   passwordState: PasswordState;
-  onOpenPassword: (commentId: number | null, action: CommentActionType) => void;
-  onSubmitPassword: (commentId: number, password: string) => void;
-  onAddComment: (values: commentValuesType) => void;
-  onEditComment: (commentId: number, content: string) => void;
-  onCancelEdit: () => void;
+  updatePasswordState: (payload: PasswordState) => void;
+  openPassword: (commentId: number | null, action: CommentActionType) => void;
+  openEditor: (commentId: number) => void;
+  closeEditor: () => void;
+  closePassword: () => void;
 }
 export const CommentContext = createContext<ContextTypes>({} as ContextTypes);
-
-type CommentActionType = 'delete' | 'edit' | '';
 
 interface CommentStoreProps {
   children: ReactNode;
   questionId: number;
 }
 
-/* 캐시를 통해 상세페이지가 렌더되고, comment가 나타나기까지 약간의 시간이 딜레이 되는 상태임 */
-
 const CommentProvider = ({ children, questionId }: CommentStoreProps) => {
-  const { comments, updateComments } = useComment(questionId);
-
   const [editId, setEditId] = useState<null | number>(null);
   const [passwordState, setPasswordState] = useState<PasswordState>({
     commentId: null,
@@ -41,74 +31,38 @@ const CommentProvider = ({ children, questionId }: CommentStoreProps) => {
     password: '',
   });
 
-  const onOpenPassword = (commentId: number | null, action: CommentActionType) => {
+  const updatePasswordState = (payload: PasswordState) => {
+    setPasswordState(payload);
+  };
+
+  const openPassword = (commentId: number | null, action: CommentActionType) => {
     setPasswordState({ commentId, action, password: '' });
   };
 
-  const onSubmitPassword = async (commentId: number, password: string) => {
-    try {
-      if (passwordState.action === 'delete') {
-        await commentApi.delete(questionId, commentId, password);
-
-        await updateComments();
-        setPasswordState({ commentId: null, action: '', password: '' });
-
-        return;
-      }
-
-      if (passwordState.action === 'edit') {
-        const isCorrectPassword = await commentApi.checkPassword(questionId, commentId, password);
-        if (isCorrectPassword.data) {
-          setEditId(commentId);
-          setPasswordState({ commentId: null, action: 'edit', password: password });
-        } else {
-          alert('비밀번호가 일치하지 않습니다.');
-        }
-      }
-    } catch (e) {
-      // 상태코드에 따라 다르게 에러 출력하기
-      alert('비밀번호가 일치하지 않습니다.');
-    }
+  const openEditor = (commentId: number) => {
+    setEditId(commentId);
   };
 
-  const onAddComment = async (values: commentValuesType) => {
-    try {
-      await commentApi.create(questionId, values);
-      await updateComments();
-      setPasswordState({ commentId: null, action: '', password: '' });
-    } catch (e) {
-      // 상태코드에 따라 다르게 에러 출력하기
-      alert('댓글 등록에 실패했습니다.');
-    }
-  };
-
-  const onEditComment = async (commentId: number, content: string) => {
-    try {
-      await commentApi.edit(questionId, commentId, { password: passwordState.password, content });
-      await updateComments();
-      setPasswordState({ commentId: null, action: '', password: '' });
-      setEditId(null);
-    } catch (e) {
-      // 상태코드에 따라 다르게 에러 출력하기
-      alert('댓글 수정에 실패했습니다.');
-    }
-  };
-
-  const onCancelEdit = () => {
+  const closeEditor = () => {
     setEditId(null);
+    closePassword();
+  };
+
+  const closePassword = () => {
+    setPasswordState({ commentId: null, action: '', password: '' });
   };
 
   return (
     <CommentContext.Provider
       value={{
-        comments,
+        questionId,
         editId,
         passwordState,
-        onOpenPassword,
-        onSubmitPassword,
-        onAddComment,
-        onEditComment,
-        onCancelEdit,
+        updatePasswordState,
+        openPassword,
+        openEditor,
+        closeEditor,
+        closePassword,
       }}
     >
       {children}

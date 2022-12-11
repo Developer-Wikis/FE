@@ -1,12 +1,13 @@
 import styled from '@emotion/styled';
-import { useContext, useRef, useState } from 'react';
+import { useRef } from 'react';
 import Button from '~/components/base/Button';
 import Input from '~/components/base/Input';
 import useForm from '~/hooks/useForm';
+import { useAddComment } from '~/react-query/hooks/useComment';
+import { useUser } from '~/react-query/hooks/useUser';
 import { mediaQuery } from '~/utils/helper/mediaQuery';
 import { SUBMIT_CHECK } from '~/utils/helper/validation';
 import CommentTextArea from './CommentTextArea';
-import { CommentContext } from './context';
 
 const initialValues = {
   nickname: '',
@@ -18,28 +19,31 @@ export type commentValuesType = {
   [key in keyof typeof initialValues]: string;
 };
 
-const AddCommentForm = () => {
-  const { values, handleChange, handleSubmit, handleReset, isLoading } = useForm({
+const AddCommentForm = ({ questionId }: { questionId: number }) => {
+  const { values, handleChange, handleSubmit, handleReset } = useForm({
     initialValues,
     onSubmit,
   });
 
-  const { onAddComment } = useContext(CommentContext);
+  const { user } = useUser();
+  const { addComment, isLoading } = useAddComment(questionId);
 
   const nicknameRef = useRef<null | HTMLInputElement>(null);
   const passwordRef = useRef<null | HTMLInputElement>(null);
   const contentRef = useRef<null | HTMLTextAreaElement>(null);
 
   async function onSubmit() {
-    if (SUBMIT_CHECK.nickname.isValid(values.nickname)) {
-      alert(SUBMIT_CHECK.nickname.message);
-      nicknameRef.current?.focus();
-      return;
-    }
-    if (SUBMIT_CHECK.password.isValid(values.password)) {
-      alert(SUBMIT_CHECK.password.message);
-      passwordRef.current?.focus();
-      return;
+    if (!user) {
+      if (SUBMIT_CHECK.nickname.isValid(values.nickname)) {
+        alert(SUBMIT_CHECK.nickname.message);
+        nicknameRef.current?.focus();
+        return;
+      }
+      if (SUBMIT_CHECK.password.isValid(values.password)) {
+        alert(SUBMIT_CHECK.password.message);
+        passwordRef.current?.focus();
+        return;
+      }
     }
 
     if (SUBMIT_CHECK.comment.isValid(values.content)) {
@@ -48,32 +52,35 @@ const AddCommentForm = () => {
       return;
     }
 
-    await onAddComment(values);
+    const commentData = user ? { content: values.content } : values;
+    await addComment(commentData);
+
+    // 위 에러 시 아래 코드 실행 안됨
     handleReset({ ...values, content: '' });
   }
 
   return (
     <Container>
       <Content>
-        <Writer>
-          <StyledInput
-            size="sm"
-            name="nickname"
-            ref={nicknameRef}
-            placeholder="닉네임"
-            value={values.nickname}
-            onChange={handleChange}
-          />
-          <StyledInput
-            size="sm"
-            name="password"
-            type="password"
-            ref={passwordRef}
-            placeholder="비밀번호"
-            value={values.password}
-            onChange={handleChange}
-          />
-        </Writer>
+        {!user && (
+          <Writer>
+            <Input
+              name="nickname"
+              ref={nicknameRef}
+              placeholder="닉네임"
+              value={values.nickname}
+              onChange={handleChange}
+            />
+            <Input
+              name="password"
+              type="password"
+              ref={passwordRef}
+              placeholder="비밀번호"
+              value={values.password}
+              onChange={handleChange}
+            />
+          </Writer>
+        )}
         <CommentTextArea value={values.content} ref={contentRef} onChange={handleChange} />
       </Content>
       <AddButton size="sm" onClick={handleSubmit} loading={isLoading}>
