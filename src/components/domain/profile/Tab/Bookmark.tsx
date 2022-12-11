@@ -87,7 +87,12 @@ const Bookmark = () => {
         <PageInfo cur={query.page} total={data.totalPages} />
       </StyledDiv>
       <StyledBookmarkList data={data} onBookmarkToggle={handleBookmarkToggle} />
-      <Pagination totalElements={data.totalElements} onChange={handlePage} />
+      <Pagination
+        current={query.page}
+        totalElements={data.totalElements}
+        onChange={handlePage}
+        key={`${query.mainCategory} ${query.subCategory}`}
+      />
     </>
   );
 };
