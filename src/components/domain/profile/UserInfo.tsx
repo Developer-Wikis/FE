@@ -11,7 +11,7 @@ const UserInfo = ({ user, ...props }: UserInfoProps) => {
   return (
     <Container {...props}>
       <StyledUserProfile text={user.username || 'jini'} fontSize="lg" />
-      <Link href={`/profile/edit`} linkType="borderGray" size="sm">
+      <Link href={`/profile/edit`} variant="borderGray" size="sm">
         회원 정보 수정
       </Link>
     </Container>

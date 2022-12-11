@@ -7,7 +7,7 @@ const Test = () => {
   const AddBookmarkWithLink = (
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
       <span>북마크에 추가되었습니다.</span>
-      <StyledLink size="sm" linkType="borderGray" href={'/'}>
+      <StyledLink size="sm" variant="borderGray" href={'/'}>
         북마크 보기
       </StyledLink>
     </div>
