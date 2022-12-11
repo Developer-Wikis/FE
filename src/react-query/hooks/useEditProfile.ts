@@ -24,8 +24,19 @@ export const useEditProfile = () => {
     },
   });
 
+  const { mutate: editDefaultImage } = useMutation(userApi.editProfileDefaultImage, {
+    onSuccess: () => {
+      queryClient.invalidateQueries([QUERY_KEY.user]);
+      alert('프로필 이미지가 기본 이미지로 변경되었습니다.');
+    },
+    onError: () => {
+      alert('프로필 이미지 변경에 실패했습니다. 다시 시도해주세요.');
+    },
+  });
+
   return {
     editUsername,
     editProfileImage,
+    editDefaultImage,
   };
 };

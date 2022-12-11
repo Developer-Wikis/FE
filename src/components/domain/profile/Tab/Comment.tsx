@@ -1,111 +1,55 @@
 import styled from '@emotion/styled';
 import CommentItem from './CommentItem';
-import { ICategoryQuery } from '~/types/question';
+import Pagination from '~/components/common/Pagination';
+import NoResult from './NoResult';
+import useProfileComment from '~/react-query/hooks/useProfileComment';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 
-/*
-TODO:
-- type 정리
-*/
+const Comment = () => {
+  const [isReady, setIsReady] = useState(false);
+  const { data, query, setQuery } = useProfileComment(isReady);
+  const router = useRouter();
 
-export type TQueryComment = {
-  tab: 'comment';
-  content: TComment[];
-  page: number;
-  totalPage: number;
-};
+  const handlePage = (page: number) => setQuery({ ...query, page });
 
-export type TComment = {
-  id: number;
-  title: string;
-  nickname: string;
-  content: string;
-  createdAt: string;
-} & ICategoryQuery;
+  useEffect(() => {
+    if (!router.isReady || router.query.tab !== 'comment') return;
 
-interface CommentProps {
-  content: TComment[];
-}
+    const initialValues = { page: 0 };
+    const filteredQuery = filter({ page: router.query.page }, initialValues);
 
-const Comment = ({ content }: CommentProps) => {
+    setQuery(filteredQuery);
+    setIsReady(true);
+  }, [router.isReady]);
+
+  if (data.totalElements === 0) return <NoResult>작성한 댓글이 없습니다.</NoResult>;
   return (
-    <StyledUl>
-      {(content.length === 0 ? DUMMY : content).map((comment) => (
-        <CommentItem comment={comment} key={comment.id} />
-      ))}
-    </StyledUl>
+    <>
+      <StyledUl>
+        {data.content.map((comment) => (
+          <CommentItem comment={comment} key={comment.id} />
+        ))}
+      </StyledUl>
+
+      <Pagination current={query.page} totalElements={data.totalElements} onChange={handlePage} />
+    </>
   );
 };
 
 export default Comment;
 
+function filter(
+  query: Record<'page', string | string[] | undefined>,
+  defaultValue: { page: number },
+) {
+  const { page } = query;
+
+  if (!Number.isInteger(Number(page))) return defaultValue;
+  return { page: Number(page) };
+}
+
 const StyledUl = styled.ul`
   border-top: 1px solid ${({ theme }) => theme.colors.gray300};
+  margin-bottom: 32px;
 `;
-
-const DUMMY: TComment[] = [
-  {
-    id: 1003,
-    title:
-      'Lorem ipsum dolor, sit amet consectetur adipisicing elit. At nulla omnis ex minus quam, similique voluptatum tempora, explicabo veritatis iste mollitia reprehenderit, amet ratione quidem magnam tempore placeat necessitatibus enim.',
-    nickname: 'jini',
-    content:
-      'Lorem ipsum dolor, sit amet consectetur adipisicing elit. At nulla omnis ex minus quam, similique voluptatum tempora, explicabo veritatis iste mollitia reprehenderit, amet ratione quidem magnam tempore placeat necessitatibus enim.',
-    createdAt: '2022-10-25T02:30:02.209669',
-    mainCategory: 'fe',
-    subCategory: 'data_structure/algorithm',
-  },
-  {
-    id: 1004,
-    title: 'useMemo와 useCallback을 설명해주세요.',
-    nickname: 'jini',
-    content: 'asdfasdf',
-    createdAt: '2022-10-25T02:33:53.342431',
-    mainCategory: 'fe',
-    subCategory: 'react',
-  },
-  {
-    id: 1005,
-    title: 'useMemo와 useCallback을 설명해주세요.',
-    nickname: 'jini',
-    content: 'ㅁㅇㄹ\nㅁㄴㅇㄹ',
-    createdAt: '2022-10-25T23:10:52.187376',
-    mainCategory: 'fe',
-    subCategory: 'react',
-  },
-  {
-    id: 1028,
-    title: 'useMemo와 useCallback을 설명해주세요.',
-    nickname: 'jini',
-    content: '궁금해요',
-    createdAt: '2022-11-14T01:26:48.145675',
-    mainCategory: 'fe',
-    subCategory: 'react',
-  },
-  {
-    id: 1029,
-    title: 'useMemo와 useCallback을 설명해주세요.',
-    nickname: 'jini',
-    content: '궁금해요',
-    createdAt: '2022-11-14T01:28:11.061833',
-    mainCategory: 'fe',
-    subCategory: 'react',
-  },
-  {
-    id: 1030,
-    title: 'useMemo와 useCallback을 설명해주세요.',
-    nickname: 'jini',
-    content: '궁금해요!',
-    createdAt: '2022-11-14T01:28:28.187058',
-    mainCategory: 'fe',
-    subCategory: 'react',
-  },
-  {
-    id: 1031,
-    title: 'useMemo와 useCallback을 설명해주세요.',
-    nickname: 'jini',
-    content: 'ee',
-    createdAt: '2022-11-14T01:34:31.799146',
-    mainCategory: 'fe',
-    subCategory: 'react',
-  },
-];

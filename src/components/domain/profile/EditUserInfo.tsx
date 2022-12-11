@@ -6,7 +6,7 @@ import AddForm from '~/components/common/AddForm';
 import InputField from '~/components/common/InputField';
 import Modal from '~/components/common/Modal';
 import { useEditProfile } from '~/react-query/hooks/useEditProfile';
-import { User } from '~/types/user';
+import { IUser } from '~/types/user';
 import { objectToForm } from '~/utils/helper/converter';
 import { mediaQuery } from '~/utils/helper/mediaQuery';
 import EditAvatar from './EditAvatar';
@@ -14,13 +14,13 @@ import ImageEditModal from './ImageEditModal';
 
 interface EditUserInfoProps {
   // onEditImage: () => void;
-  user: User;
+  user: IUser;
   onEditNickname: (value: string) => void;
 }
 
 const EditUserInfo = ({ user, onEditNickname }: EditUserInfoProps) => {
   const [isOpenModal, setIsOpenModal] = useState(false);
-  const { editProfileImage } = useEditProfile();
+  const { editProfileImage, editDefaultImage } = useEditProfile();
 
   const onCloseModal = () => {
     setIsOpenModal(false);
@@ -33,6 +33,17 @@ const EditUserInfo = ({ user, onEditNickname }: EditUserInfoProps) => {
   const onChangeProfileImage = async (imageFile: File) => {
     const formData = await objectToForm({ image: imageFile });
     editProfileImage({ userId: user.id, formData });
+    onCloseModal();
+  };
+
+  const onChangeDefaultImage = async () => {
+    if (!user.profileUrl) {
+      alert('현재 기본 이미지로 설정되어 있습니다.');
+      onCloseModal();
+      return;
+    }
+
+    editDefaultImage(user.id);
     onCloseModal();
   };
 
@@ -60,7 +71,10 @@ const EditUserInfo = ({ user, onEditNickname }: EditUserInfoProps) => {
         <EditAvatar size="lg" imageUrl={user.profileUrl} onClick={onClickProfileImage} />
       </UserProfile>
       <Modal visible={isOpenModal} onClose={onCloseModal}>
-        <ImageEditModal onChangeImage={onChangeProfileImage} />
+        <ImageEditModal
+          onChangeImage={onChangeProfileImage}
+          onChangeDefaultImage={onChangeDefaultImage}
+        />
       </Modal>
     </Container>
   );

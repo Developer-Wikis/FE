@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { useRef } from 'react';
 import Button from '~/components/base/Button';
+import Input from '~/components/base/Input';
 import useForm from '~/hooks/useForm';
 import { useAddComment } from '~/react-query/hooks/useComment';
 import { useUser } from '~/react-query/hooks/useUser';
@@ -80,7 +81,6 @@ const AddCommentForm = ({ questionId }: { questionId: number }) => {
             />
           </Writer>
         )}
-
         <CommentTextArea value={values.content} ref={contentRef} onChange={handleChange} />
       </Content>
       <AddButton size="sm" onClick={handleSubmit} loading={isLoading}>
@@ -113,14 +113,7 @@ const Writer = styled.div`
   }
 `;
 
-const Input = styled.input`
-  background-color: white;
-  border: 1px solid ${({ theme }) => theme.colors.gray300};
-  border-radius: 4px;
-  ${({ theme }) => theme.fontStyle.body2};
-
-  height: 32px;
-  padding-left: 8px;
+const StyledInput = styled(Input)`
   box-sizing: border-box;
 
   &:first-of-type {

@@ -1,8 +1,10 @@
 export interface IUser {
-  id: number | null;
+  id: number;
   username: string;
   email: string;
   profileUrl: string;
+  commentSize: number;
+  bookmarkSize: number;
 }
 export interface ICurrentUser {
   token: string;

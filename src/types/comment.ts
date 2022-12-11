@@ -1,3 +1,5 @@
+import { MainType, SubType } from '~/utils/constant/category';
+
 export interface ICommentItem {
   id: number;
   username: string;
@@ -13,6 +15,7 @@ interface AnonymousComment {
   password: string;
   content: string;
 }
+
 interface UserComment {
   content: string;
 }
@@ -25,3 +28,10 @@ export interface CommentEditPayload {
 }
 
 export type CommentActionType = 'delete' | 'edit' | '';
+
+export interface IProfileCommentItem extends ICommentItem {
+  title: string;
+  mainCategory: MainType;
+  subCategory: SubType;
+  questionId: number;
+}

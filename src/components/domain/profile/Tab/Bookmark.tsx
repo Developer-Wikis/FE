@@ -1,42 +1,58 @@
 import styled from '@emotion/styled';
-import { ChangeEvent } from 'react';
+import { useRouter } from 'next/router';
+import { ChangeEvent, useEffect, useState } from 'react';
 import Select from '~/components/base/Select';
-import QuestionList from '~/components/domain/QuestionList';
-import { questionData } from '~/mocks/data';
-import { IQuestionItem } from '~/types/question';
+import Pagination from '~/components/common/Pagination';
+import useProfileBookmark from '~/react-query/hooks/useProfileBookmark';
 import { MainType, SubWithAllType } from '~/utils/constant/category';
 import {
   getMainCategorySelectList,
   getSubCategoryWithAllSelectList,
 } from '~/utils/helper/categorySelect';
+import PageInfo from './PageInfo';
+import { isMainType, isSubWithAllType } from '~/utils/helper/checkType';
+import { isValidCategoryPair } from '~/utils/helper/validation';
+import BookmarkList from './BookmarkList';
 
 type WithAll<T> = T | 'all';
-export type TSubQuery = { mainCategory: WithAll<MainType>; subCategory: SubWithAllType };
 
 export type TQueryBookmark = {
-  tab: 'question';
-  subQuery: TSubQuery;
-  content: IQuestionItem[];
+  mainCategory: WithAll<MainType>;
+  subCategory: SubWithAllType;
   page: number;
-  totalPage: number;
 };
 
-interface BookmarkProps {
-  query: TQueryBookmark;
-  onChange: (name: 'subQuery', value: TSubQuery) => void;
-}
+const Bookmark = () => {
+  const [isReady, setIsReady] = useState(false);
+  const { data, query, setQuery } = useProfileBookmark(isReady);
+  const router = useRouter();
 
-const Bookmark = ({ query, onChange }: BookmarkProps) => {
   const handleMainCategory = (e: ChangeEvent<HTMLSelectElement>) =>
-    onChange('subQuery', {
-      mainCategory: e.target.value as WithAll<MainType>,
-      subCategory: 'all',
-    });
+    setQuery({ mainCategory: e.target.value as WithAll<MainType>, subCategory: 'all', page: 0 });
   const handleSubCategory = (e: ChangeEvent<HTMLSelectElement>) =>
-    onChange('subQuery', {
-      ...query.subQuery,
+    setQuery({
+      mainCategory: query.mainCategory,
       subCategory: e.target.value as SubWithAllType,
+      page: 0,
     });
+  const handlePage = (page: number) => setQuery({ ...query, page });
+
+  useEffect(() => {
+    if (!router.isReady || router.query.tab !== 'bookmark') return;
+
+    const initialValues = { mainCategory: 'all', subCategory: 'all', page: 0 } as TQueryBookmark;
+    const filteredQuery = filter(
+      {
+        mainCategory: router.query.mainCategory,
+        subCategory: router.query.subCategory,
+        page: router.query.page,
+      },
+      initialValues,
+    );
+
+    setQuery(filteredQuery);
+    setIsReady(true);
+  }, [router.isReady]);
 
   return (
     <>
@@ -46,42 +62,55 @@ const Bookmark = ({ query, onChange }: BookmarkProps) => {
             name="mainCategory"
             list={[{ value: 'all', text: '전체' }, ...getMainCategorySelectList()]}
             onChange={handleMainCategory}
-            selected={query.subQuery.mainCategory}
+            selected={query.mainCategory}
             withoutDefault
           />
-          {query.subQuery.mainCategory !== 'all' && (
+          {query.mainCategory !== 'all' && (
             <StyledSelect
               name="subCategory"
-              list={getSubCategoryWithAllSelectList(query.subQuery.mainCategory)}
+              list={getSubCategoryWithAllSelectList(query.mainCategory)}
               onChange={handleSubCategory}
-              selected={query.subQuery.subCategory}
-              key={query.subQuery.mainCategory}
+              selected={query.subCategory}
+              key={query.mainCategory}
               withoutDefault
             />
           )}
         </div>
 
-        <PageInfo>
-          {query.page + 1}/{query.totalPage} 페이지
-        </PageInfo>
+        <PageInfo cur={query.page} total={data.totalPages} />
       </StyledDiv>
-
-      <QuestionList
-        questions={
-          query.content.length === 0
-            ? (questionData.content as unknown as IQuestionItem[])
-            : query.content
-        }
-        currentCategory={{
-          mainCategory: 'fe',
-          subCategory: 'all',
-        }}
-      />
+      <StyledBookmarkList data={data} />
+      <Pagination totalElements={data.totalElements} onChange={handlePage} />
     </>
   );
 };
 
 export default Bookmark;
+
+function filter(
+  query: Record<keyof TQueryBookmark, string | string[] | undefined>,
+  defaultValue: TQueryBookmark,
+): TQueryBookmark {
+  const { mainCategory, subCategory, page } = query;
+
+  if (!isMainType(mainCategory) && mainCategory !== 'all') {
+    return defaultValue;
+  }
+  if (!isSubWithAllType(subCategory) || !isValidCategoryPairWithAll(mainCategory, subCategory)) {
+    return { ...defaultValue, mainCategory };
+  }
+  if (!Number.isInteger(Number(page))) {
+    return { mainCategory, subCategory, page: defaultValue.page };
+  }
+
+  return { mainCategory, subCategory, page: Number(page) };
+}
+
+function isValidCategoryPairWithAll(main: 'all' | MainType, sub: SubWithAllType) {
+  if (main === 'all' && sub === 'all') return true;
+  if (main !== 'all') return isValidCategoryPair(main, sub);
+  return false;
+}
 
 const StyledDiv = styled.div`
   display: flex;
@@ -99,7 +128,6 @@ const StyledSelect = styled(Select)`
   }
 `;
 
-const PageInfo = styled.span`
-  ${({ theme }) => theme.fontStyle.body2}
-  color: ${({ theme }) => theme.colors.gray500};
+const StyledBookmarkList = styled(BookmarkList)`
+  margin-bottom: 32px;
 `;
