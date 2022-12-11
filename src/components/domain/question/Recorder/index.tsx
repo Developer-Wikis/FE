@@ -160,7 +160,7 @@ const Recorder = forwardRef(({ limit }: RecorderProps, ref?: Ref<HTMLButtonEleme
       <RecordInfo>
         {isRecording || isCompleted ? (
           recordCount < (limit ?? Infinity) && (
-            <Button buttonType="borderGray" onClick={onRecordReset}>
+            <Button variant="borderGray" onClick={onRecordReset}>
               다시 녹음하기
             </Button>
           )

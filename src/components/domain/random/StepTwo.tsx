@@ -74,7 +74,7 @@ const StepTwo = ({ step, permission, handleSubmit, handleChange, handleBack }: S
 
         <StyledButton
           type="submit"
-          buttonType="red"
+          variant="red"
           size="lg"
           disabled={!permission.audio || !permission.mic}
         >

@@ -8,7 +8,7 @@ export default {
   component: Button,
   argTypes: {
     children: { control: 'text', defaultValue: 'BUTTON' },
-    buttonType: {
+    variant: {
       control: 'radio',
       options: Object.keys(buttonStyle),
       defaultValue: 'black',
