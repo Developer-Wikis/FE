@@ -12,7 +12,9 @@ interface BookmarkListProps {
 }
 
 const BookmarkList = ({ data, onBookmarkToggle, ...props }: BookmarkListProps) => {
-  if (data.totalElements === 0) return <NoResult {...props}>북마크한 질문이 없습니다.</NoResult>;
+  if (data.totalElements === 0 || data.content.length === 0) {
+    return <NoResult {...props}>북마크한 질문이 없습니다.</NoResult>;
+  }
   return (
     <Container {...props}>
       {data.content.map((question) => (
