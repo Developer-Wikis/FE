@@ -1,18 +1,23 @@
 import styled from '@emotion/styled';
 import Link from '~/components/base/Link';
+import { IProfileCommentItem } from '~/types/comment';
 import { convertSubCategory } from '~/utils/helper/converter';
 import { formatDate } from '~/utils/helper/formatting';
 import { mediaQuery } from '~/utils/helper/mediaQuery';
-import { TComment } from './Comment';
 
 interface CommentListProps {
-  comment: TComment;
+  comment: IProfileCommentItem;
 }
 
 const CommentItem = ({ comment }: CommentListProps) => {
   return (
     <li key={comment.id}>
-      <StyledLink href="">
+      <StyledLink
+        href={{
+          pathname: `/question/${comment.questionId}`,
+          query: { mainCategory: comment.mainCategory, subCategory: comment.subCategory },
+        }}
+      >
         <CategoryName title={convertSubCategory(comment.subCategory)}>
           <span>{convertSubCategory(comment.subCategory)}</span>
         </CategoryName>

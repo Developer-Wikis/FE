@@ -1,27 +1,29 @@
 import styled from '@emotion/styled';
 import Link from '~/components/base/Link';
+import { IUser } from '~/types/user';
+import { Nullable } from '~/types/utilityType';
 
-export type TTab = 'question' | 'comment';
 interface Tab {
-  tab: TTab;
-  onChange: (name: 'tab', value: TTab) => void;
+  user: Nullable<IUser>;
+  tab: Nullable<string>;
+  onChange: (value: string) => void;
 }
 
-const Tab = ({ tab, onChange, ...props }: Tab) => {
-  const getClassName = (linkTab: TTab) => (tab === linkTab ? 'is-active' : undefined);
+const Tab = ({ user, tab, onChange, ...props }: Tab) => {
+  const getClassName = (linkTab: string) => (tab === linkTab ? 'is-active' : undefined);
 
   return (
     <StyledNav {...props}>
       <StyledUl>
         <li>
           <StyledLink
-            href={{ pathname: `/profile`, query: { tab: 'question' } }}
+            href={{ pathname: `/profile`, query: { tab: 'bookmark' } }}
             as={`/profile`}
             size="lg"
-            className={getClassName('question')}
-            onClick={() => onChange('tab', 'question')}
+            className={getClassName('bookmark')}
+            onClick={() => onChange('bookmark')}
           >
-            북마크한 질문 {0}
+            북마크한 질문 {user?.bookmarkSize}
           </StyledLink>
         </li>
         <li>
@@ -29,9 +31,9 @@ const Tab = ({ tab, onChange, ...props }: Tab) => {
             href={{ pathname: `/profile`, query: { tab: 'comment' } }}
             size="lg"
             className={getClassName('comment')}
-            onClick={() => onChange('tab', 'comment')}
+            onClick={() => onChange('comment')}
           >
-            작성한 댓글 {0}
+            작성한 댓글 {user?.commentSize}
           </StyledLink>
         </li>
       </StyledUl>

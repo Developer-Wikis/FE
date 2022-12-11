@@ -29,7 +29,7 @@ const ProfileEdit = () => {
     }
 
     if (user) {
-      editUsername({ userId: user?.id, username: value });
+      editUsername({ userId: user.id, username: value });
     }
   };
 
