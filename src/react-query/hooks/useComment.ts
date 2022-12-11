@@ -1,23 +1,33 @@
 import commentApi from '~/service/comment';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  MutationFunction,
+  UseMutateAsyncFunction,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { QUERY_KEY } from '../queryKey';
 import { CommentEditPayload, CommentType, ICommentItem } from '~/types/comment';
-import { AxiosError } from 'axios';
+import { AxiosResponse } from 'axios';
 
 export const useGetComment = (questionId: number) => {
   const queryFn = () => commentApi.getList(questionId);
 
-  const { data: comments = [] } = useQuery<ICommentItem[]>([QUERY_KEY.comments, questionId], {
-    queryFn,
-    onError: () => {
-      /* toast로 변경 */
-      alert('댓글 목록을 가져오는데에 실패하였습니다.');
+  const { data: comments = [], refetch: updateComments } = useQuery<ICommentItem[]>(
+    [QUERY_KEY.comments, questionId],
+    {
+      queryFn,
+      onError: () => {
+        /* toast로 변경 */
+        alert('댓글 목록을 가져오는데에 실패하였습니다.');
+      },
+      staleTime: 0,
     },
-    staleTime: 0,
-  });
+  );
 
   return {
     comments,
+    updateComments,
   };
 };
 
@@ -41,13 +51,23 @@ export const useAddComment = (questionId: number) => {
   };
 };
 
-export const useEditComment = (questionId: number) => {
+export interface EditCommentPayload {
+  commentId: number;
+  payload: CommentEditPayload;
+}
+
+export interface EditComment {
+  mutateAsync: MutationFunction<AxiosResponse<undefined>, EditCommentPayload>;
+  isLoading: boolean;
+}
+
+export const useEditComment = (questionId: number): EditComment => {
   const queryClient = useQueryClient();
 
   const mutationFn = ({ commentId, payload }: { commentId: number; payload: CommentEditPayload }) =>
     commentApi.edit({ questionId, commentId, payload });
 
-  const { mutateAsync: editComment, isLoading } = useMutation(mutationFn, {
+  const { mutateAsync, isLoading } = useMutation(mutationFn, {
     onSuccess: () => {
       queryClient.invalidateQueries([QUERY_KEY.comments]);
     },
@@ -57,48 +77,64 @@ export const useEditComment = (questionId: number) => {
   });
 
   return {
-    editComment,
+    mutateAsync,
     isLoading,
   };
 };
 
-export const useDeleteComment = (questionId: number) => {
+export interface DeleteCommentPayload {
+  commentId: number;
+  password?: string;
+}
+
+export interface DeleteComment {
+  mutateAsync: MutationFunction<AxiosResponse<undefined>, DeleteCommentPayload>;
+  isLoading: boolean;
+}
+
+export const useDeleteComment = (questionId: number): DeleteComment => {
   const queryClient = useQueryClient();
 
   const mutationFn = (payload: { commentId: number; password?: string }) =>
     commentApi.delete({ questionId, ...payload });
 
-  const { mutateAsync: deleteComment, isLoading } = useMutation(mutationFn, {
+  const { mutateAsync, isLoading } = useMutation(mutationFn, {
     onSuccess: () => {
       queryClient.invalidateQueries([QUERY_KEY.comments]);
     },
-    onError: (error: AxiosError) => {
-      if (error?.response?.status === 401) {
-        alert('비밀번호가 일치하지 않습니다.');
-        return;
-      }
+    onError: () => {
       alert('댓글 삭제에 실패했습니다. 다시 시도해주세요.');
     },
   });
 
   return {
-    deleteComment,
+    mutateAsync,
     isLoading,
   };
 };
 
-export const useCheckPassword = (questionId: number) => {
+export interface CheckPasswordPayload {
+  commentId: number;
+  password: string;
+}
+
+export interface CheckPassword {
+  mutateAsync: MutationFunction<AxiosResponse<boolean>, CheckPasswordPayload>;
+  isLoading: boolean;
+}
+
+export const useCheckPassword = (questionId: number): CheckPassword => {
   const queryFn = ({ commentId, password }: { commentId: number; password: string }) =>
     commentApi.checkPassword({ questionId, commentId, password });
 
-  const { mutateAsync: checkPassword, isLoading } = useMutation(queryFn, {
+  const { mutateAsync, isLoading } = useMutation(queryFn, {
     onError: () => {
       alert('비밀번호 확인에 실패하였습니다. 다시 시도해주세요.');
     },
   });
 
   return {
-    checkPassword,
+    mutateAsync,
     isLoading,
   };
 };

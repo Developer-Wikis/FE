@@ -1,6 +1,9 @@
 import styled from '@emotion/styled';
 import { useContext } from 'react';
+import { CheckPassword, DeleteComment, EditComment } from '~/react-query/hooks/useComment';
 import { ICommentItem } from '~/types/comment';
+import { IUser } from '~/types/user';
+import { Nullable } from '~/types/utilityType';
 import { mediaQuery } from '~/utils/helper/mediaQuery';
 import UserProfile from '../UserProfile';
 import CommentContent from './CommentContent';
@@ -9,15 +12,24 @@ import EditCommentForm from './EditCommentForm';
 import PasswordConfirm from './PasswordConfirm';
 
 interface CommentListProps {
-  commentId: number;
   comment: ICommentItem;
+  deleteComment: DeleteComment;
+  editComment: EditComment;
+  checkPassword: CheckPassword;
+  user: Nullable<IUser>;
 }
 
-const CommentItem = ({ commentId, comment }: CommentListProps) => {
+const CommentItem = ({
+  comment,
+  deleteComment,
+  editComment,
+  checkPassword,
+  user,
+}: CommentListProps) => {
   const { editId, passwordState } = useContext(CommentContext);
 
-  const isShowPasswordInput = passwordState.commentId === commentId;
-  const isShowEditor = editId !== commentId;
+  const isShowPasswordInput = passwordState.commentId === comment.id;
+  const isShowEditor = editId !== comment.id;
 
   return (
     <StyledLi>
@@ -35,13 +47,24 @@ const CommentItem = ({ commentId, comment }: CommentListProps) => {
           )}
         </Writer>
         {isShowEditor ? (
-          <CommentContent comment={comment} />
+          <CommentContent user={user} comment={comment} deleteComment={deleteComment} />
         ) : (
           <EditorContainer>
-            <EditCommentForm defaultValue={comment.content} commentId={commentId} />
+            <EditCommentForm
+              user={user}
+              defaultValue={comment.content}
+              commentId={comment.id}
+              editComment={editComment}
+            />
           </EditorContainer>
         )}
-        {isShowPasswordInput && <PasswordConfirm commentId={commentId} />}
+        {isShowPasswordInput && (
+          <PasswordConfirm
+            commentId={comment.id}
+            deleteComment={deleteComment}
+            checkPassword={checkPassword}
+          />
+        )}
       </CommentContainer>
     </StyledLi>
   );

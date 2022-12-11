@@ -1,59 +1,61 @@
 import styled from '@emotion/styled';
 import { useContext } from 'react';
 import Icon from '~/components/base/Icon';
-import useCommentHandler from '~/hooks/useCommentHandler';
-import { useUser } from '~/react-query/hooks/useUser';
+import { DeleteComment } from '~/react-query/hooks/useComment';
 import { ICommentItem } from '~/types/comment';
+import { IUser } from '~/types/user';
+import { Nullable } from '~/types/utilityType';
 import { formatDate } from '~/utils/helper/formatting';
 import { mediaQuery } from '~/utils/helper/mediaQuery';
 import { CommentContext } from './context';
 
 interface CommentContentProps {
   comment: ICommentItem;
+  deleteComment: DeleteComment;
+  user: Nullable<IUser>;
 }
-const CommentContent = ({ comment }: CommentContentProps) => {
-  const { user } = useUser();
-  const { onOpenPassword, onOpenEditor, onDeleteComment, onCloseEditor, onClosePassword } =
-    useCommentHandler();
+const CommentContent = ({ user, comment, deleteComment }: CommentContentProps) => {
+  const { openPassword, openEditor, closeEditor, closePassword } = useContext(CommentContext);
 
   const { passwordState } = useContext(CommentContext);
   const isAnonymous = comment.role === 'ANONYMOUS';
   const isMyComment = user && user.id === comment.userId;
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (passwordState.action === 'edit' && passwordState.password) {
       if (confirm('수정한 내용이 있다면 초기화됩니다. 계속하시겠습니까?')) {
-        onCloseEditor();
+        closeEditor();
       } else {
         return;
       }
     }
 
     if (isAnonymous) {
-      onOpenPassword(comment.id, 'delete');
+      openPassword(comment.id, 'delete');
       return;
     }
-    onDeleteComment({ commentId: comment.id });
+    await deleteComment.mutateAsync({ commentId: comment.id });
+    closePassword();
   };
 
   const handleEditStart = () => {
     if (passwordState.action === 'delete') {
-      onClosePassword();
+      closePassword();
     }
 
     if (passwordState.password) {
       if (confirm('수정한 내용이 있다면 초기화됩니다. 계속하시겠습니까?')) {
-        onCloseEditor();
+        closeEditor();
       } else {
         return;
       }
     }
-
     if (isAnonymous) {
-      onOpenPassword(comment.id, 'edit');
+      openPassword(comment.id, 'edit');
+
       return;
     }
-    onOpenEditor(comment.id);
+    openEditor(comment.id);
   };
 
   return (

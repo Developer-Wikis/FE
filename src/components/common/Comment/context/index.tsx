@@ -10,9 +10,11 @@ export interface ContextTypes {
   questionId: number;
   editId: null | number;
   passwordState: PasswordState;
-  updateEditId: (commentId: number | null) => void;
   updatePasswordState: (payload: PasswordState) => void;
-  resetPasswordState: () => void;
+  openPassword: (commentId: number | null, action: CommentActionType) => void;
+  openEditor: (commentId: number) => void;
+  closeEditor: () => void;
+  closePassword: () => void;
 }
 export const CommentContext = createContext<ContextTypes>({} as ContextTypes);
 
@@ -29,15 +31,23 @@ const CommentProvider = ({ children, questionId }: CommentStoreProps) => {
     password: '',
   });
 
-  const updateEditId = (commentId: number | null) => {
-    setEditId(commentId);
-  };
-
   const updatePasswordState = (payload: PasswordState) => {
     setPasswordState(payload);
   };
 
-  const resetPasswordState = () => {
+  const openPassword = (commentId: number | null, action: CommentActionType) => {
+    setPasswordState({ commentId, action, password: '' });
+  };
+
+  const openEditor = (commentId: number) => {
+    setEditId(commentId);
+  };
+
+  const closeEditor = () => {
+    setEditId(null);
+  };
+
+  const closePassword = () => {
     setPasswordState({ commentId: null, action: '', password: '' });
   };
 
@@ -47,9 +57,11 @@ const CommentProvider = ({ children, questionId }: CommentStoreProps) => {
         questionId,
         editId,
         passwordState,
-        updateEditId,
         updatePasswordState,
-        resetPasswordState,
+        openPassword,
+        openEditor,
+        closeEditor,
+        closePassword,
       }}
     >
       {children}

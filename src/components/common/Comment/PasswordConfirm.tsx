@@ -3,29 +3,47 @@ import { ChangeEvent, FormEvent, useContext, useState } from 'react';
 import Button from '~/components/base/Button';
 import Icon from '~/components/base/Icon';
 import Input from '~/components/base/Input';
-import useCommentHandler from '~/hooks/useCommentHandler';
+import { CheckPassword, DeleteComment } from '~/react-query/hooks/useComment';
+import { CommentContext } from './context';
 
 interface PasswordConfirmProps {
   commentId: number;
+  deleteComment: DeleteComment;
+  checkPassword: CheckPassword;
 }
 
-const PasswordConfirm = ({ commentId }: PasswordConfirmProps) => {
+const PasswordConfirm = ({ commentId, deleteComment, checkPassword }: PasswordConfirmProps) => {
   const [password, setPassword] = useState('');
 
-  const { onSubmitPassword, onClosePassword, isLoadingDelete, isLoadingCheckPassword } =
-    useCommentHandler();
+  const { passwordState, updatePasswordState, openEditor, closePassword } =
+    useContext(CommentContext);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    onSubmitPassword({ commentId, password });
+    if (passwordState.action === 'delete') {
+      deleteComment.mutateAsync({ commentId, password });
+      closePassword();
+      return;
+    }
+
+    if (passwordState.action === 'edit') {
+      const isCorrectPassword = await checkPassword.mutateAsync({ commentId, password });
+
+      if (isCorrectPassword.data) {
+        openEditor(commentId);
+        updatePasswordState({ commentId: null, action: 'edit', password });
+      } else {
+        alert('비밀번호가 일치하지 않습니다.');
+      }
+    }
   };
 
   const handleClose = () => {
-    onClosePassword();
+    closePassword();
   };
 
   return (
@@ -37,7 +55,7 @@ const PasswordConfirm = ({ commentId }: PasswordConfirmProps) => {
           value={password}
           onChange={handleChange}
         />
-        <SubmitButton size="sm" loading={isLoadingDelete || isLoadingCheckPassword}>
+        <SubmitButton size="sm" loading={deleteComment.isLoading || checkPassword.isLoading}>
           확인
         </SubmitButton>
         <Icon.Button name="Close" color="gray500" size="12" onClick={handleClose} />
