@@ -74,6 +74,7 @@ const StyledButton = styled.button<ButtonProps & { isLoading: boolean }>`
   justify-content: center;
   position: relative;
   white-space: nowrap;
+  margin: 0;
 
   ${({ variant }) => variant && buttonStyle[variant]};
   ${({ size }) => size && buttonSizes[size]};

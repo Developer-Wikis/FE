@@ -12,7 +12,7 @@ export const buttonStyle = {
     color: ${theme.colors.gray600};
     border-radius: 4px;
 
-    &:hover {
+    &:not(:disabled):hover {
       background-color: ${theme.colors.gray100};
     }
   `,
@@ -21,7 +21,7 @@ export const buttonStyle = {
     color: ${theme.colors.white};
     border-radius: 4px;
 
-    &:hover {
+    &:not(:disabled):hover {
       background-color: ${theme.colors.gray600};
     }
   `,
