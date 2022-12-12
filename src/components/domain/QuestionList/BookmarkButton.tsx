@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import React from 'react';
+import React, { MouseEvent } from 'react';
 import Icon from '~/components/base/Icon';
 import { mediaQuery } from '~/utils/helper/mediaQuery';
 
@@ -9,6 +9,13 @@ export interface BookmarkButtonProps {
 }
 
 const BookmarkButton = ({ isBookmarked, onBookmarkToggle }: BookmarkButtonProps) => {
+  const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
+    if (e.target instanceof HTMLButtonElement) {
+      e.target.blur();
+    }
+    onBookmarkToggle();
+  };
+
   return (
     <StyledIconButton
       name="Star"
@@ -16,7 +23,7 @@ const BookmarkButton = ({ isBookmarked, onBookmarkToggle }: BookmarkButtonProps)
       height="20"
       fill={isBookmarked ? 'red' : 'gray100'}
       stroke={isBookmarked ? 'red' : 'gray300'}
-      onClick={onBookmarkToggle}
+      onClick={handleClick}
       aria-label={`북마크 ${isBookmarked ? '삭제' : '추가'}하기`}
     />
   );
