@@ -3,7 +3,7 @@ import Icon from '~/components/base/Icon';
 import Link from '~/components/base/Link';
 import { IQuestionItem, ICategoryQuery } from '~/types/question';
 import { formatNumber } from '~/utils/helper/formatting';
-import { forwardRef, Ref, useCallback } from 'react';
+import { useCallback } from 'react';
 import { convertSubCategory } from '~/utils/helper/converter';
 import { mediaQuery } from '~/utils/helper/mediaQuery';
 import BookmarkButton from './BookmarkButton';
@@ -14,49 +14,44 @@ export interface QuestionItemProps {
   onBookmarkToggle?: (id: number, isBookmarked: boolean) => void;
 }
 
-const QuestionItem = forwardRef(
-  (
-    { question, currentCategory, onBookmarkToggle }: QuestionItemProps,
-    ref?: Ref<HTMLLIElement>,
-  ) => {
-    const handleBookmarkToggle = useCallback(() => {
-      onBookmarkToggle && onBookmarkToggle(question.id, question.isBookmarked);
-    }, [question.id, question.isBookmarked, onBookmarkToggle]);
+const QuestionItem = ({ question, currentCategory, onBookmarkToggle }: QuestionItemProps) => {
+  const handleBookmarkToggle = useCallback(() => {
+    onBookmarkToggle && onBookmarkToggle(question.id, question.isBookmarked);
+  }, [question.id, question.isBookmarked, onBookmarkToggle]);
 
-    return (
-      <StyledItem ref={ref}>
-        <BookmarkButton
-          isBookmarked={question.isBookmarked ?? false}
-          onBookmarkToggle={handleBookmarkToggle}
-        />
+  return (
+    <StyledItem>
+      <BookmarkButton
+        isBookmarked={question.isBookmarked ?? false}
+        onBookmarkToggle={handleBookmarkToggle}
+      />
 
-        <StyledLink
-          href={{
-            pathname: `/question/${question.id}`,
-            query: { ...currentCategory },
-          }}
-        >
-          <CategoryName title={convertSubCategory(question.subCategory)}>
-            <span>{convertSubCategory(question.subCategory)}</span>
-          </CategoryName>
-          <QuestionTitle title={question.title}>{question.title}</QuestionTitle>
-          <QuestionInfo>
-            <QuestionInfoItem title={String(question.viewCount)}>
-              <Icon name="Eye" color="gray600" size="15" />
-              <span className="screen-out">조회수</span>
-              {formatNumber(question.viewCount)}
-            </QuestionInfoItem>
-            <QuestionInfoItem title={String(question.commentCount)}>
-              <Icon name="Comment" color="gray600" size="15" />
-              <span className="screen-out">댓글수</span>
-              {formatNumber(question.commentCount)}
-            </QuestionInfoItem>
-          </QuestionInfo>
-        </StyledLink>
-      </StyledItem>
-    );
-  },
-);
+      <StyledLink
+        href={{
+          pathname: `/question/${question.id}`,
+          query: { ...currentCategory },
+        }}
+      >
+        <CategoryName title={convertSubCategory(question.subCategory)}>
+          <span>{convertSubCategory(question.subCategory)}</span>
+        </CategoryName>
+        <QuestionTitle title={question.title}>{question.title}</QuestionTitle>
+        <QuestionInfo>
+          <QuestionInfoItem title={String(question.viewCount)}>
+            <Icon name="Eye" color="gray600" size="15" />
+            <span className="screen-out">조회수</span>
+            {formatNumber(question.viewCount)}
+          </QuestionInfoItem>
+          <QuestionInfoItem title={String(question.commentCount)}>
+            <Icon name="Comment" color="gray600" size="15" />
+            <span className="screen-out">댓글수</span>
+            {formatNumber(question.commentCount)}
+          </QuestionInfoItem>
+        </QuestionInfo>
+      </StyledLink>
+    </StyledItem>
+  );
+};
 
 export default QuestionItem;
 

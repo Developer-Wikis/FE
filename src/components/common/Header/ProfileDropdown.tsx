@@ -3,11 +3,11 @@ import { MouseEvent, useState } from 'react';
 import Link from '~/components/base/Link';
 import useClickAway from '~/hooks/useClickAway';
 import { useAuth } from '~/react-query/hooks/useAuth';
-import { User } from '~/types/user';
+import { IUser } from '~/types/user';
 import Avatar from '../Avatar';
 
 interface ProfileDropdownProps {
-  user: User;
+  user: IUser;
 }
 
 const ProfileDropdown = ({ user: { username, profileUrl } }: ProfileDropdownProps) => {

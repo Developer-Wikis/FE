@@ -1,28 +1,61 @@
 import styled from '@emotion/styled';
 import { useContext } from 'react';
 import Icon from '~/components/base/Icon';
-import { useUser } from '~/react-query/hooks/useUser';
+import { DeleteComment } from '~/react-query/hooks/useComment';
 import { ICommentItem } from '~/types/comment';
+import { IUser } from '~/types/user';
+import { Nullable } from '~/types/utilityType';
 import { formatDate } from '~/utils/helper/formatting';
 import { mediaQuery } from '~/utils/helper/mediaQuery';
 import { CommentContext } from './context';
 
 interface CommentContentProps {
   comment: ICommentItem;
+  deleteComment: DeleteComment;
+  user: Nullable<IUser>;
 }
-const CommentContent = ({ comment }: CommentContentProps) => {
-  const { onOpenPassword } = useContext(CommentContext);
-  const { user } = useUser();
+const CommentContent = ({ user, comment, deleteComment }: CommentContentProps) => {
+  const { openPassword, openEditor, closeEditor, closePassword } = useContext(CommentContext);
 
+  const { passwordState, editId } = useContext(CommentContext);
   const isAnonymous = comment.role === 'ANONYMOUS';
   const isMyComment = user && user.id === comment.userId;
 
-  const handleDelete = () => {
-    onOpenPassword(comment.id, 'delete');
+  const handleDelete = async () => {
+    if (editId) {
+      if (confirm('수정한 내용이 있다면 초기화됩니다. 계속하시겠습니까?')) {
+        closeEditor();
+      } else {
+        return;
+      }
+    }
+
+    if (isAnonymous) {
+      openPassword(comment.id, 'delete');
+      return;
+    }
+    await deleteComment.mutateAsync({ commentId: comment.id });
+    closePassword();
   };
 
   const handleEditStart = () => {
-    onOpenPassword(comment.id, 'edit');
+    if (passwordState.action === 'delete') {
+      closePassword();
+    }
+
+    if (passwordState.password) {
+      if (confirm('수정한 내용이 있다면 초기화됩니다. 계속하시겠습니까?')) {
+        closeEditor();
+      } else {
+        return;
+      }
+    }
+    if (isAnonymous) {
+      openPassword(comment.id, 'edit');
+
+      return;
+    }
+    openEditor(comment.id);
   };
 
   return (
@@ -48,6 +81,7 @@ export default CommentContent;
 const Content = styled.div`
   flex-grow: 1;
   margin-left: 16px;
+  color: ${({ theme }) => theme.colors.gray800};
 
   p {
     word-break: break-all;

@@ -2,15 +2,16 @@ import styled from '@emotion/styled';
 import Link from '~/components/base/Link';
 import UserProfile from '~/components/common/UserProfile';
 import { IUser } from '~/types/user';
+import { Nullable } from '~/types/utilityType';
 
 interface UserInfoProps {
-  user: IUser;
+  user: Nullable<IUser>;
 }
 
 const UserInfo = ({ user, ...props }: UserInfoProps) => {
   return (
     <Container {...props}>
-      <StyledUserProfile text={user.username || 'jini'} fontSize="lg" />
+      <StyledUserProfile profileUrl={user?.profileUrl} text={user?.username ?? ''} fontSize="lg" />
       <Link href={`/profile/edit`} variant="borderGray" size="sm">
         회원 정보 수정
       </Link>

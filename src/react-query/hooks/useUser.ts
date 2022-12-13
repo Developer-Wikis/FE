@@ -1,26 +1,21 @@
 import useStorage from '~/hooks/useStorage';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient, QueryObserverResult } from '@tanstack/react-query';
 import userApi from '~/service/user';
 import { QUERY_KEY } from '../queryKey';
-import { User } from '~/types/user';
+import { IUser, User } from '~/types/user';
 import { LOCAL_KEY } from '~/utils/constant/user';
 
 interface UseUser {
-  user: User | null;
+  user: IUser | null;
   setUser: (user: User, refreshToken: string) => void;
   clearUser: () => void;
-  fetchUser: () => Promise<User | null>;
+  fetchUser: () => Promise<IUser | null>;
+  refetch: () => Promise<QueryObserverResult<IUser>>;
 }
 
 const tokenToUserData = async (token: string) => {
   if (!token) return null;
-
-  const userData = await userApi.getUserInfo();
-  return {
-    ...userData,
-    /* API username으로 변경되면 수정 */
-    username: userData.name || userData.username,
-  };
+  return await userApi.getUserInfo();
 };
 
 export const useUser = (): UseUser => {
@@ -29,10 +24,10 @@ export const useUser = (): UseUser => {
   const queryClient = useQueryClient();
   const queryFn = () => {
     const token = storage.getItem(LOCAL_KEY.token, '');
-    return tokenToUserData(token)
+    return tokenToUserData(token);
   };
 
-  const { data: user = null } = useQuery<User>([QUERY_KEY.user], queryFn, {
+  const { data: user = null, refetch } = useQuery<IUser>([QUERY_KEY.user], queryFn, {
     onError: () => {
       clearUser();
     },
@@ -42,7 +37,7 @@ export const useUser = (): UseUser => {
   const setUser = (newUser: User, refreshToken: string) => {
     storage.setItem(LOCAL_KEY.token, newUser.token);
     storage.setItem(LOCAL_KEY.refresh, refreshToken);
-    queryClient.setQueryData([QUERY_KEY.user], newUser);
+    refetch();
   };
 
   const clearUser = () => {
@@ -66,5 +61,6 @@ export const useUser = (): UseUser => {
     setUser,
     clearUser,
     fetchUser,
+    refetch,
   };
 };
