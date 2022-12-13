@@ -42,7 +42,7 @@ const DeleteAccount = ({ onDeleteAccount }: DeleteAccountProps) => {
         >
           위 내용을 모두 확인하였고 이에 동의합니다.
         </NoticeCheckbox>
-        <DeleteButton buttonType="red" size="lg" disabled={!check}>
+        <DeleteButton variant="red" size="lg" disabled={!check}>
           계정 삭제하기
         </DeleteButton>
       </Confirm>

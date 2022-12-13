@@ -45,7 +45,7 @@ const Slide = ({ user, isOpen, onClose }: SlideProps) => {
                   <UserProfile profileUrl={user.profileUrl} text={user.username} />
                 </Link>
               ) : (
-                <LoginButton linkType="red" size="md" href="/login" onClick={onClose}>
+                <LoginButton variant="red" size="md" href="/login" onClick={onClose}>
                   로그인
                 </LoginButton>
               )}

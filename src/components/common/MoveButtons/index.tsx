@@ -18,7 +18,7 @@ const MoveButtons = ({
   return (
     <Buttons>
       <Button
-        buttonType="borderGray"
+        variant="borderGray"
         onClick={onPrev}
         disabled={disabledPrev}
         startIcon={<Icon name="ArrowLeft" size="16" color="gray600" />}
@@ -26,7 +26,7 @@ const MoveButtons = ({
         이전 질문
       </Button>
       <Button
-        buttonType="borderGray"
+        variant="borderGray"
         onClick={onNext}
         disabled={disabledNext}
         endIcon={<Icon name="ArrowRight" size="16" color="gray600" />}

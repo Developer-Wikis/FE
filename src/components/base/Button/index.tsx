@@ -11,7 +11,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   /**
    * Button의 ColorType을 설정합니다.
    */
-  buttonType?: keyof typeof buttonStyle;
+  variant?: keyof typeof buttonStyle;
   /**
    * Button의 size를 설정합니다.
    */
@@ -40,7 +40,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const Button = ({
   children,
-  buttonType = 'black',
+  variant = 'black',
   size = 'md',
   fullWidth,
   disabled,
@@ -52,7 +52,7 @@ const Button = ({
   return (
     <StyledButton
       isLoading={!!loading}
-      buttonType={buttonType}
+      variant={variant}
       fullWidth={fullWidth}
       disabled={disabled || loading}
       size={size}
@@ -74,8 +74,9 @@ const StyledButton = styled.button<ButtonProps & { isLoading: boolean }>`
   justify-content: center;
   position: relative;
   white-space: nowrap;
+  margin: 0;
 
-  ${({ buttonType }) => buttonType && buttonStyle[buttonType]};
+  ${({ variant }) => variant && buttonStyle[variant]};
   ${({ size }) => size && buttonSizes[size]};
   ${({ fullWidth }) => fullWidth && `width: 100%;`}
   ${({ isLoading }) => isLoading && `color: transparent;`}

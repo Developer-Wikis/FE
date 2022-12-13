@@ -94,12 +94,12 @@ const Header = () => {
 
           <RightArea>
             {!user && !isLoading && (
-              <Link size="sm" linkType="borderGray" href="/login">
+              <Link size="sm" variant="borderGray" href="/login">
                 로그인
               </Link>
             )}
             {user && <ProfileDropdown user={user} />}
-            <Link size="sm" linkType="red" href="/random/create?step=0" as="/random/create">
+            <Link size="sm" variant="red" href="/random/create?step=0" as="/random/create">
               랜덤 질문
             </Link>
           </RightArea>
