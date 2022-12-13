@@ -94,7 +94,6 @@ const Home: NextPage = () => {
           totalElements={data.totalElements}
           onChange={onChangePage}
           current={queryParams.page}
-          key={JSON.stringify(queryParams)}
         />
       </MainContent>
     </div>
