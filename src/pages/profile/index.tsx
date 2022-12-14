@@ -11,7 +11,7 @@ import useTab from '~/hooks/useTab';
 
 const Profile = () => {
   const { tab, setTab, TabItem } = useTab(null, { bookmark: Bookmark, comment: Comment });
-  const { user, refetch: userRefetch } = useUser();
+  const currentUser = useUser();
   const router = useRouter();
 
   useEffect(() => {
@@ -28,13 +28,23 @@ const Profile = () => {
   }, [router.isReady]);
 
   useEffect(() => {
-    userRefetch();
-  }, []);
+    if (currentUser.isLoading || currentUser.user) return;
 
+    alert('잘못된 접근입니다.');
+    router.push('/');
+  }, [currentUser.isLoading]);
+
+  useEffect(() => {
+    currentUser.refetch();
+  }, [router.query]);
+
+  if (!currentUser.user) {
+    return null;
+  }
   return (
     <StyledPageContainer>
-      <StyledUserInfo user={user} />
-      <StyledProfileTab user={user} tab={tab} onChange={setTab} />
+      <StyledUserInfo user={currentUser.user} />
+      <StyledProfileTab user={currentUser.user} tab={tab} onChange={setTab} />
       <TabContent>{TabItem && <TabItem />}</TabContent>
     </StyledPageContainer>
   );

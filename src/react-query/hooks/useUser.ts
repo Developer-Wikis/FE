@@ -11,6 +11,7 @@ interface UseUser {
   clearUser: () => void;
   fetchUser: () => Promise<IUser | null>;
   refetch: () => Promise<QueryObserverResult<IUser>>;
+  isLoading: boolean;
 }
 
 const tokenToUserData = async (token: string) => {
@@ -27,7 +28,11 @@ export const useUser = (): UseUser => {
     return tokenToUserData(token);
   };
 
-  const { data: user = null, refetch } = useQuery<IUser>([QUERY_KEY.user], queryFn, {
+  const {
+    data: user = null,
+    refetch,
+    isLoading,
+  } = useQuery<IUser>([QUERY_KEY.user], queryFn, {
     onError: () => {
       clearUser();
     },
@@ -62,5 +67,6 @@ export const useUser = (): UseUser => {
     clearUser,
     fetchUser,
     refetch,
+    isLoading,
   };
 };

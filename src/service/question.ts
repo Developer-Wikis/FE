@@ -2,6 +2,7 @@ import { auth, unauth } from './base';
 import { IQuestion, IQuestionItem, ICategoryQuery, IQuestionDetail } from '~/types/question';
 import { MainType } from '~/utils/constant/category';
 import { AxiosResponse } from 'axios';
+import { Paging } from '~/types/utilityType';
 
 const questionApi = {
   create(question: IQuestion): RequestType<{ id: number }> {
@@ -14,8 +15,9 @@ const questionApi = {
     params: ICategoryQuery & {
       page: number;
     },
-  ): Promise<TList> {
-    return auth.get('/questions', { params }).then((res) => res.data);
+    signal?: AbortSignal,
+  ): Promise<Paging<IQuestionItem>> {
+    return auth.get('/questions', { params, signal }).then((res) => res.data);
   },
   getDetail(id: number, params: ICategoryQuery): Promise<IQuestionDetail> {
     return unauth.get(`/questions/${id}`, { params }).then((res) => res.data);
@@ -31,11 +33,3 @@ const questionApi = {
 export default questionApi;
 
 type RequestType<T> = Promise<AxiosResponse<T, any>>;
-type TList = {
-  content: IQuestionItem[];
-  totalPages: number;
-  totalElements: number;
-};
-type TDetail = IQuestionItem & {
-  tailQuestions: string[];
-};

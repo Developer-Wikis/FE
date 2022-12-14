@@ -6,8 +6,15 @@ import QuestionItem from '../../QuestionList/QuestionItem';
 import styled from '@emotion/styled';
 import { mediaQuery } from '~/utils/helper/mediaQuery';
 
-const BookmarkList = ({ data, ...props }: { data: Paging<IQuestionItem> }) => {
-  if (data.totalElements === 0) return <NoResult {...props}>북마크한 질문이 없습니다.</NoResult>;
+interface BookmarkListProps {
+  data: Paging<IQuestionItem>;
+  onBookmarkToggle: (questionId: number) => void;
+}
+
+const BookmarkList = ({ data, onBookmarkToggle, ...props }: BookmarkListProps) => {
+  if (data.totalElements === 0 || data.content.length === 0) {
+    return <NoResult {...props}>북마크한 질문이 없습니다.</NoResult>;
+  }
   return (
     <Container {...props}>
       {data.content.map((question) => (
@@ -18,6 +25,7 @@ const BookmarkList = ({ data, ...props }: { data: Paging<IQuestionItem> }) => {
             mainCategory: question.mainCategory,
             subCategory: question.subCategory,
           }}
+          onBookmarkToggle={onBookmarkToggle}
         />
       ))}
     </Container>
