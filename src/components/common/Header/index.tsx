@@ -18,14 +18,12 @@ const Header = () => {
   const router = useRouter();
   const [selectedCategory, setSelectedCategory] = useState('');
   const [isOpen, setIsOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const { user, fetchUser } = useUser();
+  const { user, fetchUser, isLoading } = useUser();
   const { logout } = useAuth();
   const storage = useStorage('local');
 
   const getUserProfile = async () => {
     const token = storage.getItem(LOCAL_KEY.token, '');
-    setIsLoading(true);
 
     // 로컬에서 토큰 삭제 시
     if (user && !token) {
@@ -36,8 +34,6 @@ const Header = () => {
     if (token && !user) {
       await fetchUser();
     }
-
-    setIsLoading(false);
   };
 
   useEffect(() => {
