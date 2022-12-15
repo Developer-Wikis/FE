@@ -5,7 +5,7 @@ import { useState } from 'react';
 const useUrlState = <S extends ParsedUrlQueryInput>(
   initialState: S,
   queryFn?: (state: S) => string | ParsedUrlQueryInput,
-): [S, (state: S) => void] => {
+): [S, (state: S) => void, (state: S) => void] => {
   const router = useRouter();
   const [urlState, setUrlState] = useState(initialState);
 
@@ -17,7 +17,7 @@ const useUrlState = <S extends ParsedUrlQueryInput>(
     setUrlState(nextUrlState);
   };
 
-  return [urlState, handleChange];
+  return [urlState, handleChange, setUrlState];
 };
 
 export default useUrlState;
