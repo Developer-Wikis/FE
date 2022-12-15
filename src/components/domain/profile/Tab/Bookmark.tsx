@@ -13,6 +13,8 @@ import PageInfo from './PageInfo';
 import { isMainType, isSubWithAllType } from '~/utils/helper/checkType';
 import { isValidCategoryPair } from '~/utils/helper/validation';
 import BookmarkList from './BookmarkList';
+import useBookmarkList from '~/react-query/hooks/useBookmarkList';
+import { QUERY_KEY } from '~/react-query/queryKey';
 
 type WithAll<T> = T | 'all';
 
@@ -24,7 +26,14 @@ export type TQueryBookmark = {
 
 const Bookmark = () => {
   const [isReady, setIsReady] = useState(false);
-  const { data, query, setQuery } = useProfileBookmark(isReady);
+  const {
+    data,
+    query,
+    setQuery,
+    hasContentOn,
+    refetch: refetchBookmark,
+  } = useProfileBookmark(isReady);
+  const postBookmark = useBookmarkList(() => [QUERY_KEY.user, QUERY_KEY.bookmark, query]);
   const router = useRouter();
 
   const handleMainCategory = (e: ChangeEvent<HTMLSelectElement>) =>
@@ -35,7 +44,18 @@ const Bookmark = () => {
       subCategory: e.target.value as SubWithAllType,
       page: 0,
     });
-  const handlePage = (page: number) => setQuery({ ...query, page });
+  const handlePage = (page: number) => {
+    const nextPage = hasContentOn(page) ? page : page - 1;
+    setQuery({ ...query, page: nextPage });
+
+    if (nextPage === query.page) {
+      refetchBookmark();
+    }
+  };
+
+  const handleBookmarkToggle = (questionId: number) => {
+    postBookmark(questionId);
+  };
 
   useEffect(() => {
     if (!router.isReady || router.query.tab !== 'bookmark') return;
@@ -79,8 +99,8 @@ const Bookmark = () => {
 
         <PageInfo cur={query.page} total={data.totalPages} />
       </StyledDiv>
-      <StyledBookmarkList data={data} />
-      <Pagination totalElements={data.totalElements} onChange={handlePage} />
+      <StyledBookmarkList data={data} onBookmarkToggle={handleBookmarkToggle} />
+      <Pagination current={query.page} totalElements={data.totalElements} onChange={handlePage} />
     </>
   );
 };

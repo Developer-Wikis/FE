@@ -9,7 +9,7 @@ const Footer = () => {
       <Inner>
         <LogoArea>
           <Logo type="text" />
-          <SuggestionButton href="/suggestion" size="xs" linkType="gray">
+          <SuggestionButton href="/suggestion" size="xs" variant="gray">
             건의하기
           </SuggestionButton>
         </LogoArea>

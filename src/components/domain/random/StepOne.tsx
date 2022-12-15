@@ -44,7 +44,7 @@ const StepOne = ({ inputValues, handleChange, handleSubmit, mounted }: StepOnePr
 
         <StyledButton
           type="submit"
-          buttonType="red"
+          variant="red"
           size="lg"
           disabled={inputValues.subCategories.length === 0}
         >

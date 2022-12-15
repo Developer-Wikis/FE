@@ -1,9 +1,9 @@
 import styled from '@emotion/styled';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Icon from '~/components/base/Icon';
 
 const VIEW_PAGE_SIZE = 5;
-const PAGE_SIZE = 20;
+export const PAGE_SIZE = 20;
 const ZERO_INDEX = 1;
 
 interface PaginationProps {
@@ -29,6 +29,10 @@ const Pagination = ({
     setCurrentPage(page);
     onChange(page);
   };
+
+  useEffect(() => {
+    setCurrentPage(current);
+  }, [totalElements]);
 
   return (
     <Container {...props}>

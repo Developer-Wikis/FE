@@ -11,18 +11,18 @@ import BookmarkButton from './BookmarkButton';
 export interface QuestionItemProps {
   question: IQuestionItem;
   currentCategory: ICategoryQuery;
-  onBookmarkToggle?: (id: number, isBookmarked: boolean) => void;
+  onBookmarkToggle?: (id: number) => void;
 }
 
 const QuestionItem = ({ question, currentCategory, onBookmarkToggle }: QuestionItemProps) => {
   const handleBookmarkToggle = useCallback(() => {
-    onBookmarkToggle && onBookmarkToggle(question.id, question.isBookmarked);
-  }, [question.id, question.isBookmarked, onBookmarkToggle]);
+    onBookmarkToggle && onBookmarkToggle(question.id);
+  }, [question.id, onBookmarkToggle]);
 
   return (
     <StyledItem>
       <BookmarkButton
-        isBookmarked={question.isBookmarked ?? false}
+        isBookmarked={question.isBookmarked}
         onBookmarkToggle={handleBookmarkToggle}
       />
 

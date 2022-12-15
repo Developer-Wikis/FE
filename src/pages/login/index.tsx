@@ -48,7 +48,7 @@ const Login = () => {
         <Icon name="LogoIcon" size="110" />
       </LogoArea>
       <SocialButtons>
-        <SocialLink linkType="borderGray" size="lg" href={googleUrl} onClick={onClickGoogleLogin}>
+        <SocialLink variant="borderGray" size="lg" href={googleUrl} onClick={onClickGoogleLogin}>
           <Icon name="Google" />
           <span>구글 계정으로 계속하기</span>
         </SocialLink>

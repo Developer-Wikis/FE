@@ -51,10 +51,10 @@ const ImageEditModal = ({ onChangeImage, onChangeDefaultImage }: ImageEditModalP
 
   return (
     <Container>
-      <Button size="lg" buttonType="borderGray" fullWidth onClick={handleChangeDefaultImage}>
+      <Button size="lg" variant="borderGray" fullWidth onClick={handleChangeDefaultImage}>
         기본 이미지로 변경
       </Button>
-      <UploadButton size="lg" buttonType="red" fullWidth onClick={onClickUploadButton}>
+      <UploadButton size="lg" variant="red" fullWidth onClick={onClickUploadButton}>
         <ButtonText>
           <StyledIcon name="Upload" size="18" />
           이미지 업로드

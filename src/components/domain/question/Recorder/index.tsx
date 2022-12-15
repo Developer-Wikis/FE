@@ -160,22 +160,22 @@ const Recorder = forwardRef(({ limit }: RecorderProps, ref?: Ref<HTMLButtonEleme
       <RecordInfo>
         {isRecording || isCompleted ? (
           recordCount < (limit ?? Infinity) && (
-            <Button buttonType="borderGray" onClick={onRecordReset}>
+            <Button variant="borderGray" onClick={onRecordReset}>
               다시 녹음하기
             </Button>
           )
         ) : (
-          <Notice>
-            <p>
-              <strong className="red">마이크 버튼</strong>을 누르면 녹음이 시작됩니다.
-            </p>
-            <p>
-              * 녹음은 <strong>최대 1분</strong>동안 가능합니다.
-            </p>
-          </Notice>
+          <RecordMessage>
+            <strong className="red">마이크 버튼</strong>을 누르면 녹음이 시작됩니다.
+          </RecordMessage>
         )}
       </RecordInfo>
-
+      <Notice>
+        <p>
+          * 녹음은 <strong>최대 1분</strong>동안 가능합니다.
+          <br />* 녹음 내용은 서버에 저장되지 않으니 안심하고 이용하셔도 됩니다.
+        </p>
+      </Notice>
       <audio
         controls
         ref={audioRef}
@@ -252,14 +252,20 @@ const MikeButton = styled.button`
   justify-content: center;
 `;
 
-const Notice = styled.div`
-  text-align: center;
-
+const RecordMessage = styled.span`
   strong.red {
     color: ${({ theme }) => theme.colors.red};
   }
 `;
 
+const Notice = styled.div`
+  text-align: center;
+  color: ${({ theme }) => theme.colors.gray700};
+  ${({ theme }) => theme.fontStyle.body2};
+  margin-top: 18px;
+`;
+
 const RecordInfo = styled.div`
-  height: 50px;
+  text-align: center;
+  height: 46px;
 `;
