@@ -5,10 +5,27 @@ import { theme } from '~/types/theme';
 import useHover from '~/hooks/useHover';
 import { isMobileWeb } from '~/utils/helper/device';
 import { mediaQuery } from '~/utils/helper/mediaQuery';
+import Link from '~/components/base/Link';
+import { buttonSizes, buttonStyle } from '~/components/base/Button/types';
 
 export interface ToastItemProps {
+  /**
+   * Toast의 내용이 들어갑니다.
+   */
   message?: string;
+  /**
+   * Toast의 내용이 들어갑니다.
+   */
   children?: ReactNode;
+  /**
+   * Link의 내용이 들어갑니다.
+   */
+  link?: {
+    message: string;
+    href: string;
+    variant?: keyof typeof buttonStyle;
+    size?: keyof typeof buttonSizes;
+  };
   duration?: number;
   keepAlive?: boolean;
   isRemoved?: boolean;
@@ -18,6 +35,7 @@ export interface ToastItemProps {
 const ToastItem = ({
   message,
   children,
+  link,
   duration = 3000,
   keepAlive = false,
   isRemoved = false,
@@ -52,11 +70,17 @@ const ToastItem = ({
   return (
     <Container
       show={show}
-      isMessage={!!message}
+      isMessage={!!message && !link}
       ref={keepAlive && !isMobileWeb() ? ref : null}
       isRemoved={isRemoved}
+      withLink={!!link}
     >
       {message && <span>{message}</span>}
+      {link && (
+        <Link href={link.href} variant={link.variant ?? 'borderGray'} size={link.size ?? 'sm'}>
+          {link.message}
+        </Link>
+      )}
       {children}
     </Container>
   );
@@ -64,7 +88,19 @@ const ToastItem = ({
 
 export default ToastItem;
 
-const Container = styled.li<{ show: boolean; isMessage: boolean; isRemoved: boolean }>`
+const LinkStyle = `
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const Container = styled.li<{
+  show: boolean;
+  isMessage: boolean;
+  isRemoved: boolean;
+  withLink: boolean;
+}>`
+  ${({ withLink }) => (withLink ? LinkStyle : undefined)}
   position: ${({ isRemoved }) => (isRemoved ? 'absolute' : 'relative')};
   width: 437px;
   height: 58px;
