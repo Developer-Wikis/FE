@@ -34,14 +34,14 @@ const Home: NextPage = () => {
   const { user } = useUser();
 
   const [isReady, setIsReady] = useState(false);
-  const [queryParams, setQueryParams] = useUrlState(initialValues);
-  const { data } = useQuestionList(queryParams, isReady);
-  const postBookmark = useBookmarkList(() => [QUERY_KEY.question, queryParams]);
+  const [query, setQuery, setQueryWithoutUrl] = useUrlState(initialValues);
+  const { data } = useQuestionList(query, isReady);
+  const postBookmark = useBookmarkList(() => [QUERY_KEY.question, query]);
 
-  const onChangePage = (page: number) => setQueryParams({ ...queryParams, page });
+  const onChangePage = (page: number) => setQuery({ ...query, page });
   const onChangeSubCategory = (subCategory: SubWithAllType) => {
-    if (queryParams.subCategory === subCategory) return;
-    setQueryParams({ ...queryParams, subCategory, page: initialValues.page });
+    if (query.subCategory === subCategory) return;
+    setQuery({ ...query, subCategory, page: initialValues.page });
   };
   const onBookmarkToggle = (questionId: number) => {
     if (!user) {
@@ -64,9 +64,13 @@ const Home: NextPage = () => {
       },
       initialValues,
     );
-    setQueryParams(filteredQuery);
-    setIsReady(true);
-  }, [router.isReady, router.query.mainCategory, router.query.subCategory]);
+
+    setQueryWithoutUrl(filteredQuery);
+
+    if (!isReady) {
+      setIsReady(true);
+    }
+  }, [router.isReady, router.query]);
 
   if (!isReady) return null;
   return (
@@ -78,22 +82,22 @@ const Home: NextPage = () => {
       </Head>
       <MainContent>
         <StyledMiddleCategory
-          subCategories={['all', ...SUB_CATEGORIES[queryParams.mainCategory]]}
+          subCategories={['all', ...SUB_CATEGORIES[query.mainCategory]]}
           onSelect={onChangeSubCategory}
-          currentCategory={queryParams.subCategory}
+          currentCategory={query.subCategory}
         />
         <StyledQuestionList
           questions={data.content}
           currentCategory={{
-            mainCategory: queryParams.mainCategory,
-            subCategory: queryParams.subCategory,
+            mainCategory: query.mainCategory,
+            subCategory: query.subCategory,
           }}
           onBookmarkToggle={onBookmarkToggle}
         />
         <Pagination
           totalElements={data.totalElements}
           onChange={onChangePage}
-          current={queryParams.page}
+          current={query.page}
         />
       </MainContent>
     </div>
