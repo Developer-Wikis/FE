@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 
 const Comment = () => {
   const [isReady, setIsReady] = useState(false);
-  const { data, query, setQuery } = useProfileComment(isReady);
+  const { data, query, setQuery, setQueryWithoutUrl } = useProfileComment(isReady);
   const router = useRouter();
 
   const handlePage = (page: number) => setQuery({ ...query, page });
@@ -19,9 +19,9 @@ const Comment = () => {
     const initialValues = { page: 0 };
     const filteredQuery = filter({ page: router.query.page }, initialValues);
 
-    setQuery(filteredQuery);
+    setQueryWithoutUrl(filteredQuery);
     setIsReady(true);
-  }, [router.isReady]);
+  }, [router.isReady, router.query.page]);
 
   if (data.totalElements === 0) return <NoResult>작성한 댓글이 없습니다.</NoResult>;
   return (
@@ -32,7 +32,12 @@ const Comment = () => {
         ))}
       </StyledUl>
 
-      <Pagination current={query.page} totalElements={data.totalElements} onChange={handlePage} />
+      <Pagination
+        current={query.page}
+        totalElements={data.totalElements}
+        onChange={handlePage}
+        key={query.page}
+      />
     </>
   );
 };

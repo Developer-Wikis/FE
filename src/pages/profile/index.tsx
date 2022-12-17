@@ -25,7 +25,7 @@ const Profile = () => {
       default:
         setTab('bookmark');
     }
-  }, [router.isReady]);
+  }, [router.isReady, router.query.tab]);
 
   useEffect(() => {
     if (currentUser.isLoading || currentUser.user) return;

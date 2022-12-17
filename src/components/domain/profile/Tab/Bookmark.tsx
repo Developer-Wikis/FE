@@ -32,6 +32,7 @@ const Bookmark = () => {
     setQuery,
     hasContentOn,
     refetch: refetchBookmark,
+    setQueryWithoutUrl,
   } = useProfileBookmark(isReady);
   const postBookmark = useBookmarkList(() => [QUERY_KEY.user, QUERY_KEY.bookmark, query]);
   const router = useRouter();
@@ -58,7 +59,7 @@ const Bookmark = () => {
   };
 
   useEffect(() => {
-    if (!router.isReady || router.query.tab !== 'bookmark') return;
+    if (!router.isReady || (router.query.tab && router.query.tab !== 'bookmark')) return;
 
     const initialValues = { mainCategory: 'all', subCategory: 'all', page: 0 } as TQueryBookmark;
     const filteredQuery = filter(
@@ -70,9 +71,9 @@ const Bookmark = () => {
       initialValues,
     );
 
-    setQuery(filteredQuery);
+    setQueryWithoutUrl(filteredQuery);
     setIsReady(true);
-  }, [router.isReady]);
+  }, [router.isReady, router.query]);
 
   return (
     <>
@@ -100,7 +101,12 @@ const Bookmark = () => {
         <PageInfo cur={query.page} total={data.totalPages} />
       </StyledDiv>
       <StyledBookmarkList data={data} onBookmarkToggle={handleBookmarkToggle} />
-      <Pagination current={query.page} totalElements={data.totalElements} onChange={handlePage} />
+      <Pagination
+        current={query.page}
+        totalElements={data.totalElements}
+        onChange={handlePage}
+        key={query.page}
+      />
     </>
   );
 };
