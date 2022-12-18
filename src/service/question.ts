@@ -6,7 +6,7 @@ import { Paging } from '~/types/utilityType';
 
 const questionApi = {
   create(question: IQuestion): RequestType<{ id: number }> {
-    return unauth.post('/questions', question);
+    return auth.post('/questions', question);
   },
   edit(id: number, question: Omit<IQuestion, 'nickname'>) {
     return unauth.put(`/questions/${id}`, question);

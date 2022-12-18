@@ -10,7 +10,8 @@ import TitleField from '~/components/common/InputField/TitleField';
 import PageContainer from '~/components/common/PageContainer';
 import MainCategoryField from '~/components/domain/random/MainCategoryField';
 import useForm from '~/hooks/useForm';
-import questionApi from '~/service/question';
+import useUserWithGuard from '~/hooks/useUserWithGuard';
+import useCreateQuestion from '~/react-query/hooks/useCreateQuestion';
 import { IQuestion } from '~/types/question';
 import { MainType, SubType } from '~/utils/constant/category';
 import { SUBMIT_CHECK } from '~/utils/helper/validation';
@@ -51,22 +52,17 @@ const validate = (values: initialValuesType) => {
 
 const CreateQuestion = () => {
   const [tailQuestions, setTailQuestions] = useState<string[]>([]);
-  const { values, errors, isLoading, handleChange, handleSubmit } = useForm({
+  const { values, errors, handleChange, handleSubmit } = useForm({
     initialValues,
     onSubmit,
     validate,
   });
-  const router = useRouter();
+  const user = useUserWithGuard();
+  const createQuestion = useCreateQuestion();
 
-  async function onSubmit() {
+  function onSubmit() {
     const newQuestion: IQuestion = { ...values, tailQuestions };
-    try {
-      await questionApi.create(newQuestion);
-      alert('질문이 접수되었습니다. 질문은 관리자 확인 후 등록됩니다.');
-      router.push('/');
-    } catch {
-      alert('질문 등록에 실패했습니다.');
-    }
+    createQuestion.mutate(newQuestion);
   }
 
   const onAddQuestion = (value: string) => {
@@ -87,6 +83,8 @@ const CreateQuestion = () => {
     const updateList = tailQuestions.filter((_, idx) => idx !== index);
     setTailQuestions(updateList);
   };
+
+  if (!user) return null;
 
   return (
     <PageContainer>
@@ -112,7 +110,7 @@ const CreateQuestion = () => {
             list={tailQuestions}
             onRemove={onRemoveQuestion}
           />
-          <SubmitButton onClick={handleSubmit} loading={isLoading}>
+          <SubmitButton onClick={handleSubmit} loading={createQuestion.isLoading}>
             등록
           </SubmitButton>
         </FormContainer>

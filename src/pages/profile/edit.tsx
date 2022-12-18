@@ -1,13 +1,11 @@
 import styled from '@emotion/styled';
-import { useRouter } from 'next/router';
-import { useEffect } from 'react';
 import PageTitle from '~/components/base/PageTitle';
 import PageContainer from '~/components/common/PageContainer';
 import DeleteAccount from '~/components/domain/profile/DeleteAccount';
 import EditUserInfo from '~/components/domain/profile/EditUserInfo';
+import useUserWithGuard from '~/hooks/useUserWithGuard';
 import { useAuth } from '~/react-query/hooks/useAuth';
 import { useEditProfile } from '~/react-query/hooks/useEditProfile';
-import { useUser } from '~/react-query/hooks/useUser';
 import { SUBMIT_CHECK } from '~/utils/helper/validation';
 
 /*
@@ -17,10 +15,9 @@ import { SUBMIT_CHECK } from '~/utils/helper/validation';
 */
 
 const ProfileEdit = () => {
-  const { user, fetchUser } = useUser();
   const { deleteAccount } = useAuth();
-  const router = useRouter();
   const { editUsername } = useEditProfile();
+  const { user } = useUserWithGuard();
 
   const onEditNickname = (value: string) => {
     if (SUBMIT_CHECK.nickname.isValid(value)) {
@@ -38,21 +35,6 @@ const ProfileEdit = () => {
       deleteAccount(user.id);
     }
   };
-
-  const checkUser = async () => {
-    const user = await fetchUser();
-
-    if (!user) {
-      alert('잘못된 접근입니다.');
-      router.push('/');
-    }
-  };
-
-  useEffect(() => {
-    if (!user) {
-      checkUser();
-    }
-  }, []);
 
   if (!user) {
     return null;

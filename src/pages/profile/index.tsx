@@ -5,13 +5,13 @@ import Tab from '~/components/domain/profile/Tab';
 import UserInfo from '~/components/domain/profile/UserInfo';
 import Bookmark from '~/components/domain/profile/Tab/Bookmark';
 import Comment from '~/components/domain/profile/Tab/Comment';
-import { useUser } from '~/react-query/hooks/useUser';
 import { useRouter } from 'next/router';
 import useTab from '~/hooks/useTab';
+import useUserWithGuard from '~/hooks/useUserWithGuard';
 
 const Profile = () => {
   const { tab, setTab, TabItem } = useTab(null, { bookmark: Bookmark, comment: Comment });
-  const currentUser = useUser();
+  const currentUser = useUserWithGuard();
   const router = useRouter();
 
   useEffect(() => {
@@ -26,13 +26,6 @@ const Profile = () => {
         setTab('bookmark');
     }
   }, [router.isReady]);
-
-  useEffect(() => {
-    if (currentUser.isLoading || currentUser.user) return;
-
-    alert('잘못된 접근입니다.');
-    router.push('/');
-  }, [currentUser.isLoading]);
 
   useEffect(() => {
     currentUser.refetch();
