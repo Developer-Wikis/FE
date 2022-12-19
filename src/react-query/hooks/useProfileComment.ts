@@ -15,7 +15,7 @@ type Params = {
 const getComment = (query: Params) => userApi.getComment(query);
 
 const useProfileComment = (isReady: boolean) => {
-  const [query, setQuery] = useUrlState<Params>(initialState, (state) => ({
+  const [query, setQuery, setQueryWithoutUrl] = useUrlState<Params>(initialState, (state) => ({
     tab: 'comment',
     ...state,
   }));
@@ -33,7 +33,7 @@ const useProfileComment = (isReady: boolean) => {
     },
   );
 
-  return { query, setQuery, data };
+  return { query, setQuery, setQueryWithoutUrl, data };
 };
 
 export default useProfileComment;

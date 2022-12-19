@@ -18,10 +18,13 @@ const getBookmark = (query: TQueryBookmark) => userApi.getBookmark(query);
 
 const useProfileBookmark = (isReady: boolean) => {
   const queryClient = useQueryClient();
-  const [query, setQuery] = useUrlState<TQueryBookmark>(initialState, (state) => ({
-    tab: 'bookmark',
-    ...state,
-  }));
+  const [query, setQuery, setQueryWithoutUrl] = useUrlState<TQueryBookmark>(
+    initialState,
+    (state) => ({
+      tab: 'bookmark',
+      ...state,
+    }),
+  );
 
   const { user } = useUser();
 
@@ -56,7 +59,7 @@ const useProfileBookmark = (isReady: boolean) => {
     return page <= curTotalPages;
   };
 
-  return { query, setQuery, data, hasContentOn, refetch };
+  return { query, setQuery, setQueryWithoutUrl, data, hasContentOn, refetch };
 };
 
 export default useProfileBookmark;

@@ -4,7 +4,7 @@ import { IUser } from '~/types/user';
 import { Nullable } from '~/types/utilityType';
 
 interface Tab {
-  user: Nullable<IUser>;
+  user: IUser;
   tab: Nullable<string>;
   onChange: (value: string) => void;
 }
@@ -23,7 +23,7 @@ const Tab = ({ user, tab, onChange, ...props }: Tab) => {
             className={getClassName('bookmark')}
             onClick={() => onChange('bookmark')}
           >
-            북마크한 질문 {user?.bookmarkSize}
+            북마크한 질문 {user.bookmarkSize}
           </StyledLink>
         </li>
         <li>
@@ -33,7 +33,7 @@ const Tab = ({ user, tab, onChange, ...props }: Tab) => {
             className={getClassName('comment')}
             onClick={() => onChange('comment')}
           >
-            작성한 댓글 {user?.commentSize}
+            작성한 댓글 {user.commentSize}
           </StyledLink>
         </li>
       </StyledUl>
