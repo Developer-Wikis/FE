@@ -26,7 +26,13 @@ export interface ToastItemProps {
     variant?: keyof typeof buttonStyle;
     size?: keyof typeof buttonSizes;
   };
+  /**
+   * Toast의 지속 시간을 설정합니다.
+   */
   duration?: number;
+  /**
+   * true일 경우 Toast 호버 시 Toast가 사라지지 않습니다. (모바일 환경에서는 무시됩니다.)
+   */
   keepAlive?: boolean;
   isRemoved?: boolean;
   onTimeout: () => void;
@@ -109,7 +115,7 @@ const Container = styled.li<{
   text-align: ${({ isMessage }) => (isMessage ? 'center' : '')};
   ${theme.fontStyle.subtitle1}
   color: ${theme.colors.white};
-  background-color: rgba(16, 16, 16, 0.78);
+  background-color: ${({ theme }) => theme.colors.gray700};
   animation: ${({ show, isRemoved }) => getAnimationName(show, isRemoved)} 0.4s ease-out forwards;
 
   &:not(:first-of-type) {

@@ -23,6 +23,14 @@ export default {
     children: {
       control: 'text',
     },
+    duration: {
+      control: 'number',
+      defaultValue: 3000,
+    },
+    keepAlive: {
+      control: 'boolean',
+      defaultValue: false,
+    },
   },
 } as ComponentMeta<typeof ToastItem>;
 
@@ -34,12 +42,14 @@ export const Template: ComponentStory<typeof ToastItem> = ({
     variant: 'borderGray',
     size: 'sm',
   },
+  duration,
+  keepAlive,
 }) => {
   const handleClickMessage = () => {
-    toast.showMessage(message);
+    toast.showMessage(message, keepAlive, duration);
   };
   const handleClickLink = () => {
-    toast.showMessageWithLink({ message, link: { ...link } });
+    toast.showMessageWithLink({ message, link: { ...link } }, keepAlive, duration);
   };
 
   return (
@@ -51,4 +61,4 @@ export const Template: ComponentStory<typeof ToastItem> = ({
     </div>
   );
 };
-Template.parameters = { controls: { include: ['message', 'children', 'link'] } };
+Template.parameters = { controls: { exclude: ['isRemoved', 'onTimeout'] } };
