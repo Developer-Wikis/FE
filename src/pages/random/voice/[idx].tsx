@@ -11,6 +11,7 @@ import { RANDOM_LOCAL_KEY } from '~/utils/constant/random';
 import Article from '~/components/common/Article';
 import MoveButtons from '~/components/common/MoveButtons';
 import RandomContent from '~/components/domain/random/RandomContent';
+import useTTS from '~/hooks/useTTS';
 
 const DUMMY = 1;
 const DUMMY_QUESTION = {} as IQuestionDetail;
@@ -27,6 +28,7 @@ const RandomVoice = () => {
 
   const [questions, setQuestions] = useState<IQuestionDetail[]>();
   const [curQuestion, setCurQuestion] = useState<CurQuestion>();
+  const { speak, cancel } = useTTS();
 
   const clearLocal = useCallback(() => {
     Object.values(RANDOM_LOCAL_KEY).forEach(local.removeItem);
@@ -61,9 +63,9 @@ const RandomVoice = () => {
     local.setItem(RANDOM_LOCAL_KEY.latest, nextIdx);
     router.push(`/random/voice/${nextIdx}`);
 
-    speechSynthesis.cancel();
+    cancel();
     const id = ++recordRefLastId.current;
-    speak(questions[nextIdx].title, speechSynthesis, () => handleSpeechEnd(id));
+    speak(questions[nextIdx].title, () => handleSpeechEnd(id));
   };
 
   useEffect(() => {
@@ -90,9 +92,7 @@ const RandomVoice = () => {
     setCurQuestion({ idx, ...random.questions[idx - DUMMY] });
     local.setItem(RANDOM_LOCAL_KEY.latest, idx);
 
-    speak(random.questions[idx - DUMMY].title, speechSynthesis, () =>
-      handleSpeechEnd(recordRefLastId.current),
-    );
+    speak(random.questions[idx - DUMMY].title, () => handleSpeechEnd(recordRefLastId.current));
   }, [router.isReady]);
 
   return (
@@ -122,34 +122,6 @@ const RandomVoice = () => {
 };
 
 export default RandomVoice;
-
-async function populateVoiceList(synth: SpeechSynthesis) {
-  try {
-    return await synth.getVoices();
-  } catch (error) {
-    throw new Error('Failure retrieving voices');
-  }
-}
-
-async function speak(textToRead: string, synth: SpeechSynthesis, handleEnd: () => void) {
-  if (speechSynthesis.onvoiceschanged !== undefined) {
-    speechSynthesis.onvoiceschanged = () => populateVoiceList;
-  }
-
-  if (textToRead !== '') {
-    const utterThis = new SpeechSynthesisUtterance(textToRead);
-    utterThis.onend = function (event) {
-      handleEnd();
-    };
-    utterThis.onerror = function (event) {
-      console.error('SpeechSynthesisUtterance.onerror', event);
-    };
-
-    utterThis.pitch = 1;
-    utterThis.rate = 1;
-    synth.speak(utterThis);
-  }
-}
 
 function isValidIdx(idx: number, length: number) {
   return 0 + DUMMY <= idx && idx < length;
