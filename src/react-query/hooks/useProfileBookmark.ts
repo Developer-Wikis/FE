@@ -14,7 +14,11 @@ const initialState: TQueryBookmark = {
   page: 0,
 };
 
-const getBookmark = (query: TQueryBookmark) => userApi.getBookmark(query);
+const filter = (query: TQueryBookmark) => {
+  const { subCategory, ...withoutSubCategory } = query;
+  return query.mainCategory === 'all' ? withoutSubCategory : query;
+};
+const getBookmark = (query: TQueryBookmark) => userApi.getBookmark(filter(query));
 
 const useProfileBookmark = (isReady: boolean) => {
   const queryClient = useQueryClient();
@@ -22,7 +26,7 @@ const useProfileBookmark = (isReady: boolean) => {
     initialState,
     (state) => ({
       tab: 'bookmark',
-      ...state,
+      ...filter(state),
     }),
   );
 

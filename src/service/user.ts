@@ -21,7 +21,7 @@ const userApi = {
   },
   getBookmark: (params: {
     mainCategory: string;
-    subCategory: string;
+    subCategory?: string;
     page: number;
   }): Promise<Paging<IQuestionItem>> => {
     return auth.get('/questions/bookmark', { params }).then((res) => res.data);
