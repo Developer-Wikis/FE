@@ -7,7 +7,7 @@ import PageTitle from '~/components/base/PageTitle';
 import Article from '~/components/common/Article';
 import CloseButton from '~/components/common/CloseButton';
 import InputField from '~/components/common/InputField';
-import { createTailQuestion } from '~/service/question';
+import questionApi from '~/service/question';
 import { SUBMIT_CHECK } from '~/utils/helper/validation';
 
 interface TailQuestionModalProps {
@@ -34,7 +34,7 @@ const TailQuestionModal = ({ title, id, onClose, isOpenModal }: TailQuestionModa
 
     try {
       setIsLoading(true);
-      await createTailQuestion(Number(id), text);
+      await questionApi.createTail(Number(id), text);
       alert('질문이 접수되었습니다. 질문은 관리자 확인 후 등록됩니다.');
       onClose();
     } catch {
@@ -51,7 +51,7 @@ const TailQuestionModal = ({ title, id, onClose, isOpenModal }: TailQuestionModa
   }, [isOpenModal]);
 
   return (
-    <Container>
+    <StyledArticle>
       <ModalHeader>
         <PageTitle align="left">꼬리 질문 등록</PageTitle>
         <StyledCloseButton onClick={onClose} />
@@ -74,13 +74,13 @@ const TailQuestionModal = ({ title, id, onClose, isOpenModal }: TailQuestionModa
 
         <SubmitButton loading={isLoading}>등록</SubmitButton>
       </Form>
-    </Container>
+    </StyledArticle>
   );
 };
 
 export default TailQuestionModal;
 
-const Container = styled(Article)`
+const StyledArticle = styled(Article)`
   margin-top: 0;
 `;
 

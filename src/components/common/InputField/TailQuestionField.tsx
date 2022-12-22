@@ -1,7 +1,7 @@
 import Label from '~/components/base/Label';
 import TailQuestionList from '~/components/domain/question/TailQuestionList';
 import InputField from '.';
-import AddTailQuestionForm from '../AddTailQuestionForm';
+import AddForm from '../AddForm';
 
 interface TailQuestionFieldProps {
   handleSubmit: (value: string) => void;
@@ -13,12 +13,12 @@ const TailQuestionField = ({ handleSubmit, list, onRemove }: TailQuestionFieldPr
   return (
     <InputField>
       <Label htmlFor="tailQuestion">꼬리질문</Label>
-      <AddTailQuestionForm
-        type="text"
+      <AddForm
         buttonText="추가"
         name="tailQuestion"
         id="tailQuestion"
         onSubmit={handleSubmit}
+        placeholder="예상되는 꼬리질문을 입력해주세요."
       />
       <TailQuestionList list={list} onRemove={onRemove} />
     </InputField>

@@ -29,6 +29,7 @@ class MainDocument extends Document {
 
           {/*modal container*/}
           <div id="portal"></div>
+          <div id="toast-portal"></div>
         </body>
       </Html>
     );

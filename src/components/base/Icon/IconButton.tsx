@@ -1,8 +1,8 @@
-import { CSSProperties } from 'react';
+import { CSSProperties, HTMLAttributes, MouseEvent } from 'react';
 import Icon, { IconProps } from '.';
 
-interface IconButtonProps extends IconProps {
-  onClick?: () => void;
+interface IconButtonProps extends IconProps, Omit<HTMLAttributes<HTMLButtonElement>, 'color'> {
+  onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
   type?: 'submit' | 'reset' | 'button' | undefined;
   style?: CSSProperties;
 }
@@ -14,11 +14,18 @@ const IconButton = ({
   onClick,
   type = 'button',
   style,
+  fill,
+  stroke,
+  block,
+  width,
+  height,
   ...props
 }: IconButtonProps) => {
+  const iconProps = { name, size, color, fill, stroke, block, width, height };
+
   return (
     <button onClick={onClick} type={type} style={style} {...props}>
-      <Icon name={name} size={size} color={color} />
+      <Icon {...iconProps} />
     </button>
   );
 };

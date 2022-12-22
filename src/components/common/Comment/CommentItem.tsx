@@ -1,39 +1,70 @@
 import styled from '@emotion/styled';
 import { useContext } from 'react';
+import { CheckPassword, DeleteComment, EditComment } from '~/react-query/hooks/useComment';
 import { ICommentItem } from '~/types/comment';
+import { IUser } from '~/types/user';
+import { Nullable } from '~/types/utilityType';
 import { mediaQuery } from '~/utils/helper/mediaQuery';
+import UserProfile from '../UserProfile';
 import CommentContent from './CommentContent';
 import { CommentContext } from './context';
 import EditCommentForm from './EditCommentForm';
 import PasswordConfirm from './PasswordConfirm';
 
 interface CommentListProps {
-  commentId: number;
   comment: ICommentItem;
+  deleteComment: DeleteComment;
+  editComment: EditComment;
+  checkPassword: CheckPassword;
+  user: Nullable<IUser>;
 }
 
-const CommentItem = ({ commentId, comment }: CommentListProps) => {
+const CommentItem = ({
+  comment,
+  deleteComment,
+  editComment,
+  checkPassword,
+  user,
+}: CommentListProps) => {
   const { editId, passwordState } = useContext(CommentContext);
+
+  const isShowPasswordInput = passwordState.commentId === comment.id;
+  const isShowEditor = editId !== comment.id;
 
   return (
     <StyledLi>
       <CommentContainer>
         <Writer>
-          <span title={comment.nickname}>{comment.nickname}</span>
+          {comment.userId ? (
+            <UserProfile
+              profileUrl={comment.profileUrl}
+              avatarSize="sm"
+              fontSize="sm"
+              text={comment.username}
+            />
+          ) : (
+            <span title={comment.username}>{comment.username}</span>
+          )}
         </Writer>
-        {editId !== commentId ? (
-          <CommentContent
-            commentId={commentId}
-            content={comment.content}
-            createdAt={comment.createdAt}
-          />
+        {isShowEditor ? (
+          <CommentContent user={user} comment={comment} deleteComment={deleteComment} />
         ) : (
           <EditorContainer>
-            <EditCommentForm defaultValue={comment.content} commentId={commentId} />
+            <EditCommentForm
+              user={user}
+              defaultValue={comment.content}
+              commentId={comment.id}
+              editComment={editComment}
+            />
           </EditorContainer>
         )}
-
-        {passwordState.commentId === commentId && <PasswordConfirm commentId={commentId} />}
+        {isShowPasswordInput && (
+          <PasswordConfirm
+            commentId={comment.id}
+            deleteComment={deleteComment}
+            checkPassword={checkPassword}
+          />
+        )}
       </CommentContainer>
     </StyledLi>
   );
@@ -61,7 +92,7 @@ const EditorContainer = styled.div`
 
 const Writer = styled.div`
   margin-left: 16px;
-  width: 100px;
+  width: 120px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

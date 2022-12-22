@@ -12,7 +12,7 @@ export const buttonStyle = {
     color: ${theme.colors.gray600};
     border-radius: 4px;
 
-    &:hover {
+    &:not(:disabled):hover {
       background-color: ${theme.colors.gray100};
     }
   `,
@@ -21,7 +21,7 @@ export const buttonStyle = {
     color: ${theme.colors.white};
     border-radius: 4px;
 
-    &:hover {
+    &:not(:disabled):hover {
       background-color: ${theme.colors.gray600};
     }
   `,
@@ -37,17 +37,18 @@ export const buttonSizes = {
     font-size: 12px;
     padding: 5px 11px;
     line-height: 20px;
+    font-weight: 500;
   `,
   sm: `
-    ${theme.fontStyle.body2}
+    ${theme.fontStyle.body2_500}
     padding: 8px 12px;
   `,
   md: `
-    ${theme.fontStyle.body2}
+    ${theme.fontStyle.body2_500}
     padding: 12px 26px;
   `,
   lg: `
-    ${theme.fontStyle.body1}
+    ${theme.fontStyle.body1_500}
     padding: 12px 16px;
   `,
 };

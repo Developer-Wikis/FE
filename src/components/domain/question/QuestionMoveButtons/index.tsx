@@ -1,9 +1,9 @@
 import { useRouter } from 'next/router';
 import MoveButtons from '~/components/common/MoveButtons';
-import { QuestionCategoryQuery } from '~/types/question';
+import { ICategoryQuery } from '~/types/question';
 
 interface QuestionMoveButtonProps {
-  categoryQuery: QuestionCategoryQuery;
+  categoryQuery: ICategoryQuery;
   prevId: number;
   nextId: number;
 }
@@ -12,11 +12,15 @@ const QuestionMoveButtons = ({ categoryQuery, nextId, prevId }: QuestionMoveButt
   const router = useRouter();
 
   const onMovePrev = () => {
-    router.push({ pathname: `/question/${prevId}`, query: { ...categoryQuery } });
+    router.push({ pathname: `/question/${prevId}`, query: { ...categoryQuery } }, undefined, {
+      shallow: true,
+    });
   };
 
   const onMoveNext = () => {
-    router.push({ pathname: `/question/${nextId}`, query: { ...categoryQuery } });
+    router.push({ pathname: `/question/${nextId}`, query: { ...categoryQuery } }, undefined, {
+      shallow: true,
+    });
   };
 
   return (

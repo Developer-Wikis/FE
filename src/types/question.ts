@@ -3,12 +3,12 @@ import { MainType, SubType, SubWithAllType } from '~/utils/constant/category';
 export interface IQuestionItem {
   id: number;
   title: string;
-  nickname: string;
   mainCategory: MainType;
   subCategory: SubType;
   viewCount: number;
   commentCount: number;
-  createAt: string;
+  createdAt: string;
+  isBookmarked: boolean;
 }
 
 export interface IQuestion {
@@ -18,26 +18,13 @@ export interface IQuestion {
   tailQuestions: string[];
 }
 
-export interface ISort {
-  empty: boolean;
-  sorted: boolean;
-  unsorted: boolean;
-}
-export interface IQuestionDetail {
-  id: number;
-  nickname: string;
-  title: string;
-  mainCategory: MainType;
-  subCategory: SubType;
+export interface IQuestionDetail extends IQuestionItem {
   tailQuestions: string[];
-  viewCount: number;
-  commentCount: number;
-  createdAt: string;
   prevId: number;
   nextId: number;
 }
 
-export interface QuestionCategoryQuery {
+export interface ICategoryQuery {
   mainCategory: MainType;
   subCategory: SubWithAllType;
 }

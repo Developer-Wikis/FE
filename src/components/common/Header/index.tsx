@@ -1,18 +1,44 @@
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Link from '~/components/base/Link';
 import PageContainer from '~/components/common/PageContainer';
 import Logo from '../Logo';
-import CategoryListItem from './CategoryListItem';
 import Icon from '~/components/base/Icon/index';
 import { mediaQuery } from '~/utils/helper/mediaQuery';
+import useStorage from '~/hooks/useStorage';
+import { LOCAL_KEY } from '~/utils/constant/user';
 import Slide from './Slide';
+import CategoryListItem from './CategoryListItem';
+import ProfileDropdown from './ProfileDropdown';
+import { useUser } from '~/react-query/hooks/useUser';
+import { useAuth } from '~/react-query/hooks/useAuth';
 
 const Header = () => {
   const router = useRouter();
   const [selectedCategory, setSelectedCategory] = useState('');
   const [isOpen, setIsOpen] = useState(false);
+  const { user, fetchUser, isLoading } = useUser();
+  const { logout } = useAuth();
+  const storage = useStorage('local');
+
+  const getUserProfile = async () => {
+    const token = storage.getItem(LOCAL_KEY.token, '');
+
+    // 로컬에서 토큰 삭제 시
+    if (user && !token) {
+      logout();
+    }
+
+    // 새로고침하여 userState 초기화 시
+    if (token && !user) {
+      await fetchUser();
+    }
+  };
+
+  useEffect(() => {
+    getUserProfile();
+  }, []);
 
   useEffect(() => {
     if (!router.isReady) {
@@ -27,48 +53,58 @@ const Header = () => {
   }, [router.isReady, router.query]);
 
   return (
-    <StyledHeader>
-      <HeaderContent>
-        <LeftArea>
-          <FirstRow>
-            <Link href="/">
-              <h1>
-                <Logo />
-              </h1>
+    <>
+      <StyledHeader>
+        <HeaderContent>
+          <LeftArea>
+            <FirstRow>
+              <Link href="/">
+                <h1>
+                  <Logo />
+                </h1>
+              </Link>
+
+              <Hamburger
+                name="Hamburger"
+                color="gray800"
+                size="24"
+                onClick={() => setIsOpen(true)}
+              />
+            </FirstRow>
+
+            <Nav>
+              <CategoryList>
+                <CategoryListItem
+                  href="/?mainCategory=fe"
+                  select={selectedCategory === 'fe'}
+                  name="프론트엔드"
+                />
+                <CategoryListItem
+                  href="/?mainCategory=be"
+                  select={selectedCategory === 'be'}
+                  name="백엔드"
+                />
+              </CategoryList>
+            </Nav>
+          </LeftArea>
+
+          <RightArea>
+            {!user && !isLoading && (
+              <Link size="sm" variant="borderGray" href="/login">
+                로그인
+              </Link>
+            )}
+            {user && <ProfileDropdown user={user} />}
+            <Link size="sm" variant="red" href="/random/create?step=0" as="/random/create">
+              랜덤 질문
             </Link>
+          </RightArea>
+        </HeaderContent>
 
-            {/* 햄버거가 될 예정*/}
-            <Hambuger name="Menu" color="gray800" size="24" onClick={() => setIsOpen(true)} />
-          </FirstRow>
-
-          <Nav>
-            <CategoryList>
-              <CategoryListItem
-                href="/?mainCategory=fe"
-                select={selectedCategory === 'fe'}
-                name="프론트엔드"
-              />
-              <CategoryListItem
-                href="/?mainCategory=be"
-                select={selectedCategory === 'be'}
-                name="백엔드"
-              />
-            </CategoryList>
-          </Nav>
-        </LeftArea>
-
-        <RightArea>
-          <Link size="sm" linkType="red" href="/random/create?step=0" as="/random/create">
-            랜덤 질문
-          </Link>
-          <Link size="sm" linkType="black" href="/question/create">
-            질문 등록
-          </Link>
-        </RightArea>
-      </HeaderContent>
-
-      <Slide isOpen={isOpen} onClose={() => setIsOpen(false)} />
-    </StyledHeader>
+        <Slide user={user} isOpen={isOpen} onClose={() => setIsOpen(false)} />
+      </StyledHeader>
+      <Line />
+    </>
   );
 };
 
@@ -76,6 +112,10 @@ export default Header;
 
 const StyledHeader = styled.header`
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray300};
+
+  ${mediaQuery('sm')} {
+    border-bottom: 1px solid ${({ theme }) => theme.colors.gray400};
+  }
 `;
 
 const HeaderContent = styled(PageContainer)`
@@ -86,7 +126,7 @@ const HeaderContent = styled(PageContainer)`
 
   ${mediaQuery('sm')} {
     display: block;
-    height: 128px;
+    height: auto;
   }
 `;
 
@@ -118,7 +158,7 @@ const Nav = styled.nav`
     display: flex;
     align-items: center;
     margin-left: 0;
-    height: 64px;
+    height: 55px;
   }
 `;
 
@@ -126,7 +166,7 @@ const CategoryList = styled.ul`
   display: flex;
 `;
 
-const Hambuger = styled(Icon.Button)`
+const Hamburger = styled(Icon.Button)`
   display: none;
 
   ${mediaQuery('sm')} {
@@ -135,11 +175,27 @@ const Hambuger = styled(Icon.Button)`
 `;
 
 const RightArea = styled.div`
-  a ~ a {
-    margin-left: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  & > a:last-of-type {
+    margin-left: 14px;
   }
 
   ${mediaQuery('sm')} {
     display: none;
+  }
+`;
+
+const Line = styled.hr`
+  display: none;
+
+  ${mediaQuery('sm')} {
+    display: block;
+    height: 6px;
+    background-color: ${({ theme }) => theme.colors.gray200};
+    border: 0;
+    margin: 0;
   }
 `;

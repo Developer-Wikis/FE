@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { FormEvent, useEffect, useRef } from 'react';
 import Button from '~/components/base/Button';
+import Checkbox from '~/components/base/Checkbox';
 import Icon from '~/components/base/Icon';
 import PageTitle from '~/components/base/PageTitle';
 import { Step } from '~/pages/random/create';
@@ -48,17 +49,17 @@ const StepTwo = ({ step, permission, handleSubmit, handleChange, handleBack }: S
           <audio src="/assets/audio/mixkit-positive-notification-951.wav" ref={audioRef} />
         </AudioButton>
 
-        <AudioCheckbox>
-          <input
-            type="checkbox"
-            name="soundTest"
+        <CheckboxField>
+          <Checkbox
             id="soundTest"
+            name="soundTest"
             required
             checked={permission.audio}
             onChange={() => handleChange('audio', !permission.audio)}
-          />
-          <label htmlFor="soundTest">알림음이 정상적으로 들리신다면 옵션을 체크해주세요.</label>
-        </AudioCheckbox>
+          >
+            알림음이 정상적으로 들리신다면 옵션을 체크해주세요.
+          </Checkbox>
+        </CheckboxField>
 
         <StyledUl>
           <StyledLi>
@@ -73,7 +74,7 @@ const StepTwo = ({ step, permission, handleSubmit, handleChange, handleBack }: S
 
         <StyledButton
           type="submit"
-          buttonType="red"
+          variant="red"
           size="lg"
           disabled={!permission.audio || !permission.mic}
         >
@@ -116,24 +117,8 @@ const AudioButton = styled.button`
   }
 `;
 
-const AudioCheckbox = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 28px;
-
-  input {
-    margin: 0;
-    width: 16px;
-    height: 16px;
-    accent-color: ${({ theme }) => theme.colors.red};
-  }
-
-  label {
-    margin-left: 6px;
-    ${({ theme }) => theme.fontStyle.body2}
-    color: ${({ theme }) => theme.colors.gray600};
-  }
+const CheckboxField = styled.div`
+  margin-bottom: 27px;
 `;
 
 const StyledUl = styled.ul`

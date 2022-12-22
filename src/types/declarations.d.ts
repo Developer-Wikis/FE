@@ -1,5 +1,5 @@
 import '@emotion/react';
-import { ThemeColors, ThemeFontStyle } from './theme';
+import { ThemeColors, ThemeFontStyle, ThemeSpace } from './theme';
 
 declare module '@emotion/react' {
   export interface Theme {
@@ -8,6 +8,9 @@ declare module '@emotion/react' {
     };
     fontStyle: {
       [key in ThemeFontStyle]: string;
+    };
+    space: {
+      [key in ThemeSpace]: string;
     };
   }
 }

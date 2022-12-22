@@ -32,16 +32,40 @@ export const theme = {
       font-size: 16px;
       line-height: 1.5;
     `,
+    body1_500: `
+      font-size: 16px;
+      line-height: 1.5;
+      font-weight: 500;
+    `,
+    body1_600: `
+      font-size: 16px;
+      line-height: 1.5;
+      font-weight: 600;
+    `,
     body2: `
       font-size: 14px;
-      line-height: 1.5;
+      line-height: 20px;
+    `,
+    body2_500: `
+      font-size: 14px;
+      line-height: 20px;
+      font-weight: 500;
+    `,
+    body2_600: `
+      font-size: 14px;
+      line-height: 20px;
+      font-weight: 600;
     `,
     caption: `
       font-size: 13px;
       line-height: 1.5;
     `,
   },
+  space: {
+    mobileSide: '16px',
+  },
 };
 
 export type ThemeColors = keyof typeof theme.colors;
 export type ThemeFontStyle = keyof typeof theme.fontStyle;
+export type ThemeSpace = keyof typeof theme.space;

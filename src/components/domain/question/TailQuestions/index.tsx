@@ -47,7 +47,7 @@ const TailQuestions = ({ questions, questionId, title }: Props) => {
                 <p>등록된 꼬리 질문이 없습니다.</p>
               )}
             </AccordionContent>
-            <StyledButton size="sm" buttonType="black" onClick={onOpenModal}>
+            <StyledButton size="sm" variant="black" onClick={onOpenModal}>
               꼬리 질문 등록
             </StyledButton>
           </>

@@ -6,7 +6,7 @@ interface objectType {
 
 interface useFormProps<T extends objectType> {
   initialValues: T;
-  onSubmit: (e?: FormEvent) => Promise<void>;
+  onSubmit: (e?: FormEvent) => Promise<void> | void;
   validate?: (values: T) => T | objectType;
 }
 
