@@ -92,7 +92,7 @@ const EditorContainer = styled.div`
 
 const Writer = styled.div`
   margin-left: 16px;
-  width: 100px;
+  width: 120px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
