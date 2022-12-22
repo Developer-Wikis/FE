@@ -45,6 +45,7 @@ const Avatar = ({ src, size = 'md', alt = '프로필이미지', ...props }: Avat
 export default Avatar;
 
 const Container = styled.div<AvatarProps>`
+  flex-shrink: 0;
   width: ${({ size }) => size && AvatarSize[size]};
   height: ${({ size }) => size && AvatarSize[size]};
   position: relative;
