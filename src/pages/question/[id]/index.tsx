@@ -14,6 +14,7 @@ import { QueryClient, dehydrate, useQueryClient } from '@tanstack/react-query';
 import { useQuestionDetail } from '~/react-query/hooks/useQuestion';
 import { QUERY_KEY } from '~/react-query/queryKey';
 import { useRouter } from 'next/router';
+import useDetailView from '~/react-query/hooks/useDetailView';
 
 /*
 
@@ -74,10 +75,12 @@ const QuestionDetail = ({ questionId: defaultId, query }: QuestionDetailProps) =
   const [questionId, setQuestionId] = useState(defaultId);
   const { detailData, prefetchDetail } = useQuestionDetail(questionId, query);
   const router = useRouter();
+  const addDetailView = useDetailView();
 
   useEffect(() => {
     const { id } = router.query;
     const numberId = Number(id);
+    addDetailView(numberId);
 
     /* CSR 이동 체크 */
     if (numberId !== questionId) {
