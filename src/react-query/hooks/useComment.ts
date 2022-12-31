@@ -8,6 +8,9 @@ import {
 } from '@tanstack/react-query';
 import { QUERY_KEY } from '../queryKey';
 import { CommentEditPayload, CommentType, ICommentItem } from '~/types/comment';
+import { AxiosError } from 'axios';
+import { useRouter } from 'next/router';
+import { useUser } from './useUser';
 
 export const useGetComment = (questionId: number) => {
   const queryFn = () => commentApi.getList(questionId);
@@ -32,6 +35,8 @@ export const useGetComment = (questionId: number) => {
 
 export const useAddComment = (questionId: number) => {
   const queryClient = useQueryClient();
+  const router = useRouter();
+  const { clearUser } = useUser();
 
   const mutationFn = (payload: CommentType) => commentApi.create({ questionId, payload });
 
@@ -39,7 +44,14 @@ export const useAddComment = (questionId: number) => {
     onSuccess: () => {
       queryClient.invalidateQueries([QUERY_KEY.comments]);
     },
-    onError: () => {
+    onError: (error: AxiosError) => {
+      if (error.response?.status === 401) {
+        alert('로그인이 필요한 서비스입니다.');
+        router.push('/login');
+        clearUser();
+        return;
+      }
+
       alert('댓글 등록에 실패했습니다. 다시 시도해주세요.');
     },
   });

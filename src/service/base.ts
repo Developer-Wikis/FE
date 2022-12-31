@@ -25,14 +25,11 @@ const getRefreshToken = async () => {
       },
     );
 
-    console.log(data, 'data');
-
     storage.setItem(LOCAL_KEY.token, data.accessToken);
     storage.setItem(LOCAL_KEY.refresh, data.refreshToken);
 
     return data.accessToken;
   } catch (e) {
-    console.log('세션이 만료되었습니다.');
     storage.removeItem(LOCAL_KEY.token);
     storage.removeItem(LOCAL_KEY.refresh);
   }
@@ -57,20 +54,20 @@ const authConfig = (instance: AxiosInstance) => {
       const originalRequest: AxiosRequestConfig = error.config;
 
       /** refresh 실패할 경우 */
-      if (originalRequest.url === '/refreshToken' || error.response?.status !== 401) {
-        console.log('세션이 만료되었습니다.');
+      if (originalRequest.url === '/refreshToken' && error.response?.status === 403) {
         return Promise.reject(error.response);
       }
 
-      const accessToken = await getRefreshToken();
+      if (error.response?.status === 401) {
+        const accessToken = await getRefreshToken();
 
-      if (accessToken) {
-        originalRequest.headers!.Authorization = `Bearer ${accessToken}`;
-        // 재요청
-        return axios(originalRequest);
+        if (accessToken) {
+          originalRequest.headers!.Authorization = `Bearer ${accessToken}`;
+          return axios(originalRequest);
+        }
       }
 
-      // return Promise.reject(error);
+      return Promise.reject(error);
     },
   );
   return instance;
