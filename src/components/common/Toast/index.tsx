@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { buttonSizes, buttonStyle } from '~/components/base/Button/types';
 import { Nullable } from '~/types/utilityType';
 import ClientPortal from '../ClientPortal';
 import ToastManager, { TCreateToast } from './ToastManager';
@@ -27,6 +28,28 @@ class Toast {
 
   showChildren(children: ReactNode, keepAlive?: boolean, duration?: number) {
     this.createToast && this.createToast({ children, keepAlive, duration });
+  }
+
+  showMessageWithLink(
+    content: {
+      message: string;
+      link: {
+        message: string;
+        href: string;
+        variant?: keyof typeof buttonStyle;
+        size?: keyof typeof buttonSizes;
+      };
+    },
+    keepAlive = true,
+    duration?: number,
+  ) {
+    this.createToast &&
+      this.createToast({
+        message: content.message,
+        link: content.link,
+        keepAlive,
+        duration,
+      });
   }
 }
 

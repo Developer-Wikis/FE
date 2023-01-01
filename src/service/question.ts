@@ -28,6 +28,9 @@ const questionApi = {
   createTail(id: number, text: string) {
     return unauth.post(`/questions/${id}/tail`, { tailQuestion: text });
   },
+  addView(id: number) {
+    return unauth.put(`/questions/${id}/add`);
+  },
 };
 
 export default questionApi;

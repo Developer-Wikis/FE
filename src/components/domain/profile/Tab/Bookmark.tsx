@@ -117,7 +117,7 @@ function filter(
   query: Record<keyof TQueryBookmark, string | string[] | undefined>,
   defaultValue: TQueryBookmark,
 ): TQueryBookmark {
-  const { mainCategory, subCategory, page } = query;
+  const { mainCategory, subCategory = 'all', page } = query;
 
   if (!isMainType(mainCategory) && mainCategory !== 'all') {
     return defaultValue;

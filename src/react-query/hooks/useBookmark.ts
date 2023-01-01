@@ -3,6 +3,7 @@ import bookmarkApi from '~/service/bookmark';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEY } from '../queryKey';
 import { AxiosError } from 'axios';
+import { toast } from '~/components/common/Toast';
 
 type BookmarkResponse = boolean | undefined;
 
@@ -51,6 +52,14 @@ const useBookmark = ({ questionId }: { questionId: number }) => {
       return { prevData: prevData || false };
     },
     onSuccess: (data) => {
+      if (data) {
+        toast.showMessageWithLink({
+          message: '북마크에 추가되었습니다.',
+          link: { message: '북마크 보기', href: '/profile' },
+        });
+      } else {
+        toast.showMessage('북마크가 제거되었습니다.');
+      }
       setBookmarkData(data);
     },
     onError: (_, __, context) => {

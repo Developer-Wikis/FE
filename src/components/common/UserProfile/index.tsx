@@ -61,6 +61,9 @@ const Container = styled.div`
 `;
 
 const Text = styled.span<{ fontSize: 'sm' | 'md' | 'lg' }>`
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   ${({ fontSize }) => fontSize && textSize[fontSize]};
 `;
 

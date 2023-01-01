@@ -1,10 +1,13 @@
 import { QueryKey, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useRouter } from 'next/router';
+import { toast } from '~/components/common/Toast';
 import bookmarkApi from '~/service/bookmark';
 import { IQuestionItem } from '~/types/question';
 import { Paging } from '~/types/utilityType';
 
 const useBookmarkList = (queryKeyFn: () => QueryKey) => {
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   const setBookmarkData = (data: Paging<IQuestionItem>) => {
     queryClient.setQueryData(queryKeyFn(), data);
@@ -23,11 +26,20 @@ const useBookmarkList = (queryKeyFn: () => QueryKey) => {
       return { prevData };
     },
     onSuccess: (isBookmarked) => {
-      // TODO: alert -> toast로 변경
-      if (isBookmarked) {
-        alert('북마크가 추가되었습니다.');
-      } else {
-        alert('북마크가 제거되었습니다.');
+      if (!isBookmarked) {
+        toast.showMessage('북마크가 제거되었습니다.');
+        return;
+      }
+
+      switch (router.pathname) {
+        case '/profile':
+          toast.showMessage('북마크에 추가되었습니다.');
+          break;
+        default:
+          toast.showMessageWithLink({
+            message: '북마크에 추가되었습니다.',
+            link: { message: '북마크 보기', href: '/profile' },
+          });
       }
     },
     onError: (_, __, context) => {
