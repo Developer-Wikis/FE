@@ -13,6 +13,7 @@ import { SUBMIT_CHECK } from '~/utils/helper/validation';
 import ErrorMessage from '~/components/common/ErrorMessage';
 import { useRouter } from 'next/router';
 import PageDescription from '~/components/common/PageDescription';
+import SEO from '~/components/common/SEO';
 
 const SERVICE_ID = process.env.EMAILJS_SERVICE_ID;
 const TEMPLATE_ID = process.env.EMAILJS_TEMPLATE_ID;
@@ -67,30 +68,33 @@ const Suggestion = () => {
   }
 
   return (
-    <Article>
-      <PageTitle>건의하기</PageTitle>
-      <PageDescription>
-        Developerwiki가 더 나은 서비스로 성장할 수 있도록
-        <br />
-        아낌없는 피드백 부탁드립니다. 🙏‍
-      </PageDescription>
+    <>
+      <SEO title="건의하기" withSuffix />
+      <Article>
+        <PageTitle>건의하기</PageTitle>
+        <PageDescription>
+          Developerwiki가 더 나은 서비스로 성장할 수 있도록
+          <br />
+          아낌없는 피드백 부탁드립니다. 🙏‍
+        </PageDescription>
 
-      <Form onSubmit={handleSubmit}>
-        <TitleField handleChange={handleChange} message={errors.title} />
-        <InputField>
-          <Label htmlFor="content">건의 내용</Label>
-          <TextArea
-            height={150}
-            name="content"
-            placeholder="건의 내용을 입력해 주세요."
-            onChange={handleChange}
-            block
-          />
-          {errors.content && <ErrorMessage message={errors.content} />}
-        </InputField>
-        <SubmitButton loading={isLoading}>건의 메일 보내기</SubmitButton>
-      </Form>
-    </Article>
+        <Form onSubmit={handleSubmit}>
+          <TitleField handleChange={handleChange} message={errors.title} />
+          <InputField>
+            <Label htmlFor="content">건의 내용</Label>
+            <TextArea
+              height={150}
+              name="content"
+              placeholder="건의 내용을 입력해 주세요."
+              onChange={handleChange}
+              block
+            />
+            {errors.content && <ErrorMessage message={errors.content} />}
+          </InputField>
+          <SubmitButton loading={isLoading}>건의 메일 보내기</SubmitButton>
+        </Form>
+      </Article>
+    </>
   );
 };
 

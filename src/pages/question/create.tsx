@@ -8,6 +8,7 @@ import SubCategoryField from '~/components/common/InputField/SubCategoryField';
 import TailQuestionField from '~/components/common/InputField/TailQuestionField';
 import TitleField from '~/components/common/InputField/TitleField';
 import PageContainer from '~/components/common/PageContainer';
+import SEO from '~/components/common/SEO';
 import MainCategoryField from '~/components/domain/random/MainCategoryField';
 import useForm from '~/hooks/useForm';
 import useUserWithGuard from '~/hooks/useUserWithGuard';
@@ -87,35 +88,38 @@ const CreateQuestion = () => {
   if (!user) return null;
 
   return (
-    <PageContainer>
-      <Article>
-        <PageTitle>질문 등록하기</PageTitle>
-        <FormContainer>
-          <TitleField handleChange={handleChange} message={errors.title} />
-          <MainCategoryField
-            handleChange={handleChange}
-            selected={values.mainCategory}
-            message={errors.mainCategory}
-          />
-          {values.mainCategory && values.mainCategory !== 'none' && (
-            <SubCategoryField
-              mainCategory={values.mainCategory}
+    <>
+      <SEO title="질문 등록" withSuffix />
+      <PageContainer>
+        <Article>
+          <PageTitle>질문 등록하기</PageTitle>
+          <FormContainer>
+            <TitleField handleChange={handleChange} message={errors.title} />
+            <MainCategoryField
               handleChange={handleChange}
-              selected={values.subCategory}
-              message={errors.subCategory}
+              selected={values.mainCategory}
+              message={errors.mainCategory}
             />
-          )}
-          <TailQuestionField
-            handleSubmit={onAddQuestion}
-            list={tailQuestions}
-            onRemove={onRemoveQuestion}
-          />
-          <SubmitButton onClick={handleSubmit} loading={createQuestion.isLoading}>
-            등록
-          </SubmitButton>
-        </FormContainer>
-      </Article>
-    </PageContainer>
+            {values.mainCategory && values.mainCategory !== 'none' && (
+              <SubCategoryField
+                mainCategory={values.mainCategory}
+                handleChange={handleChange}
+                selected={values.subCategory}
+                message={errors.subCategory}
+              />
+            )}
+            <TailQuestionField
+              handleSubmit={onAddQuestion}
+              list={tailQuestions}
+              onRemove={onRemoveQuestion}
+            />
+            <SubmitButton onClick={handleSubmit} loading={createQuestion.isLoading}>
+              등록
+            </SubmitButton>
+          </FormContainer>
+        </Article>
+      </PageContainer>
+    </>
   );
 };
 

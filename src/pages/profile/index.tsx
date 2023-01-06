@@ -8,6 +8,7 @@ import Comment from '~/components/domain/profile/Tab/Comment';
 import { useRouter } from 'next/router';
 import useTab from '~/hooks/useTab';
 import useUserWithGuard from '~/hooks/useUserWithGuard';
+import SEO from '~/components/common/SEO';
 
 const Profile = () => {
   const { tab, setTab, TabItem } = useTab(null, { bookmark: Bookmark, comment: Comment });
@@ -35,11 +36,14 @@ const Profile = () => {
     return null;
   }
   return (
-    <StyledPageContainer>
-      <StyledUserInfo user={currentUser.user} />
-      <StyledProfileTab user={currentUser.user} tab={tab} onChange={setTab} />
-      <TabContent>{TabItem && <TabItem />}</TabContent>
-    </StyledPageContainer>
+    <>
+      <SEO title={currentUser.user.username || '프로필'} withSuffix />
+      <StyledPageContainer>
+        <StyledUserInfo user={currentUser.user} />
+        <StyledProfileTab user={currentUser.user} tab={tab} onChange={setTab} />
+        <TabContent>{TabItem && <TabItem />}</TabContent>
+      </StyledPageContainer>
+    </>
   );
 };
 
