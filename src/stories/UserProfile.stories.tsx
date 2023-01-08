@@ -8,7 +8,7 @@ export default {
   argTypes: {
     profileUrl: {
       control: 'text',
-      defaultValue: '/assets/profile-default.jpeg',
+      defaultValue: '/assets/profile-default.jpg',
     },
     avatarSize: {
       control: 'radio',

@@ -9,7 +9,7 @@ export default {
   argTypes: {
     src: {
       control: 'text',
-      defaultValue: '/assets/profile-default.jpeg',
+      defaultValue: '/assets/profile-default.jpg',
     },
     size: {
       control: 'radio',
