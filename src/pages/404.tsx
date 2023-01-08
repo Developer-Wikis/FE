@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import Button from '~/components/base/Button';
+import Link from '~/components/base/Link';
 import PageContainer from '~/components/common/PageContainer';
 
 const Custom404 = () => {
@@ -11,7 +11,9 @@ const Custom404 = () => {
           <strong>Page Not Found</strong>
           <p>찾으려는 페이지가 존재하지 않습니다.</p>
         </PageText>
-        <Button>홈으로 이동</Button>
+        <Link variant="black" size="md" href="/">
+          홈으로 이동
+        </Link>
       </Content>
     </PageContainer>
   );
