@@ -1,10 +1,10 @@
 import { useUser } from './useUser';
 import bookmarkApi from '~/service/bookmark';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEY } from '../queryKey';
-import { AxiosError } from 'axios';
 import { toast } from '~/components/common/Toast';
 import useAuthMutation from './useAuthMutation';
+import useAuthQuery from './useAuthQuery';
 
 type BookmarkResponse = boolean | undefined;
 
@@ -15,19 +15,14 @@ type BookmarkResponse = boolean | undefined;
 
 const useBookmark = ({ questionId }: { questionId: number }) => {
   const queryClient = useQueryClient();
-  const { user, clearUser } = useUser();
+  const { user } = useUser();
 
-  const { data: isBookmarked = false } = useQuery(
+  const { data: isBookmarked = false } = useAuthQuery(
     ['bookmark', questionId, user?.id],
     ({ signal }) => {
       return bookmarkApi.getBookmark(questionId, signal);
     },
     {
-      onError: (error: AxiosError) => {
-        if (error.response?.status === 401) {
-          clearUser();
-        }
-      },
       enabled: !!user,
       retry: 0,
     },
