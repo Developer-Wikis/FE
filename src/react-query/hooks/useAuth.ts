@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router';
 import userApi from '~/service/user';
-import { useMutation } from '@tanstack/react-query';
 import oauthApi from '~/service/oauth';
 import { useUser } from './useUser';
+import useAuthMutation from './useAuthMutation';
 
 export const useAuth = () => {
   const { setUser, clearUser } = useUser();
@@ -34,7 +34,7 @@ export const useAuth = () => {
     clearUser();
   };
 
-  const { mutate: deleteAccount } = useMutation(userApi.deleteAccount, {
+  const { mutate: deleteAccount } = useAuthMutation(userApi.deleteAccount, {
     onSuccess: () => {
       clearUser();
       alert('계정이 성공적으로 삭제되었습니다.');

@@ -1,9 +1,10 @@
 import { useUser } from './useUser';
 import bookmarkApi from '~/service/bookmark';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEY } from '../queryKey';
 import { AxiosError } from 'axios';
 import { toast } from '~/components/common/Toast';
+import useAuthMutation from './useAuthMutation';
 
 type BookmarkResponse = boolean | undefined;
 
@@ -36,10 +37,7 @@ const useBookmark = ({ questionId }: { questionId: number }) => {
     queryClient.setQueryData([QUERY_KEY.bookmark, questionId, user?.id], data);
   };
 
-  const { mutate: postBookmark } = useMutation({
-    mutationFn: () => {
-      return bookmarkApi.bookmark(questionId);
-    },
+  const { mutate: postBookmark } = useAuthMutation(() => bookmarkApi.bookmark(questionId), {
     onMutate: async (data: boolean) => {
       await queryClient.cancelQueries({ queryKey: [QUERY_KEY.bookmark, questionId, user?.id] });
       const prevData: BookmarkResponse = queryClient.getQueryData([

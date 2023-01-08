@@ -1,16 +1,8 @@
 import commentApi from '~/service/comment';
-import {
-  MutationFunction,
-  UseMutateAsyncFunction,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from '@tanstack/react-query';
+import { MutationFunction, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEY } from '../queryKey';
 import { CommentEditPayload, CommentType, ICommentItem } from '~/types/comment';
-import { AxiosError } from 'axios';
-import { useRouter } from 'next/router';
-import { useUser } from './useUser';
+import useAuthMutation from './useAuthMutation';
 
 export const useGetComment = (questionId: number) => {
   const queryFn = () => commentApi.getList(questionId);
@@ -19,10 +11,6 @@ export const useGetComment = (questionId: number) => {
     [QUERY_KEY.comments, questionId],
     {
       queryFn,
-      onError: () => {
-        /* toast로 변경 */
-        alert('댓글 목록을 가져오는데에 실패하였습니다.');
-      },
       staleTime: 0,
     },
   );
@@ -35,23 +23,14 @@ export const useGetComment = (questionId: number) => {
 
 export const useAddComment = (questionId: number) => {
   const queryClient = useQueryClient();
-  const router = useRouter();
-  const { clearUser } = useUser();
 
   const mutationFn = (payload: CommentType) => commentApi.create({ questionId, payload });
 
-  const { mutateAsync: addComment, isLoading } = useMutation(mutationFn, {
+  const { mutateAsync: addComment, isLoading } = useAuthMutation(mutationFn, {
     onSuccess: () => {
       queryClient.invalidateQueries([QUERY_KEY.comments]);
     },
-    onError: (error: AxiosError) => {
-      if (error.response?.status === 401) {
-        alert('로그인이 필요한 서비스입니다.');
-        router.push('/login');
-        clearUser();
-        return;
-      }
-
+    onError: () => {
       alert('댓글 등록에 실패했습니다. 다시 시도해주세요.');
     },
   });
@@ -78,7 +57,7 @@ export const useEditComment = (questionId: number): EditComment => {
   const mutationFn = ({ commentId, payload }: { commentId: number; payload: CommentEditPayload }) =>
     commentApi.edit({ questionId, commentId, payload });
 
-  const { mutateAsync, isLoading } = useMutation(mutationFn, {
+  const { mutateAsync, isLoading } = useAuthMutation(mutationFn, {
     onSuccess: () => {
       queryClient.invalidateQueries([QUERY_KEY.comments]);
     },
@@ -109,7 +88,7 @@ export const useDeleteComment = (questionId: number): DeleteComment => {
   const mutationFn = (payload: { commentId: number; password?: string }) =>
     commentApi.delete({ questionId, ...payload });
 
-  const { mutateAsync, isLoading } = useMutation(mutationFn, {
+  const { mutateAsync, isLoading } = useAuthMutation(mutationFn, {
     onSuccess: () => {
       queryClient.invalidateQueries([QUERY_KEY.comments]);
     },
