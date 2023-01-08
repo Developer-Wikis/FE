@@ -3,7 +3,12 @@ import { AxiosError } from 'axios';
 import { useRouter } from 'next/router';
 import { useUser } from './useUser';
 
-const useAuthQuery = <TQueryFnData, TError, TData, TQueryKey extends QueryKey = QueryKey>(
+const useAuthQuery = <
+  TQueryFnData,
+  TError,
+  TData = TQueryFnData,
+  TQueryKey extends QueryKey = QueryKey,
+>(
   queryKey: TQueryKey,
   queryFn: QueryFunction<TQueryFnData, TQueryKey>,
   options?: Omit<UseQueryOptions<TQueryFnData, TError, TData, TQueryKey>, 'queryFn' | 'queryKey'>,
