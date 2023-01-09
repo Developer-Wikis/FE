@@ -19,7 +19,7 @@ interface AvatarProps {
   onClick?: (e: MouseEvent<HTMLImageElement>) => void;
 }
 
-const defaultImage = '/assets/profile-default.jpeg';
+const defaultImage = '/assets/profile-default.jpg';
 
 const Avatar = ({ src, size = 'md', alt = '프로필이미지', ...props }: AvatarProps) => {
   const imageUrl = src || defaultImage;

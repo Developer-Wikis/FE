@@ -34,8 +34,11 @@ const CommentContent = ({ user, comment, deleteComment }: CommentContentProps) =
       openPassword(comment.id, 'delete');
       return;
     }
-    await deleteComment.mutateAsync({ commentId: comment.id });
-    closePassword();
+
+    if (confirm('댓글을 삭제하시겠습니까?')) {
+      await deleteComment.mutateAsync({ commentId: comment.id });
+      closePassword();
+    }
   };
 
   const handleEditStart = () => {
