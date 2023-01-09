@@ -3,14 +3,15 @@ import { MutationFunction, useMutation, useQuery, useQueryClient } from '@tansta
 import { QUERY_KEY } from '../queryKey';
 import { CommentEditPayload, CommentType, ICommentItem } from '~/types/comment';
 import useAuthMutation from './useAuthMutation';
+import useAuthQuery from './useAuthQuery';
 
 export const useGetComment = (questionId: number) => {
   const queryFn = () => commentApi.getList(questionId);
 
-  const { data: comments = [], refetch: updateComments } = useQuery<ICommentItem[]>(
+  const { data: comments = [], refetch: updateComments } = useAuthQuery<ICommentItem[], Error>(
     [QUERY_KEY.comments, questionId],
+    queryFn,
     {
-      queryFn,
       staleTime: 0,
     },
   );
