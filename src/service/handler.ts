@@ -8,7 +8,7 @@ const storage = useStorage('local');
 const handleAuthRequest = (config: AxiosRequestConfig) => {
   const token = storage.getItem(LOCAL_KEY.token, '');
   config.headers = {
-    Authorization: `Bearer ${token}` || '',
+    Authorization: token ? `Bearer ${token}` : '',
   };
 
   return config;
@@ -16,11 +16,6 @@ const handleAuthRequest = (config: AxiosRequestConfig) => {
 
 const handleAuthResponseError = async (error: AxiosError) => {
   const originalRequest: AxiosRequestConfig = error.config;
-
-  /** refresh 실패할 경우 */
-  if (originalRequest.url === '/refreshToken' && error.response?.status === 403) {
-    return Promise.reject(error.response);
-  }
 
   if (error.response?.status === 401) {
     const accessToken = await getRefreshToken();
