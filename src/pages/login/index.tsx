@@ -9,6 +9,7 @@ import PageDescription from '~/components/common/PageDescription';
 import styled from '@emotion/styled';
 import Icon from '~/components/base/Icon';
 import { useAuth } from '~/react-query/hooks/useAuth';
+import SEO from '~/components/common/SEO';
 
 const Login = () => {
   const router = useRouter();
@@ -41,19 +42,22 @@ const Login = () => {
   }, [router.query]);
 
   return (
-    <Article>
-      <PageTitle>로그인</PageTitle>
-      <PageDescription textType="bold">developerwiki에 오신 것을 환영합니다!</PageDescription>
-      <LogoArea>
-        <Icon name="LogoIcon" size="110" />
-      </LogoArea>
-      <SocialButtons>
-        <SocialLink variant="borderGray" size="lg" href={googleUrl} onClick={onClickGoogleLogin}>
-          <Icon name="Google" />
-          <span>구글 계정으로 계속하기</span>
-        </SocialLink>
-      </SocialButtons>
-    </Article>
+    <>
+      <SEO title="로그인" withSuffix />
+      <Article>
+        <PageTitle>로그인</PageTitle>
+        <PageDescription textType="bold">developerwiki에 오신 것을 환영합니다!</PageDescription>
+        <LogoArea>
+          <Icon name="LogoIcon" size="110" />
+        </LogoArea>
+        <SocialButtons>
+          <SocialLink variant="borderGray" size="lg" href={googleUrl} onClick={onClickGoogleLogin}>
+            <Icon name="Google" />
+            <span>구글 계정으로 계속하기</span>
+          </SocialLink>
+        </SocialButtons>
+      </Article>
+    </>
   );
 };
 

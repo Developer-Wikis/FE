@@ -1,6 +1,7 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 import { isProduction } from '../utils/helper/checkType';
 import { GTM_ID } from '../lib/gtm';
+import Favicon from '~/components/base/Favicon';
 
 class MainDocument extends Document {
   static async getInitialProps(ctx: any) {
@@ -11,7 +12,9 @@ class MainDocument extends Document {
   render() {
     return (
       <Html lang="ko">
-        <Head />
+        <Head>
+          <Favicon />
+        </Head>
         <body>
           {isProduction() && (
             <noscript>

@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import PageTitle from '~/components/base/PageTitle';
 import PageContainer from '~/components/common/PageContainer';
+import SEO from '~/components/common/SEO';
 import DeleteAccount from '~/components/domain/profile/DeleteAccount';
 import EditUserInfo from '~/components/domain/profile/EditUserInfo';
 import useUserWithGuard from '~/hooks/useUserWithGuard';
@@ -41,13 +42,16 @@ const ProfileEdit = () => {
   }
 
   return (
-    <Container>
-      <PageTitle align="left">회원 정보 수정</PageTitle>
-      <EditUserInfo user={user} onEditNickname={onEditNickname} />
-      <Line />
-      <PageTitle align="left">계정 삭제</PageTitle>
-      <DeleteAccount onDeleteAccount={onDeleteAccount} />
-    </Container>
+    <>
+      <SEO title="회원 정보 수정" withSuffix />
+      <Container>
+        <PageTitle align="left">회원 정보 수정</PageTitle>
+        <EditUserInfo user={user} onEditNickname={onEditNickname} />
+        <Line />
+        <PageTitle align="left">계정 삭제</PageTitle>
+        <DeleteAccount onDeleteAccount={onDeleteAccount} />
+      </Container>
+    </>
   );
 };
 

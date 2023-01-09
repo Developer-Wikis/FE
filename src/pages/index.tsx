@@ -16,6 +16,7 @@ import useQuestionList from '~/react-query/hooks/useQuestionList';
 import useBookmarkList from '~/react-query/hooks/useBookmarkList';
 import { useUser } from '~/react-query/hooks/useUser';
 import { QUERY_KEY } from '~/react-query/queryKey';
+import SEO from '~/components/common/SEO';
 
 type QueryParams = {
   mainCategory: MainType;
@@ -75,11 +76,8 @@ const Home: NextPage = () => {
   if (!isReady) return null;
   return (
     <div>
-      <Head>
-        <title>Developer Wiki</title>
-        <meta name="description" content="Developer Wiki" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+      <SEO title="Developer Wiki" />
+
       <MainContent>
         <StyledMiddleCategory
           subCategories={['all', ...SUB_CATEGORIES[query.mainCategory]]}

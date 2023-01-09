@@ -11,6 +11,7 @@ import { RANDOM_LOCAL_KEY } from '~/utils/constant/random';
 import Article from '~/components/common/Article';
 import MoveButtons from '~/components/common/MoveButtons';
 import RandomContent from '~/components/domain/random/RandomContent';
+import SEO from '~/components/common/SEO';
 
 const DUMMY = 1;
 const DUMMY_QUESTION = {} as IQuestionDetail;
@@ -97,6 +98,7 @@ const RandomVoice = () => {
 
   return (
     <>
+      <SEO title={curQuestion?.title || '음성 면접 연습'} withSuffix />
       {curQuestion && (
         <PageContainer>
           <Article full>
