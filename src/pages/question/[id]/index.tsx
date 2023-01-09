@@ -14,6 +14,9 @@ import { QueryClient, dehydrate, useQueryClient } from '@tanstack/react-query';
 import { useQuestionDetail } from '~/react-query/hooks/useQuestion';
 import { QUERY_KEY } from '~/react-query/queryKey';
 import { useRouter } from 'next/router';
+import useDetailView from '~/react-query/hooks/useDetailView';
+import SEO from '~/components/common/SEO';
+import { convertMainCategory, convertSubCategory } from '~/utils/helper/converter';
 
 /*
 
@@ -74,10 +77,12 @@ const QuestionDetail = ({ questionId: defaultId, query }: QuestionDetailProps) =
   const [questionId, setQuestionId] = useState(defaultId);
   const { detailData, prefetchDetail } = useQuestionDetail(questionId, query);
   const router = useRouter();
+  const addDetailView = useDetailView();
 
   useEffect(() => {
     const { id } = router.query;
     const numberId = Number(id);
+    addDetailView(numberId);
 
     /* CSR 이동 체크 */
     if (numberId !== questionId) {
@@ -103,28 +108,37 @@ const QuestionDetail = ({ questionId: defaultId, query }: QuestionDetailProps) =
   }
 
   return (
-    <Container>
-      <PostHeader
-        subCategory={detailData.subCategory}
+    <>
+      <SEO
         title={detailData.title}
-        questionId={detailData.id}
+        withSuffix
+        description={`${convertMainCategory(detailData.mainCategory)} ${convertSubCategory(
+          detailData.subCategory,
+        )} 면접 질문 ${detailData.title}`}
       />
-      <PostContent>
-        <Recorder key={detailData.id} />
-        <TailQuestions
-          questions={detailData.tailQuestions}
-          questionId={detailData.id}
+      <Container>
+        <PostHeader
+          subCategory={detailData.subCategory}
           title={detailData.title}
+          questionId={detailData.id}
         />
-        <QuestionMoveButtons
-          categoryQuery={query}
-          prevId={detailData.prevId}
-          nextId={detailData.nextId}
-        />
-      </PostContent>
+        <PostContent>
+          <Recorder key={detailData.id} />
+          <TailQuestions
+            questions={detailData.tailQuestions}
+            questionId={detailData.id}
+            title={detailData.title}
+          />
+          <QuestionMoveButtons
+            categoryQuery={query}
+            prevId={detailData.prevId}
+            nextId={detailData.nextId}
+          />
+        </PostContent>
 
-      <Comment questionId={detailData.id} />
-    </Container>
+        <Comment questionId={detailData.id} />
+      </Container>
+    </>
   );
 };
 

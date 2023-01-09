@@ -28,7 +28,7 @@ const commentApi = {
       .then((res) => res.data);
   },
   async delete({ questionId, commentId, password }: CommentPayload): Promise<undefined> {
-    return unauth
+    return auth
       .delete(`/questions/${questionId}/comments/${commentId}`, {
         data: { password },
       })

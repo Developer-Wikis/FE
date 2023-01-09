@@ -14,6 +14,7 @@ import { IQuestionDetail } from '~/types/question';
 import { isValidRandomType } from '~/utils/helper/validation';
 import { RANDOM_LOCAL_KEY } from '~/utils/constant/random';
 import Article from '~/components/common/Article';
+import SEO from '~/components/common/SEO';
 
 const SESSION_KEY = {
   step: 'step',
@@ -166,29 +167,32 @@ const CreateRandom = () => {
   }, [stepOneMounted.current]);
 
   return (
-    <MainContent>
-      <Article>
-        {step === 1 && (
-          <StepOne
-            step={step}
-            inputValues={inputValues}
-            handleChange={handleChange}
-            handleSubmit={handleSubmit}
-            mounted={stepOneMounted}
-          />
-        )}
+    <>
+      <SEO title="랜덤 질문" withSuffix />
+      <MainContent>
+        <Article>
+          {step === 1 && (
+            <StepOne
+              step={step}
+              inputValues={inputValues}
+              handleChange={handleChange}
+              handleSubmit={handleSubmit}
+              mounted={stepOneMounted}
+            />
+          )}
 
-        {step === 2 && (
-          <StepTwo
-            step={step}
-            permission={permission}
-            handleSubmit={handleSubmit}
-            handleChange={handlePermissionChange}
-            handleBack={handleBack}
-          />
-        )}
-      </Article>
-    </MainContent>
+          {step === 2 && (
+            <StepTwo
+              step={step}
+              permission={permission}
+              handleSubmit={handleSubmit}
+              handleChange={handlePermissionChange}
+              handleBack={handleBack}
+            />
+          )}
+        </Article>
+      </MainContent>
+    </>
   );
 };
 
