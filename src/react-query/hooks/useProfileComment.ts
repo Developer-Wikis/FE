@@ -3,6 +3,7 @@ import userApi from '~/service/user';
 import { QUERY_KEY } from '../queryKey';
 import { useUser } from './useUser';
 import useUrlState from '~/hooks/useUrlState';
+import useAuthQuery from './useAuthQuery';
 
 const initialState = {
   page: 0,
@@ -23,7 +24,7 @@ const useProfileComment = (isReady: boolean) => {
   const { user } = useUser();
 
   const fallback = { content: [], totalPages: 0, totalElements: 0 };
-  const { data = fallback } = useQuery(
+  const { data = fallback } = useAuthQuery(
     [QUERY_KEY.user, QUERY_KEY.comments, query],
     () => getComment(query),
     {

@@ -1,8 +1,10 @@
 import { useUser } from './useUser';
 import bookmarkApi from '~/service/bookmark';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEY } from '../queryKey';
 import { toast } from '~/components/common/Toast';
+import useAuthMutation from './useAuthMutation';
+import useAuthQuery from './useAuthQuery';
 
 type BookmarkResponse = boolean | undefined;
 
@@ -15,7 +17,7 @@ const useBookmark = ({ questionId }: { questionId: number }) => {
   const queryClient = useQueryClient();
   const { user } = useUser();
 
-  const { data: isBookmarked = false } = useQuery(
+  const { data: isBookmarked = false } = useAuthQuery(
     ['bookmark', questionId, user?.id],
     ({ signal }) => {
       return bookmarkApi.getBookmark(questionId, signal);
@@ -30,10 +32,7 @@ const useBookmark = ({ questionId }: { questionId: number }) => {
     queryClient.setQueryData([QUERY_KEY.bookmark, questionId, user?.id], data);
   };
 
-  const { mutate: postBookmark } = useMutation({
-    mutationFn: () => {
-      return bookmarkApi.bookmark(questionId);
-    },
+  const { mutate: postBookmark } = useAuthMutation(() => bookmarkApi.bookmark(questionId), {
     onMutate: async (data: boolean) => {
       await queryClient.cancelQueries({ queryKey: [QUERY_KEY.bookmark, questionId, user?.id] });
       const prevData: BookmarkResponse = queryClient.getQueryData([

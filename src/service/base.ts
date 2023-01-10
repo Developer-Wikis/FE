@@ -1,26 +1,27 @@
-import useStorage from '~/hooks/useStorage';
 import axios, { AxiosInstance } from 'axios';
-import { LOCAL_KEY } from '~/utils/constant/user';
+import {
+  handleAuthResponseError,
+  handleAuthRequest,
+  handleAuthResponse,
+  handleAuthRequestError,
+} from './handler';
 
 const baseURL = `${process.env.BASE_URL}`;
-const storage = useStorage('local');
+
+const createInstance = () => {
+  return axios.create({
+    baseURL,
+  });
+};
 
 const authConfig = (instance: AxiosInstance) => {
-  instance.interceptors.request.use(
-    (config) => {
-      const token = storage.getItem(LOCAL_KEY.token, '');
-      config.headers = {
-        Authorization: `Bearer ${token}` || '',
-      };
-      return config;
-    },
-    (error) => Promise.reject(error.response),
-  );
+  instance.interceptors.request.use(handleAuthRequest, handleAuthRequestError);
 
+  instance.interceptors.response.use(handleAuthResponse, handleAuthResponseError);
   return instance;
 };
 
-const unauth = axios.create({ baseURL });
-const auth = authConfig(axios.create({ baseURL }));
+const unauth = createInstance();
+const auth = authConfig(createInstance());
 
 export { unauth, auth };
