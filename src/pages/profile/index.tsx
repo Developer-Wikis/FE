@@ -32,17 +32,16 @@ const Profile = () => {
     currentUser.refetch();
   }, [router.query]);
 
-  if (!currentUser.user) {
-    return null;
-  }
   return (
     <>
-      <SEO title={currentUser.user.username || '프로필'} withSuffix />
-      <StyledPageContainer>
-        <StyledUserInfo user={currentUser.user} />
-        <StyledProfileTab user={currentUser.user} tab={tab} onChange={setTab} />
-        <TabContent>{TabItem && <TabItem />}</TabContent>
-      </StyledPageContainer>
+      <SEO title={currentUser.user?.username ?? '프로필'} withSuffix />
+      {currentUser.user && (
+        <StyledPageContainer>
+          <StyledUserInfo user={currentUser.user} />
+          <StyledProfileTab user={currentUser.user} tab={tab} onChange={setTab} />
+          <TabContent>{TabItem && <TabItem />}</TabContent>
+        </StyledPageContainer>
+      )}
     </>
   );
 };

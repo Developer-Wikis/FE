@@ -37,20 +37,18 @@ const ProfileEdit = () => {
     }
   };
 
-  if (!user) {
-    return null;
-  }
-
   return (
     <>
       <SEO title="회원 정보 수정" withSuffix />
-      <Container>
-        <PageTitle align="left">회원 정보 수정</PageTitle>
-        <EditUserInfo user={user} onEditNickname={onEditNickname} />
-        <Line />
-        <PageTitle align="left">계정 삭제</PageTitle>
-        <DeleteAccount onDeleteAccount={onDeleteAccount} />
-      </Container>
+      {user && (
+        <Container>
+          <PageTitle align="left">회원 정보 수정</PageTitle>
+          <EditUserInfo user={user} onEditNickname={onEditNickname} />
+          <Line />
+          <PageTitle align="left">계정 삭제</PageTitle>
+          <DeleteAccount onDeleteAccount={onDeleteAccount} />
+        </Container>
+      )}
     </>
   );
 };
