@@ -73,32 +73,32 @@ const Home: NextPage = () => {
     }
   }, [router.isReady, router.query]);
 
-  if (!isReady) return null;
   return (
-    <div>
+    <>
       <SEO title="Developer Wiki" />
-
-      <MainContent>
-        <StyledMiddleCategory
-          subCategories={['all', ...SUB_CATEGORIES[query.mainCategory]]}
-          onSelect={onChangeSubCategory}
-          currentCategory={query.subCategory}
-        />
-        <StyledQuestionList
-          questions={data.content}
-          currentCategory={{
-            mainCategory: query.mainCategory,
-            subCategory: query.subCategory,
-          }}
-          onBookmarkToggle={onBookmarkToggle}
-        />
-        <Pagination
-          totalElements={data.totalElements}
-          onChange={onChangePage}
-          current={query.page}
-        />
-      </MainContent>
-    </div>
+      {isReady && (
+        <MainContent>
+          <StyledMiddleCategory
+            subCategories={['all', ...SUB_CATEGORIES[query.mainCategory]]}
+            onSelect={onChangeSubCategory}
+            currentCategory={query.subCategory}
+          />
+          <StyledQuestionList
+            questions={data.content}
+            currentCategory={{
+              mainCategory: query.mainCategory,
+              subCategory: query.subCategory,
+            }}
+            onBookmarkToggle={onBookmarkToggle}
+          />
+          <Pagination
+            totalElements={data.totalElements}
+            onChange={onChangePage}
+            current={query.page}
+          />
+        </MainContent>
+      )}
+    </>
   );
 };
 
