@@ -7,6 +7,7 @@ import useUrlState from '~/hooks/useUrlState';
 import { IQuestionItem } from '~/types/question';
 import { Paging } from '~/types/utilityType';
 import { PAGE_SIZE } from '~/components/common/Pagination';
+import useAuthQuery from './useAuthQuery';
 
 const initialState: TQueryBookmark = {
   mainCategory: 'all',
@@ -33,7 +34,7 @@ const useProfileBookmark = (isReady: boolean) => {
   const { user } = useUser();
 
   const fallback = { content: [], totalPages: 0, totalElements: 0 };
-  const { data = fallback, refetch } = useQuery(
+  const { data = fallback, refetch } = useAuthQuery(
     [QUERY_KEY.user, QUERY_KEY.bookmark, query],
     () => getBookmark(query),
     {

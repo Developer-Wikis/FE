@@ -18,6 +18,8 @@ import { Hydrate, QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from '~/react-query/queryClient';
 import type { DehydratedState } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { ErrorBoundary } from 'react-error-boundary';
+import AuthFallback from '~/components/base/ErrorBoundary/AuthFallback';
 
 if (process.env.NEXT_PUBLIC_API_MOCKING === 'enabled') {
   import('../mocks');
@@ -53,12 +55,14 @@ function MyApp({ Component, pageProps }: AppProps<{ dehydratedState: DehydratedS
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps.dehydratedState}>
           <ThemeProvider theme={theme}>
-            <Header />
-            <MainContainer>
-              <Component {...pageProps} />
-            </MainContainer>
-            <Footer />
-            {ToastContainer.render()}
+            <ErrorBoundary FallbackComponent={AuthFallback}>
+              <Header />
+              <MainContainer>
+                <Component {...pageProps} />
+              </MainContainer>
+              <Footer />
+              {ToastContainer.render()}
+            </ErrorBoundary>
           </ThemeProvider>
           <ReactQueryDevtools initialIsOpen={false} />
         </Hydrate>
